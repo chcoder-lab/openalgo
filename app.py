@@ -12,7 +12,7 @@ if __name__ == "__main__":
     from utils.version import get_version as _get_version_early
 
     _host_ip = os.getenv("FLASK_HOST_IP", "127.0.0.1")
-    _port = int(os.getenv("FLASK_PORT", 5000))
+    _port = int(os.getenv("FLASK_PORT", 5001))
     _ws_port = int(os.getenv("WEBSOCKET_PORT", 8765))
     _debug = os.getenv("FLASK_DEBUG", "False").lower() in ("true", "1", "t")
     _is_reloader_parent = _debug and os.environ.get("WERKZEUG_RUN_MAIN") != "true"
@@ -256,7 +256,7 @@ def create_app():
     app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
 
     # Dynamic cookie security configuration based on HOST_SERVER
-    HOST_SERVER = os.getenv("HOST_SERVER", "http://127.0.0.1:5000")
+    HOST_SERVER = os.getenv("HOST_SERVER", "http://127.0.0.1:5001")
     USE_HTTPS = HOST_SERVER.startswith("https://")
 
     # Configure session cookie security
@@ -577,7 +577,7 @@ def create_app():
         """Return the HOST_SERVER configuration for frontend webhook URL generation"""
         from flask import jsonify
 
-        host_server = os.getenv("HOST_SERVER", "http://127.0.0.1:5000")
+        host_server = os.getenv("HOST_SERVER", "http://127.0.0.1:5001")
 
         # Determine if webhook URL is externally accessible
         is_localhost = any(
@@ -857,7 +857,7 @@ else:
 # Start Flask development server with SocketIO support if directly executed
 if __name__ == "__main__":
     host_ip = os.getenv("FLASK_HOST_IP", "127.0.0.1")
-    port = int(os.getenv("FLASK_PORT", 5000))
+    port = int(os.getenv("FLASK_PORT", 5001))
     debug = os.getenv("FLASK_DEBUG", "False").lower() in ("true", "1", "t")
 
     # Start ngrok tunnel if enabled

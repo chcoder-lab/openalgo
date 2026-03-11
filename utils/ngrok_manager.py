@@ -132,12 +132,12 @@ def setup_ngrok_handlers():
     logger.debug(f"ngrok cleanup handlers registered for {platform.system()}")
 
 
-def start_ngrok_tunnel(port: int = 5000) -> str | None:
+def start_ngrok_tunnel(port: int = 5001) -> str | None:
     """
     Start ngrok tunnel with domain from HOST_SERVER if configured.
 
     Args:
-        port: The local port to tunnel (default: 5000)
+        port: The local port to tunnel (default: 5001)
 
     Returns:
         The public ngrok URL if successful, None otherwise

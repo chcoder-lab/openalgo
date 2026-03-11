@@ -108,7 +108,7 @@ def get_credentials():
 
         # Get port configuration
         flask_host = get_env_value("FLASK_HOST_IP") or "127.0.0.1"
-        flask_port = get_env_value("FLASK_PORT") or "5000"
+        flask_port = get_env_value("FLASK_PORT") or "5001"
         websocket_host = get_env_value("WEBSOCKET_HOST") or "127.0.0.1"
         websocket_port = get_env_value("WEBSOCKET_PORT") or "8765"
         zmq_host = get_env_value("ZMQ_HOST") or "127.0.0.1"

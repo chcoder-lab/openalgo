@@ -120,4 +120,4 @@ def get_host_server() -> str:
     Returns:
         str: The host server URL string.
     """
-    return os.getenv("HOST_SERVER", "http://127.0.0.1:5000")
+    return os.getenv("HOST_SERVER", "http://127.0.0.1:5001")

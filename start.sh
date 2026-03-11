@@ -28,8 +28,8 @@ else
             ENV_FILE="/tmp/.env"
         fi
         
-        # Use Railway's PORT, default to 5000 for local development
-        APP_PORT="${PORT:-5000}"
+        # Use Railway's PORT, default to 5001 for local development
+        APP_PORT="${PORT:-5001}"
         
         cat > "$ENV_FILE" << EOF
 # OpenAlgo Environment Configuration File
@@ -226,8 +226,8 @@ trap cleanup SIGTERM SIGINT
 # ============================================
 # START MAIN APPLICATION
 # ============================================
-# Use PORT env var if set (Railway/cloud), otherwise default to 5000
-APP_PORT="${PORT:-5000}"
+# Use PORT env var if set (Railway/cloud), otherwise default to 5001
+APP_PORT="${PORT:-5001}"
 
 echo "[OpenAlgo] Starting application on port ${APP_PORT} with eventlet..."
 

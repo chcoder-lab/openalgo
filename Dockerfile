@@ -71,5 +71,5 @@ ENV PATH="/app/.venv/bin:$PATH" \
     NUMBA_NUM_THREADS=2
 # --------------------------------------------------------------------------- #
 USER appuser
-EXPOSE 5000
+EXPOSE 5001
 CMD ["/app/start.sh"]

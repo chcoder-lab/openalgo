@@ -132,32 +132,15 @@ export default function BrokerSelect() {
     fetchBrokerConfig()
   }, [])
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-
-    if (!selectedBroker) {
-      setError('Please select a broker')
-      return
-    }
-
-    if (!brokerConfig) {
-      setError('Broker configuration not loaded')
-      setShowSetupForm(true)
-      return
-    }
-
-    setIsSubmitting(true)
-    let loginUrl = ''
-
-    const { broker_api_key, redirect_url, broker_api_environment } = brokerConfig
+  const buildLoginUrl = (broker: string, config: BrokerConfig) => {
+    const { broker_api_key, redirect_url, broker_api_environment } = config
     const tastytradeAuthBase =
       broker_api_environment === 'production'
         ? 'https://my.tastytrade.com/auth.html'
         : 'https://cert-my.staging-tasty.works/auth.html'
 
-
     // Build login URL based on broker type (matching original broker.html logic)
-    switch (selectedBroker) {
+    switch (broker) {
       case 'fivepaisa':
       case 'fivepaisaxts':
       case 'aliceblue':
@@ -179,59 +162,69 @@ export default function BrokerSelect() {
       case 'rmoney':
       case 'shoonya':
       case 'tastytrade':
-        loginUrl = `${tastytradeAuthBase}?client_id=${broker_api_key}&redirect_uri=${redirect_url}&response_type=code&state=2e9b44629ebb28226224d09db3ffb47c`
-        break
+        return `${tastytradeAuthBase}?client_id=${broker_api_key}&redirect_uri=${redirect_url}&response_type=code&state=2e9b44629ebb28226224d09db3ffb47c`
       case 'webull':
-        loginUrl = '/webull/callback'
-        break
+        return '/webull/callback'
       case 'wisdom':
       case 'zebu':
         // TOTP brokers - redirect to callback page which shows form
-        loginUrl = `/${selectedBroker}/callback`
-        break
+        return `/${broker}/callback`
 
       case 'dhan':
-        loginUrl = '/dhan/initiate-oauth'
-        break
+        return '/dhan/initiate-oauth'
 
       case 'compositedge':
-        loginUrl = `https://xts.compositedge.com/interactive/thirdparty?appKey=${broker_api_key}&returnURL=${redirect_url}`
-        break
+        return `https://xts.compositedge.com/interactive/thirdparty?appKey=${broker_api_key}&returnURL=${redirect_url}`
 
       case 'flattrade': {
         const flattradeApiKey = getFlattradeApiKey(broker_api_key)
-        loginUrl = `https://auth.flattrade.in/?app_key=${flattradeApiKey}`
-        break
+        return `https://auth.flattrade.in/?app_key=${flattradeApiKey}`
       }
 
       case 'fyers':
-        loginUrl = `https://api-t1.fyers.in/api/v3/generate-authcode?client_id=${broker_api_key}&redirect_uri=${redirect_url}&response_type=code&state=2e9b44629ebb28226224d09db3ffb47c`
-        break
+        return `https://api-t1.fyers.in/api/v3/generate-authcode?client_id=${broker_api_key}&redirect_uri=${redirect_url}&response_type=code&state=2e9b44629ebb28226224d09db3ffb47c`
 
       case 'upstox':
-        loginUrl = `https://api.upstox.com/v2/login/authorization/dialog?response_type=code&client_id=${broker_api_key}&redirect_uri=${redirect_url}`
-        break
+        return `https://api.upstox.com/v2/login/authorization/dialog?response_type=code&client_id=${broker_api_key}&redirect_uri=${redirect_url}`
 
       case 'zerodha':
-        loginUrl = `https://kite.trade/connect/login?api_key=${broker_api_key}`
-        break
+        return `https://kite.trade/connect/login?api_key=${broker_api_key}`
 
       case 'paytm':
-        loginUrl = `https://login.paytmmoney.com/merchant-login?apiKey=${broker_api_key}&state={default}`
-        break
+        return `https://login.paytmmoney.com/merchant-login?apiKey=${broker_api_key}&state={default}`
 
       case 'pocketful': {
         const state = generateRandomState()
         localStorage.setItem('pocketful_oauth_state', state)
         const scope = 'orders holdings'
-        loginUrl = `https://trade.pocketful.in/oauth2/auth?client_id=${broker_api_key}&redirect_uri=${redirect_url}&response_type=code&scope=${encodeURIComponent(scope)}&state=${encodeURIComponent(state)}`
-        break
+        return `https://trade.pocketful.in/oauth2/auth?client_id=${broker_api_key}&redirect_uri=${redirect_url}&response_type=code&scope=${encodeURIComponent(scope)}&state=${encodeURIComponent(state)}`
       }
 
       default:
-        setError('Please select a broker')
-        setIsSubmitting(false)
-        return
+        return ''
+    }
+  }
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+
+    if (!selectedBroker) {
+      setError('Please select a broker')
+      return
+    }
+
+    if (!brokerConfig) {
+      setError('Broker configuration not loaded')
+      setShowSetupForm(true)
+      return
+    }
+
+    setIsSubmitting(true)
+    const loginUrl = buildLoginUrl(selectedBroker, brokerConfig)
+    if (!loginUrl) {
+      setError('Please select a broker')
+      setIsSubmitting(false)
+      return
     }
 
     // Use setTimeout to ensure state updates complete before navigation
@@ -295,13 +288,24 @@ export default function BrokerSelect() {
           // Keep local config if refetch fails
         }
         setError(null)
+        const loginUrl = buildLoginUrl(selectedBroker, localConfig as BrokerConfig)
+        if (loginUrl) {
+          setTimeout(() => {
+            window.location.href = loginUrl
+          }, 100)
+        }
         return
       }
 
       setError(response.data?.message || 'Failed to save broker credentials')
       setShowSetupForm(true)
     } catch (err: any) {
-      const message = err?.response?.data?.message || err?.message || 'Failed to save broker credentials'
+      if (err?.response?.status === 401) {
+        window.location.href = '/login'
+        return
+      }
+      const message =
+        err?.response?.data?.message || err?.message || 'Failed to save broker credentials'
       setError(message)
       setShowSetupForm(true)
     } finally {

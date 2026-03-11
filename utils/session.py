@@ -183,8 +183,9 @@ def check_session_validity(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
         if not is_session_valid():
-            # Revoke tokens before clearing session
-            revoke_user_tokens()
+            # Only revoke broker tokens if the user completed broker login
+            if session.get("logged_in"):
+                revoke_user_tokens()
             session.clear()
 
             # Check if this is an AJAX/fetch request
@@ -224,8 +225,9 @@ def invalidate_session_if_invalid(f):
     def decorated_function(*args, **kwargs):
         if not is_session_valid():
             logger.info("Invalid session detected - clearing session")
-            # Revoke tokens before clearing session
-            revoke_user_tokens()
+            # Only revoke broker tokens if the user completed broker login
+            if session.get("logged_in"):
+                revoke_user_tokens()
             session.clear()
         return f(*args, **kwargs)
 

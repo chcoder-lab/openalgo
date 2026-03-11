@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import {
   Select,
@@ -12,6 +13,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { useAuthStore } from '@/stores/authStore'
+import { webClient } from '@/api/client'
 
 // All supported brokers with their display names and auth types
 const allBrokers = [
@@ -74,6 +76,11 @@ function generateRandomState(): string {
   return result
 }
 
+function encodeBase64(value: string): string {
+  if (!value) return ''
+  return window.btoa(unescape(encodeURIComponent(value)))
+}
+
 export default function BrokerSelect() {
   const { user } = useAuthStore()
   const [selectedBroker, setSelectedBroker] = useState<string>('')
@@ -81,6 +88,13 @@ export default function BrokerSelect() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [brokerConfig, setBrokerConfig] = useState<BrokerConfig | null>(null)
+  const [showSetupForm, setShowSetupForm] = useState(false)
+  const [setupApiKey, setSetupApiKey] = useState('')
+  const [setupApiSecret, setSetupApiSecret] = useState('')
+  const [setupApiKeyMarket, setSetupApiKeyMarket] = useState('')
+  const [setupApiSecretMarket, setSetupApiSecretMarket] = useState('')
+  const [setupRedirectUrl, setSetupRedirectUrl] = useState('')
+  const [setupEnv, setSetupEnv] = useState('sandbox')
 
   useEffect(() => {
     // Fetch broker configuration
@@ -96,10 +110,15 @@ export default function BrokerSelect() {
           // Auto-select the configured broker
           setSelectedBroker(data.broker_name)
         } else {
-          setError(data.message || 'Failed to load broker configuration')
+          const message = data.message || 'Failed to load broker configuration'
+          setError(message)
+          if (message.toLowerCase().includes('broker configuration')) {
+            setShowSetupForm(true)
+          }
         }
       } catch {
         setError('Failed to load broker configuration')
+        setShowSetupForm(true)
       } finally {
         setIsLoading(false)
       }
@@ -118,6 +137,7 @@ export default function BrokerSelect() {
 
     if (!brokerConfig) {
       setError('Broker configuration not loaded')
+      setShowSetupForm(true)
       return
     }
 
@@ -215,6 +235,63 @@ export default function BrokerSelect() {
     }, 100)
   }
 
+  const handleSetupSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!selectedBroker) {
+      setError('Please select a broker')
+      setShowSetupForm(true)
+      return
+    }
+    setIsSubmitting(true)
+    setError(null)
+
+    try {
+      const redirectUrl =
+        setupRedirectUrl.trim() || `${window.location.origin}/${selectedBroker}/callback`
+      const payload = {
+        encoded: 'base64',
+        broker_api_key: encodeBase64(setupApiKey.trim()),
+        broker_api_secret: encodeBase64(setupApiSecret.trim()),
+        broker_api_key_market: encodeBase64(setupApiKeyMarket.trim()),
+        broker_api_secret_market: encodeBase64(setupApiSecretMarket.trim()),
+        redirect_url: encodeBase64(redirectUrl),
+        broker_api_environment: setupEnv,
+      }
+
+      const response = await webClient.post('/api/broker/credentials', payload, {
+        headers: { 'X-OpenAlgo-Encoded': 'base64' },
+      })
+
+      if (response.data?.status === 'success') {
+        setShowSetupForm(false)
+        setSetupApiKey('')
+        setSetupApiSecret('')
+        setSetupApiKeyMarket('')
+        setSetupApiSecretMarket('')
+        setSetupRedirectUrl('')
+        const configResponse = await fetch('/auth/broker-config', {
+          credentials: 'include',
+        })
+        const data = await configResponse.json()
+        if (data.status === 'success') {
+          setBrokerConfig(data)
+          setSelectedBroker(data.broker_name)
+          setError(null)
+          return
+        }
+      }
+
+      setError(response.data?.message || 'Failed to save broker credentials')
+      setShowSetupForm(true)
+    } catch (err: any) {
+      const message = err?.response?.data?.message || err?.message || 'Failed to save broker credentials'
+      setError(message)
+      setShowSetupForm(true)
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -245,7 +322,113 @@ export default function BrokerSelect() {
                 </Alert>
               )}
 
-              <form onSubmit={handleSubmit} className="space-y-6">
+              {showSetupForm ? (
+                <form onSubmit={handleSetupSubmit} className="space-y-5">
+                  <Alert className="border-amber-500/50 bg-amber-500/10">
+                    <Info className="h-4 w-4 text-amber-500" />
+                    <AlertDescription className="text-amber-200">
+                      Broker configuration is missing. Enter your credentials to continue.
+                    </AlertDescription>
+                  </Alert>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="broker-select-setup">Broker</Label>
+                    <Select
+                      value={selectedBroker}
+                      onValueChange={setSelectedBroker}
+                      disabled={isSubmitting}
+                    >
+                      <SelectTrigger id="broker-select-setup" className="w-full">
+                        <SelectValue placeholder="Select a Broker" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {allBrokers.map((broker) => (
+                          <SelectItem key={broker.id} value={broker.id}>
+                            {broker.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="broker-api-key">Broker API Key</Label>
+                    <Input
+                      id="broker-api-key"
+                      value={setupApiKey}
+                      onChange={(e) => setSetupApiKey(e.target.value)}
+                      placeholder="Enter broker API key"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="broker-api-secret">Broker API Secret</Label>
+                    <Input
+                      id="broker-api-secret"
+                      type="password"
+                      value={setupApiSecret}
+                      onChange={(e) => setSetupApiSecret(e.target.value)}
+                      placeholder="Enter broker API secret"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="broker-api-key-market">Market API Key (optional)</Label>
+                    <Input
+                      id="broker-api-key-market"
+                      value={setupApiKeyMarket}
+                      onChange={(e) => setSetupApiKeyMarket(e.target.value)}
+                      placeholder="Enter market API key"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="broker-api-secret-market">Market API Secret (optional)</Label>
+                    <Input
+                      id="broker-api-secret-market"
+                      type="password"
+                      value={setupApiSecretMarket}
+                      onChange={(e) => setSetupApiSecretMarket(e.target.value)}
+                      placeholder="Enter market API secret"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="redirect-url">Redirect URL</Label>
+                    <Input
+                      id="redirect-url"
+                      value={setupRedirectUrl}
+                      onChange={(e) => setSetupRedirectUrl(e.target.value)}
+                      placeholder="https://your-domain/<broker>/callback"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="broker-env-select">Broker API Environment</Label>
+                    <Select value={setupEnv} onValueChange={setSetupEnv} disabled={isSubmitting}>
+                      <SelectTrigger id="broker-env-select" className="w-full">
+                        <SelectValue placeholder="Select environment" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="sandbox">Sandbox</SelectItem>
+                        <SelectItem value="production">Production</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <Button type="submit" className="w-full" disabled={isSubmitting}>
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Saving...
+                      </>
+                    ) : (
+                      'Save & Continue'
+                    )}
+                  </Button>
+                </form>
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="space-y-2">
                   <Label htmlFor="broker-select" className="block text-center">
                     Login with your Broker
@@ -292,7 +475,8 @@ export default function BrokerSelect() {
                     </>
                   )}
                 </Button>
-              </form>
+                </form>
+              )}
             </CardContent>
           </Card>
 

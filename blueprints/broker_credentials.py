@@ -4,6 +4,7 @@ Broker credentials management API.
 Handles reading and updating per-user broker credentials.
 """
 
+import base64
 import os
 import re
 
@@ -158,9 +159,20 @@ def update_credentials():
         if not username:
             return jsonify({"status": "error", "message": "Not authenticated"}), 401
 
+        def decode_if_needed(value: str, encoded: bool) -> str:
+            if not value or not encoded:
+                return value
+            try:
+                return base64.b64decode(value).decode("utf-8")
+            except Exception:
+                return value
+
         # Support both JSON and form data
         if request.is_json:
             data = request.get_json() or {}
+            encoded = (data.get("encoded") or "").lower() == "base64" or (
+                request.headers.get("X-OpenAlgo-Encoded", "").lower() == "base64"
+            )
             broker_api_key = data.get("broker_api_key", "").strip()
             broker_api_secret = data.get("broker_api_secret", "").strip()
             broker_api_key_market = data.get("broker_api_key_market", "").strip()
@@ -172,6 +184,9 @@ def update_credentials():
             websocket_url = data.get("websocket_url", "").strip()
             has_ngrok_key = "ngrok_allow" in data
         else:
+            encoded = (request.form.get("encoded", "").lower() == "base64") or (
+                request.headers.get("X-OpenAlgo-Encoded", "").lower() == "base64"
+            )
             broker_api_key = request.form.get("broker_api_key", "").strip()
             broker_api_secret = request.form.get("broker_api_secret", "").strip()
             broker_api_key_market = request.form.get("broker_api_key_market", "").strip()
@@ -182,6 +197,12 @@ def update_credentials():
             host_server = request.form.get("host_server", "").strip()
             websocket_url = request.form.get("websocket_url", "").strip()
             has_ngrok_key = "ngrok_allow" in request.form
+
+        broker_api_key = decode_if_needed(broker_api_key, encoded)
+        broker_api_secret = decode_if_needed(broker_api_secret, encoded)
+        broker_api_key_market = decode_if_needed(broker_api_key_market, encoded)
+        broker_api_secret_market = decode_if_needed(broker_api_secret_market, encoded)
+        redirect_url = decode_if_needed(redirect_url, encoded)
 
         # Validate redirect URL format
         if redirect_url:

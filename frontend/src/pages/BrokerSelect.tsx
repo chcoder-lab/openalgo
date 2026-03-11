@@ -106,9 +106,14 @@ export default function BrokerSelect() {
         const data = await response.json()
 
         if (data.status === 'success') {
+          const hasRequiredConfig = Boolean(data.broker_name && data.broker_api_key && data.redirect_url)
           setBrokerConfig(data)
           // Auto-select the configured broker
           setSelectedBroker(data.broker_name)
+          if (!hasRequiredConfig) {
+            setError('Broker credentials not configured')
+            setShowSetupForm(true)
+          }
         } else {
           const message = data.message || 'Failed to load broker configuration'
           setError(message)
@@ -263,22 +268,34 @@ export default function BrokerSelect() {
       })
 
       if (response.data?.status === 'success') {
+        const localConfig = {
+          broker_name: selectedBroker,
+          broker_api_key: setupApiKey.trim(),
+          redirect_url: redirectUrl,
+          broker_api_environment: setupEnv,
+        }
+        setBrokerConfig(localConfig as BrokerConfig)
+        setSelectedBroker(selectedBroker)
         setShowSetupForm(false)
         setSetupApiKey('')
         setSetupApiSecret('')
         setSetupApiKeyMarket('')
         setSetupApiSecretMarket('')
         setSetupRedirectUrl('')
-        const configResponse = await fetch('/auth/broker-config', {
-          credentials: 'include',
-        })
-        const data = await configResponse.json()
-        if (data.status === 'success') {
-          setBrokerConfig(data)
-          setSelectedBroker(data.broker_name)
-          setError(null)
-          return
+        try {
+          const configResponse = await fetch('/auth/broker-config', {
+            credentials: 'include',
+          })
+          const data = await configResponse.json()
+          if (data.status === 'success') {
+            setBrokerConfig(data)
+            setSelectedBroker(data.broker_name)
+          }
+        } catch {
+          // Keep local config if refetch fails
         }
+        setError(null)
+        return
       }
 
       setError(response.data?.message || 'Failed to save broker credentials')

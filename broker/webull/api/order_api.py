@@ -95,10 +95,24 @@ def get_positions(auth):
     account_id = _get_account_id(auth)
     return _request(
         "GET",
-        "/openapi/account/positions",
+        "/openapi/assets/positions",
         auth,
         query={"account_id": account_id},
     )
+
+
+def get_order_detail(auth, client_order_id: str):
+    account_id = _get_account_id(auth)
+    return _request(
+        "GET",
+        "/openapi/trade/order/detail",
+        auth,
+        query={"account_id": account_id, "client_order_id": client_order_id},
+    )
+
+
+def preview_order(auth, payload: dict):
+    return _request("POST", "/openapi/trade/order/preview", auth, body=payload)
 
 
 def get_holdings(auth):
@@ -155,7 +169,7 @@ def place_order_api(data, auth):
         }
 
         payload = {"account_id": account_id, "stock_order": stock_order}
-        response = _request("POST", "/openapi/trade/stock/order/place", auth, body=payload)
+        response = _request("POST", "/openapi/trade/order/place", auth, body=payload)
 
         order_id = None
         if isinstance(response, dict):
@@ -178,7 +192,9 @@ def place_smartorder_api(data, auth):
 def cancel_all_orders_api(data, auth):
     try:
         account_id = _get_account_id(auth)
-        open_orders = _request("GET", "/openapi/trade/order/open", auth, query={"account_id": account_id})
+        open_orders = _request(
+            "GET", "/openapi/trade/order/open", auth, query={"account_id": account_id}
+        )
         orders = open_orders.get("data") if isinstance(open_orders, dict) else []
         results = []
         for order in orders or []:

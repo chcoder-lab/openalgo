@@ -26,6 +26,19 @@ Beyond execution, OpenAlgo empowers traders to completely own their trading infr
 - **Upgrade Guide**: [Upgrade Instructions](https://docs.openalgo.in/installation-guidelines/getting-started/upgrade)
 - **Why OpenAlgo**: [Why Build with OpenAlgo](https://docs.openalgo.in/why-to-build-with-openalgo)
 
+## Webull Smoke Test
+
+Run a quick local check of the Webull OpenAPI integration:
+
+```bash
+python3 scripts/webull_smoke.py \
+  --env sandbox \
+  --token YOUR_ACCESS_TOKEN \
+  --app-key YOUR_APP_KEY \
+  --app-secret YOUR_APP_SECRET \
+  --symbol AAPL
+```
+
 
 ## Python Compatibility
 

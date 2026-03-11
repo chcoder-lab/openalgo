@@ -44,11 +44,11 @@ def authenticate_broker(mobile_number, totp, mpin):
 
         if not ucc:
             logger.error("BROKER_API_KEY (UCC) is not configured")
-            return None, "BROKER_API_KEY (UCC) is required in .env file"
+            return None, "BROKER_API_KEY (UCC) is required. Configure it in Profile → Broker."
 
         if not access_token:
             logger.error("BROKER_API_SECRET (Access Token) is not configured")
-            return None, "BROKER_API_SECRET (Access Token) is required in .env file"
+            return None, "BROKER_API_SECRET (Access Token) is required. Configure it in Profile → Broker."
 
         logger.debug(f"Parsed UCC: {ucc}, Access Token length: {len(access_token)}")
 

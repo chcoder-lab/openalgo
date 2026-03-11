@@ -92,10 +92,12 @@ def copy_from_dataframe(df):
         db_session.rollback()
 
 
-# Define tastytrade API endpoints
-tastytrade_BASE_URL = get_tastytrade_base_url()
-SCRIP_GROUPS_URL = f"{tastytrade_BASE_URL}/api/mkt-data/scrips/symbol-store"
-SCRIP_DATA_URL = f"{tastytrade_BASE_URL}/api/mkt-data/scrips/symbol-store/{{group}}"
+def _get_scrip_groups_url() -> str:
+    return f"{get_tastytrade_base_url()}/api/mkt-data/scrips/symbol-store"
+
+
+def _get_scrip_data_url(group: str) -> str:
+    return f"{get_tastytrade_base_url()}/api/mkt-data/scrips/symbol-store/{group}"
 
 
 def get_scrip_groups():
@@ -104,7 +106,7 @@ def get_scrip_groups():
     try:
         # Add version=0 parameter to force fresh data
         params = {"version": "0"}
-        response = client.get(SCRIP_GROUPS_URL, params=params)
+        response = client.get(_get_scrip_groups_url(), params=params)
         response.raise_for_status()
         data = response.json()
         logger.info(f"Received scrip groups data: {data}")
@@ -127,7 +129,7 @@ def get_scrip_data(scrip_group):
     try:
         # Add version=0 parameter to force fresh data
         params = {"version": "0"}
-        response = client.get(SCRIP_DATA_URL.format(group=scrip_group), params=params)
+        response = client.get(_get_scrip_data_url(scrip_group), params=params)
         response.raise_for_status()
 
         # Split the response text into lines

@@ -79,12 +79,8 @@ class DhanWebSocketAdapter(BaseBrokerWebSocketAdapter):
         self.user_id = user_id
         self.broker_name = broker_name
 
-        # For Dhan, use credentials from .env file and database
+        # For Dhan, use per-user broker credentials and database auth
         import os
-
-        from dotenv import load_dotenv
-
-        load_dotenv()
 
         # Get Dhan client_id from BROKER_API_KEY (format: client_id:::api_key)
         broker_api_key = os.getenv("BROKER_API_KEY")

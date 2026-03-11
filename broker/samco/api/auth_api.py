@@ -35,10 +35,10 @@ def authenticate_broker(yob=None):
         password = get_password()
 
         if not client_id:
-            return None, "Client ID not configured. Please set BROKER_API_KEY in .env"
+            return None, "Client ID not configured. Set it in Profile → Broker."
 
         if not password:
-            return None, "Password not configured. Please set BROKER_API_SECRET in .env"
+            return None, "Password not configured. Set it in Profile → Broker."
 
         # Get the shared httpx client
         client = get_httpx_client()

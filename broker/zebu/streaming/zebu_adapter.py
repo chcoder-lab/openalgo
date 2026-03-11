@@ -359,7 +359,7 @@ class ZebuWebSocketAdapter(BaseBrokerWebSocketAdapter):
             self.actid = user_id
             self.logger.warning(f"No BROKER_API_KEY found. Using user_id '{user_id}' as actid.")
             self.logger.warning(
-                "Please set BROKER_API_KEY=Z56004 (or your vendor code) in .env file"
+                "Please set BROKER_API_KEY=Z56004 (or your vendor code) in Profile → Broker."
             )
 
         # Get auth token from database

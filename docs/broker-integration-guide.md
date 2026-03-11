@@ -127,8 +127,8 @@ Different authentication patterns return different tuples. The callback handler 
 ```python
 # broker/your_broker/api/auth_api.py
 
-import os
 from utils.httpx_client import get_httpx_client
+from utils.config import get_broker_api_key, get_broker_api_secret
 
 def authenticate_broker(request_token):
     """
@@ -143,8 +143,9 @@ def authenticate_broker(request_token):
             - On failure: (None, "error description")
     """
     try:
-        BROKER_API_KEY = os.getenv("BROKER_API_KEY")
-        BROKER_API_SECRET = os.getenv("BROKER_API_SECRET")
+        # Broker credentials are stored per user (Profile → Broker)
+        BROKER_API_KEY = get_broker_api_key()
+        BROKER_API_SECRET = get_broker_api_secret()
 
         client = get_httpx_client()
 
@@ -175,6 +176,9 @@ def authenticate_broker(request_token):
 ```python
 # For brokers that require userid + password + TOTP instead of OAuth
 
+from utils.config import get_broker_api_key
+from utils.httpx_client import get_httpx_client
+
 def authenticate_broker(clientcode, broker_pin, totp_code):
     """
     Authenticate using client credentials and TOTP.
@@ -182,7 +186,8 @@ def authenticate_broker(clientcode, broker_pin, totp_code):
     Returns:
         tuple: (auth_token, feed_token, error_message)
     """
-    api_key = os.getenv("BROKER_API_KEY")
+    # Broker credentials are stored per user (Profile → Broker)
+    api_key = get_broker_api_key()
     client = get_httpx_client()
 
     payload = {
@@ -214,6 +219,12 @@ XTS-based brokers require **two separate authentications** — one for order pla
 # broker/your_broker/api/auth_api.py
 
 from broker.your_broker.baseurl import INTERACTIVE_URL, MARKET_DATA_URL
+from utils.config import (
+    get_broker_api_key,
+    get_broker_api_secret,
+    get_broker_api_key_market,
+    get_broker_api_secret_market,
+)
 
 def authenticate_broker(request_token):
     """
@@ -222,10 +233,11 @@ def authenticate_broker(request_token):
     Returns:
         tuple: (auth_token, feed_token, user_id, error_message)
     """
-    BROKER_API_KEY = os.getenv("BROKER_API_KEY")
-    BROKER_API_SECRET = os.getenv("BROKER_API_SECRET")
-    BROKER_API_KEY_MARKET = os.getenv("BROKER_API_KEY_MARKET")
-    BROKER_API_SECRET_MARKET = os.getenv("BROKER_API_SECRET_MARKET")
+    # Broker credentials are stored per user (Profile → Broker)
+    BROKER_API_KEY = get_broker_api_key()
+    BROKER_API_SECRET = get_broker_api_secret()
+    BROKER_API_KEY_MARKET = get_broker_api_key_market()
+    BROKER_API_SECRET_MARKET = get_broker_api_secret_market()
 
     client = get_httpx_client()
 

@@ -12,7 +12,7 @@ def get_margin_data(auth_token: str) -> dict:
         account_id = _get_account_id(auth_token)
         data = _request(
             "GET",
-            "/openapi/account/balance",
+            "/openapi/assets/balance",
             auth_token,
             query={"account_id": account_id},
         )

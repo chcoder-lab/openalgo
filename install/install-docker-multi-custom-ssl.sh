@@ -829,7 +829,7 @@ for i in "${!CONF_DOMAINS[@]}"; do
         
         sed -i "s|YOUR_BROKER_API_KEY|$API_KEY|g" "$ENV_FILE"
         sed -i "s|YOUR_BROKER_API_SECRET|$API_SECRET|g" "$ENV_FILE"
-        sed -i "s|http://127.0.0.1:5000|https://$DOMAIN|g" "$ENV_FILE"
+        sed -i "s|http://127.0.0.1:5001|https://$DOMAIN|g" "$ENV_FILE"
         sed -i "s|<broker>|$BROKER|g" "$ENV_FILE"
         sed -i "s|3daa0403ce2501ee7432b75bf100048e3cf510d63d2754f952e93d88bf07ea84|$APP_KEY|g" "$ENV_FILE"
         sed -i "s|a25d94718479b170c16278e321ea6c989358bf499a658fd20c90033cef8ce772|$PEPPER|g" "$ENV_FILE"
@@ -888,7 +888,7 @@ services:
       - STRATEGY_MEMORY_LIMIT_MB=${STRATEGY_MEM_LIMIT}
     shm_size: '${SHM_SIZE_MB}m'
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://127.0.0.1:5000/auth/check-setup"]
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:5001/auth/check-setup"]
       interval: 30s
       timeout: 10s
       retries: 3

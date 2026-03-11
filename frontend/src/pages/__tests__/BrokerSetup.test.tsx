@@ -16,7 +16,7 @@ const { mockGet, mockPost } = vi.hoisted(() => ({
         broker_api_key_market_raw_length: 0,
         broker_api_secret_market: '',
         broker_api_secret_market_raw_length: 0,
-        redirect_url: 'http://127.0.0.1:5000/zerodha/callback',
+        redirect_url: 'http://127.0.0.1:5001/zerodha/callback',
         current_broker: 'zerodha',
         valid_brokers: ['zerodha'],
       },

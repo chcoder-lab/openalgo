@@ -256,7 +256,7 @@ $SUDO cp .sample.env .env
 # Update .env file
 $SUDO sed -i "s|YOUR_BROKER_API_KEY|$BROKER_API_KEY|g" .env
 $SUDO sed -i "s|YOUR_BROKER_API_SECRET|$BROKER_API_SECRET|g" .env
-$SUDO sed -i "s|http://127.0.0.1:5000|https://$DOMAIN|g" .env
+$SUDO sed -i "s|http://127.0.0.1:5001|https://$DOMAIN|g" .env
 $SUDO sed -i "s|<broker>|$BROKER_NAME|g" .env
 $SUDO sed -i "s|3daa0403ce2501ee7432b75bf100048e3cf510d63d2754f952e93d88bf07ea84|$APP_KEY|g" .env
 $SUDO sed -i "s|a25d94718479b170c16278e321ea6c989358bf499a658fd20c90033cef8ce772|$API_KEY_PEPPER|g" .env
@@ -335,7 +335,7 @@ services:
     container_name: openalgo-web
 
     ports:
-      - "127.0.0.1:5000:5000"
+      - "127.0.0.1:5001:5000"
       - "127.0.0.1:8765:8765"
 
     # Use named volumes to avoid permission issues with non-root container user
@@ -365,7 +365,7 @@ services:
     shm_size: '${SHM_SIZE_MB}m'
 
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://127.0.0.1:5000/auth/check-setup"]
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:5001/auth/check-setup"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -441,7 +441,7 @@ limit_req_zone \$binary_remote_addr zone=general_limit:10m rate=10r/s;
 
 # Upstream definitions
 upstream openalgo_flask {
-    server 127.0.0.1:5000;
+    server 127.0.0.1:5001;
     keepalive 64;
 }
 

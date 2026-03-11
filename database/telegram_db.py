@@ -796,7 +796,7 @@ def get_user_credentials(telegram_id: int) -> dict | None:
             result = {
                 "username": user.openalgo_username,
                 "api_key": api_key,
-                "host_url": user.host_url or os.getenv("HOST_SERVER", "http://127.0.0.1:5000"),
+                "host_url": user.host_url or os.getenv("HOST_SERVER", "http://127.0.0.1:5001"),
                 "broker": user.broker,
             }
             # Cache the result

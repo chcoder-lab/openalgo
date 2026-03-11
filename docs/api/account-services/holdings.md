@@ -5,7 +5,7 @@ Get portfolio holdings (delivery positions) with P&L information.
 ## Endpoint URL
 
 ```http
-Local Host   :  POST http://127.0.0.1:5000/api/v1/holdings
+Local Host   :  POST http://127.0.0.1:5001/api/v1/holdings
 Ngrok Domain :  POST https://<your-ngrok-domain>.ngrok-free.app/api/v1/holdings
 Custom Domain:  POST https://<your-custom-domain>/api/v1/holdings
 ```

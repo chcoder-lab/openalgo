@@ -5,7 +5,7 @@ Get market trading timings for a specific date across all exchanges.
 ## Endpoint URL
 
 ```http
-Local Host   :  POST http://127.0.0.1:5000/api/v1/timings
+Local Host   :  POST http://127.0.0.1:5001/api/v1/timings
 Ngrok Domain :  POST https://<your-ngrok-domain>.ngrok-free.app/api/v1/timings
 Custom Domain:  POST https://<your-custom-domain>/api/v1/timings
 ```

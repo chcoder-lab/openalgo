@@ -64,7 +64,7 @@ OpenAlgo implements defense-in-depth security with multiple layers protecting th
 
 ```python
 # app.py
-HOST_SERVER = os.getenv('HOST_SERVER', 'http://127.0.0.1:5000')
+HOST_SERVER = os.getenv('HOST_SERVER', 'http://127.0.0.1:5001')
 USE_HTTPS = HOST_SERVER.startswith('https://')
 
 # Dynamic cookie security based on HTTPS

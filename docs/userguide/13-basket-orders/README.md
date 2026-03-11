@@ -156,7 +156,7 @@ POST /api/v1/basketorder
 ```python
 from openalgo import api
 
-client = api(api_key="your-key", host="http://127.0.0.1:5000")
+client = api(api_key="your-key", host="http://127.0.0.1:5001")
 
 # Define basket
 basket = [

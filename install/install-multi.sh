@@ -312,7 +312,7 @@ for ((i=1; i<=INSTANCES; i++)); do
     sudo sed -i "s|<broker>|$BROKER|g" "$ENV_FILE"
 
     # 2. Replace domain URLs (before port changes)
-    sudo sed -i "s|http://127.0.0.1:5000|https://$DOMAIN|g" "$ENV_FILE"
+    sudo sed -i "s|http://127.0.0.1:5001|https://$DOMAIN|g" "$ENV_FILE"
     # Explicitly set HOST_SERVER in case the default value didn't match
     sudo sed -i "s|HOST_SERVER = '.*'|HOST_SERVER = 'https://$DOMAIN'|g" "$ENV_FILE"
     sudo sed -i "s|CORS_ALLOWED_ORIGINS = '.*'|CORS_ALLOWED_ORIGINS = 'https://$DOMAIN'|g" "$ENV_FILE"

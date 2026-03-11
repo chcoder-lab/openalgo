@@ -19,7 +19,7 @@ chmod +x docker-run.sh
 
 ## What's Included
 
-- **Web UI**: http://127.0.0.1:5000
+- **Web UI**: http://127.0.0.1:5001
 - **WebSocket**: ws://127.0.0.1:8765
 - **REST API**: Full Swagger documentation at `/api/docs`
 - **Automatic Setup**: Secure key generation, broker configuration

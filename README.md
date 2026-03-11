@@ -308,7 +308,7 @@ cp .sample.env .env
 uv run app.py
 ```
 
-The application will be available at `http://127.0.0.1:5000`
+The application will be available at `http://127.0.0.1:5001`
 
 For detailed installation instructions, deployment options (Docker, AWS, etc.), and configuration guides, visit [docs.openalgo.in/installation-guidelines/getting-started](https://docs.openalgo.in/installation-guidelines/getting-started)
 

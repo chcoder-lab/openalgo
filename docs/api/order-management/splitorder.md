@@ -5,7 +5,7 @@ Split a large order into multiple smaller orders to reduce market impact or comp
 ## Endpoint URL
 
 ```http
-Local Host   :  POST http://127.0.0.1:5000/api/v1/splitorder
+Local Host   :  POST http://127.0.0.1:5001/api/v1/splitorder
 Ngrok Domain :  POST https://<your-ngrok-domain>.ngrok-free.app/api/v1/splitorder
 Custom Domain:  POST https://<your-custom-domain>/api/v1/splitorder
 ```

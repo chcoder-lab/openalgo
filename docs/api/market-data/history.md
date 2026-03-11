@@ -5,7 +5,7 @@ Get historical OHLCV (Open, High, Low, Close, Volume) data for a symbol.
 ## Endpoint URL
 
 ```http
-Local Host   :  POST http://127.0.0.1:5000/api/v1/history
+Local Host   :  POST http://127.0.0.1:5001/api/v1/history
 Ngrok Domain :  POST https://<your-ngrok-domain>.ngrok-free.app/api/v1/history
 Custom Domain:  POST https://<your-custom-domain>/api/v1/history
 ```

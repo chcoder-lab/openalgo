@@ -354,7 +354,7 @@ def get_webhook_base_url():
     import os
 
     # Use HOST_SERVER from .env or default to localhost
-    host = os.getenv("HOST_SERVER", "http://127.0.0.1:5000")
+    host = os.getenv("HOST_SERVER", "http://127.0.0.1:5001")
     # Ensure no trailing slash
     return host.rstrip("/")
 

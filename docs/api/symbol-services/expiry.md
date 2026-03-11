@@ -5,7 +5,7 @@ Get available expiry dates for a futures or options symbol.
 ## Endpoint URL
 
 ```http
-Local Host   :  POST http://127.0.0.1:5000/api/v1/expiry
+Local Host   :  POST http://127.0.0.1:5001/api/v1/expiry
 Ngrok Domain :  POST https://<your-ngrok-domain>.ngrok-free.app/api/v1/expiry
 Custom Domain:  POST https://<your-custom-domain>/api/v1/expiry
 ```

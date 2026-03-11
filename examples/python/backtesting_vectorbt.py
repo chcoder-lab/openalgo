@@ -18,7 +18,7 @@ from plotly.subplots import make_subplots
 
 # ───────────────────────── CONFIG ─────────────────────────
 API_KEY = "dfae8e3a1ce08f60754b0d3597553d7c14957542104b431e4b881c089864a35e"
-API_HOST = "http://127.0.0.1:5000"
+API_HOST = "http://127.0.0.1:5001"
 
 SYMBOL = "SBIN"
 EXCHANGE = "NSE"

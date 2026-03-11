@@ -21,13 +21,13 @@ def test_broker_context_overrides_env(monkeypatch):
         {
             "broker_api_key": "KEY123",
             "broker_api_secret": "SECRET123",
-            "redirect_url": "http://127.0.0.1:5000/zerodha/callback",
+            "redirect_url": "http://127.0.0.1:5001/zerodha/callback",
         }
     )
 
     try:
         assert os.getenv("BROKER_API_KEY") == "KEY123"
         assert os.getenv("BROKER_API_SECRET") == "SECRET123"
-        assert os.getenv("REDIRECT_URL") == "http://127.0.0.1:5000/zerodha/callback"
+        assert os.getenv("REDIRECT_URL") == "http://127.0.0.1:5001/zerodha/callback"
     finally:
         config_module.reset_broker_context(token)

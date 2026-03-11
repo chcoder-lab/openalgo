@@ -6,7 +6,7 @@ app = Flask(__name__)
 # Initialize API client
 client = api(
     api_key="83ad96143dd5081d033abcfd20e9108daee5708fbea404121a762bed1e498dd0",
-    host="http://127.0.0.1:5000",
+    host="http://127.0.0.1:5001",
 )
 
 

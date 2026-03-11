@@ -18,7 +18,7 @@ from datetime import datetime
 import requests
 
 # Configuration
-BASE_URL = "http://127.0.0.1:5000"
+BASE_URL = "http://127.0.0.1:5001"
 API_KEY = "bf1267a177b7ece1b10ca29b0ee8c4d62b153fe60caba3c566619e607cf9169f"
 
 # Test order data for each order type
@@ -206,7 +206,7 @@ def test_all_order_types():
             log(f"  - {order_type}: ID {pending_id}")
         log("")
         log("Next Steps:")
-        log("1. Open Action Center: http://127.0.0.1:5000/action-center")
+        log("1. Open Action Center: http://127.0.0.1:5001/action-center")
         log("2. Review and approve each order")
         log("3. Verify execution results")
 

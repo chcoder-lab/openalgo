@@ -49,7 +49,7 @@ OpenAlgo supports 29 Indian brokers through a unified interface. This guide cove
 4. Note down:
    - **API Key**
    - **API Secret**
-5. Set redirect URL to: `http://127.0.0.1:5000/callback/zerodha`
+5. Set redirect URL to: `http://127.0.0.1:5001/callback/zerodha`
 
 **Cost**: ₹2,000/month for Kite Connect
 

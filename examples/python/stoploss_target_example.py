@@ -9,7 +9,7 @@ from openalgo import api
 
 # Configuration
 API_KEY = "your-api-key-here"
-HOST = "http://127.0.0.1:5000"
+HOST = "http://127.0.0.1:5001"
 WS_URL = "ws://127.0.0.1:8765"
 
 SYMBOL = "CRUDEOIL16JAN26FUT"

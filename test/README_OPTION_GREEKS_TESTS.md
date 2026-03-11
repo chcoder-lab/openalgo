@@ -17,7 +17,7 @@ This folder contains test scripts for the Option Greeks API.
 
 2. **OpenAlgo must be running**
    - Start OpenAlgo application
-   - Ensure it's accessible at `http://127.0.0.1:5000`
+   - Ensure it's accessible at `http://127.0.0.1:5001`
 
 3. **Markets Should Be Open**
    - Greeks require live prices for underlying and option
@@ -66,7 +66,7 @@ Edit the test file to configure:
 
 ```python
 # Configuration section at the top of the file
-BASE_URL = "http://127.0.0.1:5000"  # Change if using different host/port
+BASE_URL = "http://127.0.0.1:5001"  # Change if using different host/port
 API_KEY = "your_api_key_here"        # Replace with your actual API key
 ```
 
@@ -356,7 +356,7 @@ MCX Option:   Expires in 9.5 hours ⏱️  (Still has time value)
 import requests
 
 def get_greeks(symbol, exchange):
-    url = "http://127.0.0.1:5000/api/v1/optiongreeks"
+    url = "http://127.0.0.1:5001/api/v1/optiongreeks"
     payload = {
         "apikey": "your_api_key",
         "symbol": symbol,

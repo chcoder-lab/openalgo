@@ -5,7 +5,7 @@ Get the complete option chain for a given underlying and expiry, including quote
 ## Endpoint URL
 
 ```http
-Local Host   :  POST http://127.0.0.1:5000/api/v1/optionchain
+Local Host   :  POST http://127.0.0.1:5001/api/v1/optionchain
 Ngrok Domain :  POST https://<your-ngrok-domain>.ngrok-free.app/api/v1/optionchain
 Custom Domain:  POST https://<your-custom-domain>/api/v1/optionchain
 ```

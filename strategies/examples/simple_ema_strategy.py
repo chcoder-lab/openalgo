@@ -31,7 +31,7 @@ fast_period = 5
 slow_period = 10
 
 # Set the API Key
-client = api(api_key=api_key, host='http://127.0.0.1:5000')
+client = api(api_key=api_key, host='http://127.0.0.1:5001')
 
 def calculate_ema_signals(df):
     """

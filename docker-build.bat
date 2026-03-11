@@ -94,7 +94,7 @@ REM Wait for application
 echo Waiting for application to start (up to 30 seconds)...
 set /a counter=0
 :wait_loop
-curl -s -f http://127.0.0.1:5000/auth/check-setup >nul 2>nul
+curl -s -f http://127.0.0.1:5001/auth/check-setup >nul 2>nul
 if %ERRORLEVEL% EQU 0 (
     echo OK: Application is responding
     goto :continue
@@ -142,10 +142,10 @@ echo        OpenAlgo is now running!
 echo ========================================
 echo.
 echo Access URLs:
-echo   Web UI:       http://127.0.0.1:5000
+echo   Web UI:       http://127.0.0.1:5001
 echo   WebSocket:    ws://127.0.0.1:8765
-echo   API Docs:     http://127.0.0.1:5000/api/docs
-echo   React UI:     http://127.0.0.1:5000/react
+echo   API Docs:     http://127.0.0.1:5001/api/docs
+echo   React UI:     http://127.0.0.1:5001/react
 echo.
 echo Useful Commands:
 echo   View logs:        docker-compose logs -f
@@ -158,12 +158,12 @@ REM Detect configured broker
 findstr /C:"fyers" .env >nul 2>nul
 if %ERRORLEVEL% EQU 0 (
     echo Configured Broker: Fyers
-    echo Callback URL: http://127.0.0.1:5000/fyers/callback
+    echo Callback URL: http://127.0.0.1:5001/fyers/callback
 )
 
 echo.
 echo Next Steps:
-echo   1. Open http://127.0.0.1:5000 in your browser
+echo   1. Open http://127.0.0.1:5001 in your browser
 echo   2. Complete the initial setup wizard
 echo   3. Configure your broker credentials
 echo   4. Start trading with Python strategies!

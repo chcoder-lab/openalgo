@@ -140,7 +140,7 @@ Environment="PATH=/opt/openalgo/.venv/bin"
 ExecStart=/opt/openalgo/.venv/bin/gunicorn \
     --worker-class eventlet \
     -w 1 \
-    --bind 127.0.0.1:5000 \
+    --bind 127.0.0.1:5001 \
     --timeout 120 \
     app:app
 Restart=always
@@ -194,7 +194,7 @@ server {
 
     # Main application
     location / {
-        proxy_pass http://127.0.0.1:5000;
+        proxy_pass http://127.0.0.1:5001;
         proxy_http_version 1.1;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;

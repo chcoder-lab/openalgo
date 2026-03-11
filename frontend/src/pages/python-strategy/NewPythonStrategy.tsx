@@ -26,7 +26,7 @@ API_KEY = os.getenv('OPENALGO_API_KEY')
 # Initialize the API client
 client = api(
     api_key=API_KEY,
-    host_url="http://127.0.0.1:5000"
+    host_url="http://127.0.0.1:5001"
 )
 
 def main():

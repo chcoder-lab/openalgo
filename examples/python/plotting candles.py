@@ -16,7 +16,7 @@ from plotly.subplots import make_subplots
 
 # ───────────────────────── CONFIG ─────────────────────────
 API_KEY = "3f75e26648a543a886c9b38332a6942e30e0710bbf0488cf432ef27745de8ae7"
-API_HOST = "http://127.0.0.1:5000"
+API_HOST = "http://127.0.0.1:5001"
 
 SYMBOL = "RELIANCE"
 EXCHANGE = "NSE"

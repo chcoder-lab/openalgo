@@ -597,7 +597,7 @@ limiter = Limiter(
 
 **Code:**
 ```python
-HOST_SERVER = os.getenv("HOST_SERVER", "http://127.0.0.1:5000")
+HOST_SERVER = os.getenv("HOST_SERVER", "http://127.0.0.1:5001")
 USE_HTTPS = HOST_SERVER.startswith("https://")
 
 app.config.update(

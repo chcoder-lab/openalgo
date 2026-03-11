@@ -296,7 +296,7 @@ if exist "%BACKUP_DIR%\" (
 echo.
 echo   Next Steps:
 echo     Start application: uv run app.py
-echo     API documentation: http://127.0.0.1:5000/api/docs
+echo     API documentation: http://127.0.0.1:5001/api/docs
 echo.
 
 if defined STASHED (

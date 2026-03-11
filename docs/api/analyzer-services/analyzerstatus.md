@@ -5,7 +5,7 @@ Get the current status of the analyzer (sandbox) mode.
 ## Endpoint URL
 
 ```http
-Local Host   :  POST http://127.0.0.1:5000/api/v1/analyzerstatus
+Local Host   :  POST http://127.0.0.1:5001/api/v1/analyzerstatus
 Ngrok Domain :  POST https://<your-ngrok-domain>.ngrok-free.app/api/v1/analyzerstatus
 Custom Domain:  POST https://<your-custom-domain>/api/v1/analyzerstatus
 ```

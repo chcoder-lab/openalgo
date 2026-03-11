@@ -11,7 +11,7 @@ This folder contains test scripts for the Option Symbol and Options Order APIs.
 
 1. **OpenAlgo must be running**
    - Start OpenAlgo application
-   - Ensure it's accessible at `http://127.0.0.1:5000`
+   - Ensure it's accessible at `http://127.0.0.1:5001`
 
 2. **API Key**
    - Get your API key from OpenAlgo settings
@@ -62,7 +62,7 @@ Edit the test files to configure:
 
 ```python
 # Configuration section at the top of each file
-BASE_URL = "http://127.0.0.1:5000"  # Change if using different host/port
+BASE_URL = "http://127.0.0.1:5001"  # Change if using different host/port
 API_KEY = "your_api_key_here"        # Replace with your actual API key
 ```
 
@@ -168,7 +168,7 @@ API_KEY = "your_api_key_here"        # Replace with your actual API key
 ConnectionError: ('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))
 ```
 
-**Solution**: Make sure OpenAlgo is running at `http://127.0.0.1:5000`
+**Solution**: Make sure OpenAlgo is running at `http://127.0.0.1:5001`
 
 ### Invalid API Key Error
 

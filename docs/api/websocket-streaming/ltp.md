@@ -59,7 +59,7 @@ import time
 # Initialize client with WebSocket
 client = api(
     api_key="your_api_key",
-    host="http://127.0.0.1:5000",
+    host="http://127.0.0.1:5001",
     ws_url="ws://127.0.0.1:8765"
 )
 

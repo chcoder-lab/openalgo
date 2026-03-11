@@ -16,7 +16,7 @@ logging.basicConfig(
 # Initialize feed client with explicit parameters
 client = api(
     api_key="7653f710c940cdf1d757b5a7d808a60f43bc7e9c0239065435861da2869ec0fc",  # Replace with your API key
-    host="http://127.0.0.1:5000",  # Replace with your API host
+    host="http://127.0.0.1:5001",  # Replace with your API host
     ws_url="ws://127.0.0.1:8765",  # Explicit WebSocket URL (can be different from REST API host)
 )
 

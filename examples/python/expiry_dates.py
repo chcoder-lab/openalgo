@@ -16,7 +16,7 @@ from openalgo import api
 # Initialize client with explicit parameters
 client = api(
     api_key="7371cc58b9d30204e5fee1d143dc8cd926bcad90c24218201ad81735384d2752",  # Replace with your API key
-    host="http://127.0.0.1:5000",  # Replace with your API host
+    host="http://127.0.0.1:5001",  # Replace with your API host
 )
 
 # Expiry request parameters

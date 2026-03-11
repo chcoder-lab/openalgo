@@ -217,7 +217,7 @@ sudo systemctl status openalgo
 tail -f log/openalgo.log
 
 # Verify web access
-curl http://127.0.0.1:5000/health
+curl http://127.0.0.1:5001/health
 
 # Check database connectivity
 uv run python -c "from database import init_all_databases; print('OK')"

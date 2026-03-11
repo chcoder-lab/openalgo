@@ -94,7 +94,6 @@ export default function BrokerSelect() {
   const [setupApiKeyMarket, setSetupApiKeyMarket] = useState('')
   const [setupApiSecretMarket, setSetupApiSecretMarket] = useState('')
   const [setupRedirectUrl, setSetupRedirectUrl] = useState('')
-  const [setupEnv, setSetupEnv] = useState('sandbox')
 
   useEffect(() => {
     // Fetch broker configuration
@@ -253,7 +252,7 @@ export default function BrokerSelect() {
         broker_api_key_market: encodeBase64(setupApiKeyMarket.trim()),
         broker_api_secret_market: encodeBase64(setupApiSecretMarket.trim()),
         redirect_url: encodeBase64(redirectUrl),
-        broker_api_environment: setupEnv,
+        broker_api_environment: undefined,
       }
 
       const response = await webClient.post('/api/broker/credentials', payload, {
@@ -265,7 +264,7 @@ export default function BrokerSelect() {
           broker_name: selectedBroker,
           broker_api_key: setupApiKey.trim(),
           redirect_url: redirectUrl,
-          broker_api_environment: setupEnv,
+          broker_api_environment: brokerConfig?.broker_api_environment || 'sandbox',
         }
         setBrokerConfig(localConfig as BrokerConfig)
         setSelectedBroker(selectedBroker)
@@ -422,19 +421,6 @@ export default function BrokerSelect() {
                       onChange={(e) => setSetupRedirectUrl(e.target.value)}
                       placeholder="https://your-domain/<broker>/callback"
                     />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="broker-env-select">Broker API Environment</Label>
-                    <Select value={setupEnv} onValueChange={setSetupEnv} disabled={isSubmitting}>
-                      <SelectTrigger id="broker-env-select" className="w-full">
-                        <SelectValue placeholder="Select environment" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="sandbox">Sandbox</SelectItem>
-                        <SelectItem value="production">Production</SelectItem>
-                      </SelectContent>
-                    </Select>
                   </div>
 
                   <Button type="submit" className="w-full" disabled={isSubmitting}>

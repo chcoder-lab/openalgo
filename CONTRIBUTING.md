@@ -177,7 +177,7 @@ source venv/bin/activate
 # Run the Flask application
 python app.py
 
-# Application will be available at http://127.0.0.1:5000
+# Application will be available at http://127.0.0.1:5001
 ```
 
 #### Option 2: Production with Gunicorn (Linux only)
@@ -210,8 +210,8 @@ python app.py
 
 ### First Time Setup
 
-1. **Access the application**: Navigate to `http://127.0.0.1:5000`
-2. **Setup account**: Go to `http://127.0.0.1:5000/setup`
+1. **Access the application**: Navigate to `http://127.0.0.1:5001`
+2. **Setup account**: Go to `http://127.0.0.1:5001/setup`
 3. **Create admin user**: Fill in the setup form
 4. **Login**: Use your credentials to access the dashboard
 5. **Configure broker**: Navigate to Settings → Broker Setup
@@ -415,9 +415,9 @@ git commit -m "refactor: optimize order processing pipeline"
 python app.py
 
 # Test specific features:
-# 1. Web UI: http://127.0.0.1:5000
-# 2. API Docs: http://127.0.0.1:5000/api/docs
-# 3. API Analyzer: http://127.0.0.1:5000/analyzer
+# 1. Web UI: http://127.0.0.1:5001
+# 2. API Docs: http://127.0.0.1:5001/api/docs
+# 3. API Analyzer: http://127.0.0.1:5001/analyzer
 ```
 
 #### Testing Checklist
@@ -589,7 +589,7 @@ OpenAlgo primarily uses manual testing currently:
    ```
 
 2. **API Testing**
-   - Use the built-in Swagger UI at `http://127.0.0.1:5000/api/docs`
+   - Use the built-in Swagger UI at `http://127.0.0.1:5001/api/docs`
    - Test API endpoints with Postman or curl
    - Verify request/response formats
 

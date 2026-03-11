@@ -197,7 +197,7 @@ Check:
 from openalgo import api
 
 # Connect (same as production)
-client = api(api_key="your-key", host="http://127.0.0.1:5000")
+client = api(api_key="your-key", host="http://127.0.0.1:5001")
 
 # When Analyzer Mode is ON, this goes to sandbox
 response = client.place_order(

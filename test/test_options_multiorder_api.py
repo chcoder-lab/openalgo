@@ -27,7 +27,7 @@ import time
 import requests
 
 # Configuration
-BASE_URL = "http://127.0.0.1:5000"
+BASE_URL = "http://127.0.0.1:5001"
 API_KEY = "c32eb9dee6673190bb9dfab5f18ef0a96b0d76ba484cd36bc5ca5f7ebc8745bf"
 
 

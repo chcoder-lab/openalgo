@@ -29,7 +29,7 @@ API Key: a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6
 
 1. Login to OpenAlgo
 2. Go to **API Key** in sidebar
-3. Or visit: `http://127.0.0.1:5000/apikey`
+3. Or visit: `http://127.0.0.1:5001/apikey`
 
 ### Step 2: Generate New Key
 
@@ -125,7 +125,7 @@ from openalgo import api
 # Initialize with your API key
 client = api(
     api_key="a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6",
-    host="http://127.0.0.1:5000"
+    host="http://127.0.0.1:5001"
 )
 
 # Place an order
@@ -146,7 +146,7 @@ const OpenAlgo = require('openalgo-node');
 
 const client = new OpenAlgo({
   apiKey: 'a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6',
-  host: 'http://127.0.0.1:5000'
+  host: 'http://127.0.0.1:5001'
 });
 
 // Place an order

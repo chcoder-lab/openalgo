@@ -12,7 +12,7 @@ import sys
 import requests
 
 
-def test_logout_csrf_protection(base_url="http://127.0.0.1:5000"):
+def test_logout_csrf_protection(base_url="http://127.0.0.1:5001"):
     """Test logout CSRF protection"""
     print(f"\n{'=' * 60}")
     print("Testing Logout CSRF Protection")
@@ -115,7 +115,7 @@ def test_logout_csrf_protection(base_url="http://127.0.0.1:5000"):
 
 
 if __name__ == "__main__":
-    base_url = "http://127.0.0.1:5000"
+    base_url = "http://127.0.0.1:5001"
     if len(sys.argv) > 1:
         base_url = sys.argv[1]
 

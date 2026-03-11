@@ -8,7 +8,7 @@ import pandas as pd
 from openalgo import api
 
 # Initialize the API client
-client = api(api_key="your_api_key_here", host="http://127.0.0.1:5000")
+client = api(api_key="your_api_key_here", host="http://127.0.0.1:5001")
 
 # Path to the CSV file
 symbols_file = "symbols.csv"

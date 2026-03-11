@@ -5,7 +5,7 @@ Get the current status of a specific order by its order ID.
 ## Endpoint URL
 
 ```http
-Local Host   :  POST http://127.0.0.1:5000/api/v1/orderstatus
+Local Host   :  POST http://127.0.0.1:5001/api/v1/orderstatus
 Ngrok Domain :  POST https://<your-ngrok-domain>.ngrok-free.app/api/v1/orderstatus
 Custom Domain:  POST https://<your-custom-domain>/api/v1/orderstatus
 ```

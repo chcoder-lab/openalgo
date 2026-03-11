@@ -15,7 +15,6 @@ from database.broker_credentials_db import (
     upsert_user_broker_credentials,
 )
 from utils.logging import get_logger
-from utils.session import check_session_validity
 
 logger = get_logger(__name__)
 
@@ -87,7 +86,6 @@ def get_broker_from_redirect_url(redirect_url: str) -> str:
 
 
 @broker_credentials_bp.route("/credentials", methods=["GET"])
-@check_session_validity
 def get_credentials():
     """Get current broker credentials (masked)."""
     try:
@@ -151,7 +149,6 @@ def get_credentials():
 
 
 @broker_credentials_bp.route("/credentials", methods=["POST"])
-@check_session_validity
 def update_credentials():
     """Update per-user broker credentials."""
     try:

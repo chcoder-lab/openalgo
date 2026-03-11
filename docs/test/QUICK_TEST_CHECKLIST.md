@@ -16,7 +16,7 @@ uv run app.py
 ```
 
 - [ ] App starts without errors
-- [ ] Frontend loads at http://127.0.0.1:5000
+- [ ] Frontend loads at http://127.0.0.1:5001
 - [ ] No console errors in browser
 
 ---
@@ -138,7 +138,7 @@ uv run app.py
 ```bash
 # Set your API key
 API_KEY="your_api_key_here"
-BASE_URL="http://127.0.0.1:5000"
+BASE_URL="http://127.0.0.1:5001"
 
 # Test equity quotes
 curl -X POST "$BASE_URL/api/v1/quotes" \
@@ -292,7 +292,7 @@ Run this sequence to verify basic functionality:
    ```
 
 2. **Browser Tests**
-   - Open http://127.0.0.1:5000
+   - Open http://127.0.0.1:5001
    - Login
    - Connect broker
    - Search "RELIANCE"

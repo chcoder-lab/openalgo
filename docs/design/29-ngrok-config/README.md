@@ -94,7 +94,7 @@ Ngrok starts automatically and displays the public URL:
 ╭─── OpenAlgo v2.0.0 ───────────────────────────────────────────╮
 │                                                               │
 │ Endpoints                                                     │
-│ Web App    http://127.0.0.1:5000                             │
+│ Web App    http://127.0.0.1:5001                             │
 │ WebSocket  ws://127.0.0.1:8765                               │
 │ Ngrok      https://abc123.ngrok.io                           │
 │                                                               │

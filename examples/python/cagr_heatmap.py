@@ -20,7 +20,7 @@ from openalgo import api
 # ---------------------------------------------------
 # Initialize OpenAlgo Client
 # ---------------------------------------------------
-client = api(api_key="your_api_key_here", host="http://127.0.0.1:5000")
+client = api(api_key="your_api_key_here", host="http://127.0.0.1:5001")
 
 print("🔁 OpenAlgo Python Bot is running.")
 

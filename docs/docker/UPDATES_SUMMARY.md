@@ -139,7 +139,7 @@ services:
   openalgo:
     container_name: openalgo-web
     ports:
-      - "127.0.0.1:5000:5000"
+      - "127.0.0.1:5001:5000"
       - "127.0.0.1:8765:8765"
 
     volumes:
@@ -157,7 +157,7 @@ services:
     # MISSING: shm_size
 
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://127.0.0.1:5000/auth/check-setup"]
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:5001/auth/check-setup"]
 
     restart: unless-stopped
 
@@ -176,7 +176,7 @@ services:
   openalgo:
     container_name: openalgo-web
     ports:
-      - "127.0.0.1:5000:5000"
+      - "127.0.0.1:5001:5000"
       - "127.0.0.1:8765:8765"
 
     volumes:
@@ -195,7 +195,7 @@ services:
     shm_size: '2gb'                        # ← NEW
 
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://127.0.0.1:5000/auth/check-setup"]
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:5001/auth/check-setup"]
 
     restart: unless-stopped
 

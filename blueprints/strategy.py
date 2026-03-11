@@ -64,7 +64,7 @@ scheduler = BackgroundScheduler(
 scheduler.start()
 
 # Get base URL from environment or default to localhost
-BASE_URL = os.getenv("HOST_SERVER", "http://127.0.0.1:5000")
+BASE_URL = os.getenv("HOST_SERVER", "http://127.0.0.1:5001")
 
 # Valid exchanges
 VALID_EXCHANGES = ["NSE", "BSE", "NFO", "CDS", "BFO", "BCD", "MCX", "NCDEX"]

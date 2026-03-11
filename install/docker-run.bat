@@ -251,7 +251,7 @@ echo   Strategies:     %OPENALGO_DIR%\strategies\
 echo   Logs:           %OPENALGO_DIR%\log\
 echo.
 echo   Redirect URL for broker portal:
-echo   http://127.0.0.1:5000/%BROKER_NAME%/callback
+echo   http://127.0.0.1:5001/%BROKER_NAME%/callback
 echo.
 echo   Documentation: https://docs.openalgo.in
 echo.
@@ -401,7 +401,7 @@ echo.
 echo [SUCCESS] OpenAlgo started successfully!
 echo.
 echo   ========================================
-echo   Web UI:     http://127.0.0.1:5000
+echo   Web UI:     http://127.0.0.1:5001
 echo   WebSocket:  ws://127.0.0.1:8765
 echo   ========================================
 echo.
@@ -458,7 +458,7 @@ if errorlevel 1 (
 ) else (
     echo [STATUS] OpenAlgo is running.
     echo.
-    echo   Web UI: http://127.0.0.1:5000
+    echo   Web UI: http://127.0.0.1:5001
 )
 echo.
 echo   Data directory: %OPENALGO_DIR%

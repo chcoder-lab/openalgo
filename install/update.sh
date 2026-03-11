@@ -494,7 +494,7 @@ if [ "$SERVER_MODE" = true ]; then
 else
     log_message "\nNext Steps:" "$YELLOW"
     log_message "  Start application: uv run app.py" "$BLUE"
-    log_message "  API documentation: http://127.0.0.1:5000/api/docs" "$BLUE"
+    log_message "  API documentation: http://127.0.0.1:5001/api/docs" "$BLUE"
 fi
 
 if [ -n "$NEW_VARS" ]; then

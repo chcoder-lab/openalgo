@@ -8,14 +8,14 @@ This is a Model Context Protocol (MCP) server that provides trading and market d
 
 Ensure your OpenAlgo server is running and properly configured:
 
-1. **Start OpenAlgo Server**: Your OpenAlgo server should be running (e.g., on `http://127.0.0.1:5000`)
+1. **Start OpenAlgo Server**: Your OpenAlgo server should be running (e.g., on `http://127.0.0.1:5001`)
 2. **Verify Connection**: Test that the server is accessible by visiting the web interface.
 3. **Broker Authentication**: Ensure your broker credentials are properly configured in OpenAlgo.
 
 ### 2. API Key
 
 To get your OpenAlgo API key:
-1. Open your OpenAlgo web interface (e.g., `http://127.0.0.1:5000`)
+1. Open your OpenAlgo web interface (e.g., `http://127.0.0.1:5001`)
 2. Navigate to **Settings → API Keys**.
 3. Generate or copy your existing API key.
 
@@ -34,7 +34,7 @@ Add the following configuration to your MCP client, replacing the placeholder pa
       "args": [
         "D:\\openalgo-mcp\\openalgo\\mcp\\mcpserver.py",
         "YOUR_API_KEY_HERE",
-        "http://127.0.0.1:5000"
+        "http://127.0.0.1:5001"
       ]
     }
   }
@@ -57,7 +57,7 @@ Add the following configuration to your MCP client, replacing the placeholder pa
       "args": [
         "/Users/your_username/openalgo/mcp/mcpserver.py",
         "YOUR_API_KEY_HERE",
-        "http://127.0.0.1:5000"
+        "http://127.0.0.1:5001"
       ]
     }
   }
@@ -80,7 +80,7 @@ Add the following configuration to your MCP client, replacing the placeholder pa
       "args": [
         "/home/your_username/openalgo/mcp/mcpserver.py",
         "YOUR_API_KEY_HERE",
-        "http://127.0.0.1:5000"
+        "http://127.0.0.1:5001"
       ]
     }
   }
@@ -197,7 +197,7 @@ Once configured, you can ask your AI assistant to:
 
 ## Troubleshooting
 
-1. **Connection Issues**: Verify OpenAlgo server is running on `http://127.0.0.1:5000`
+1. **Connection Issues**: Verify OpenAlgo server is running on `http://127.0.0.1:5001`
 2. **Authentication Errors**: Check your API key is correct and valid
 3. **Permission Errors**: Ensure the Python virtual environment has proper permissions
 4. **Order Failures**: Verify your broker connection and trading permissions

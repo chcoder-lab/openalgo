@@ -51,7 +51,7 @@ function SendOpenAlgoOrder(apiKey, strategy, symbol, exchange, action, quantity,
     json += "}";
 
     // Send HTTP request
-    url = "http://127.0.0.1:5000/api/v1/placeorder";
+    url = "http://127.0.0.1:5001/api/v1/placeorder";
 
     ih = InternetOpenURL(url, "POST", json, "Content-Type: application/json");
 
@@ -110,7 +110,7 @@ if(LastValue(Sell) AND LastValue(Ref(Sell, -1)) == 0)
 _SECTION_BEGIN("OpenAlgo Configuration");
 
 apiKey = ParamStr("API Key", "YOUR_API_KEY");
-baseUrl = ParamStr("OpenAlgo URL", "http://127.0.0.1:5000");
+baseUrl = ParamStr("OpenAlgo URL", "http://127.0.0.1:5001");
 strategy = ParamStr("Strategy Name", "AmibrokerStrategy");
 exchange = ParamList("Exchange", "NSE|NFO|BSE|MCX|CDS");
 product = ParamList("Product", "MIS|CNC|NRML");

@@ -701,7 +701,7 @@ if is_xts_broker "$BROKER_NAME"; then
     sudo sed -i "s|YOUR_BROKER_MARKET_API_SECRET|$BROKER_API_SECRET_MARKET|g" $OPENALGO_PATH/.env
 fi
 
-sudo sed -i "s|http://127.0.0.1:5000|https://$DOMAIN|g" $OPENALGO_PATH/.env
+sudo sed -i "s|http://127.0.0.1:5001|https://$DOMAIN|g" $OPENALGO_PATH/.env
 # Explicitly set HOST_SERVER in case the default value didn't match
 sudo sed -i "s|HOST_SERVER = '.*'|HOST_SERVER = 'https://$DOMAIN'|g" $OPENALGO_PATH/.env
 sudo sed -i "s|<broker>|$BROKER_NAME|g" $OPENALGO_PATH/.env

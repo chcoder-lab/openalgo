@@ -5,7 +5,7 @@ Calculate Option Greeks (Delta, Gamma, Theta, Vega, Rho) and Implied Volatility 
 ## Endpoint URL
 
 ```http
-Local Host   :  POST http://127.0.0.1:5000/api/v1/optiongreeks
+Local Host   :  POST http://127.0.0.1:5001/api/v1/optiongreeks
 Ngrok Domain :  POST https://<your-ngrok-domain>.ngrok-free.app/api/v1/optiongreeks
 Custom Domain:  POST https://<your-custom-domain>/api/v1/optiongreeks
 ```

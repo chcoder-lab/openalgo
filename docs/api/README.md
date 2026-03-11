@@ -5,7 +5,7 @@ Welcome to the OpenAlgo REST API Documentation. This comprehensive guide covers 
 ## Base URL
 
 ```http
-Local Host   :  http://127.0.0.1:5000/api/v1
+Local Host   :  http://127.0.0.1:5001/api/v1
 Ngrok Domain :  https://<your-ngrok-domain>.ngrok-free.app/api/v1
 Custom Domain:  https://<your-custom-domain>/api/v1
 ```

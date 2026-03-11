@@ -307,7 +307,7 @@ Square-off:         │                              squareoff_time
 ```bash
 WEBHOOK_RATE_LIMIT=100 per minute
 STRATEGY_RATE_LIMIT=200 per minute
-HOST_SERVER=http://127.0.0.1:5000  # Base URL for internal API calls
+HOST_SERVER=http://127.0.0.1:5001  # Base URL for internal API calls
 ```
 
 ## Key Files Reference

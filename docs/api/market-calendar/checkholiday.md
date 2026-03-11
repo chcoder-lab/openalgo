@@ -5,7 +5,7 @@ Check if a specific date is a market holiday for an exchange.
 ## Endpoint URL
 
 ```http
-Local Host   :  POST http://127.0.0.1:5000/api/v1/checkholiday
+Local Host   :  POST http://127.0.0.1:5001/api/v1/checkholiday
 Ngrok Domain :  POST https://<your-ngrok-domain>.ngrok-free.app/api/v1/checkholiday
 Custom Domain:  POST https://<your-custom-domain>/api/v1/checkholiday
 ```

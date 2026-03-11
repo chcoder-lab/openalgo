@@ -152,7 +152,7 @@ from openalgo import api
 
 # Configuration
 API_KEY = os.getenv('OPENALGO_APIKEY')
-HOST = os.getenv('OPENALGO_HOST', 'http://127.0.0.1:5000')
+HOST = os.getenv('OPENALGO_HOST', 'http://127.0.0.1:5001')
 SYMBOL = 'SBIN'
 EXCHANGE = 'NSE'
 QUANTITY = 1

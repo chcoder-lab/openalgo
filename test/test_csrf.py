@@ -23,7 +23,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
 class CSRFTester:
-    def __init__(self, base_url="http://127.0.0.1:5000"):
+    def __init__(self, base_url="http://127.0.0.1:5001"):
         self.base_url = base_url
         self.session = requests.Session()
         self.results = {
@@ -237,7 +237,7 @@ class CSRFTester:
 def main():
     """Main test execution"""
     # Check command line arguments
-    base_url = "http://127.0.0.1:5000"
+    base_url = "http://127.0.0.1:5001"
     if len(sys.argv) > 1:
         base_url = sys.argv[1]
 

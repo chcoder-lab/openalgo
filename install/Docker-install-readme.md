@@ -43,7 +43,7 @@ chmod +x docker-run.sh
 
 ### After Setup
 
-- **Web UI**: http://127.0.0.1:5000
+- **Web UI**: http://127.0.0.1:5001
 - **WebSocket**: ws://127.0.0.1:8765
 - **Config file**: `.env` (in script directory)
 - **Database**: `db/` (in script directory)

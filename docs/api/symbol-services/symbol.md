@@ -5,7 +5,7 @@ Get detailed information about a specific trading symbol including broker-specif
 ## Endpoint URL
 
 ```http
-Local Host   :  POST http://127.0.0.1:5000/api/v1/symbol
+Local Host   :  POST http://127.0.0.1:5001/api/v1/symbol
 Ngrok Domain :  POST https://<your-ngrok-domain>.ngrok-free.app/api/v1/symbol
 Custom Domain:  POST https://<your-custom-domain>/api/v1/symbol
 ```

@@ -5,7 +5,7 @@ Get available time intervals for historical data from the current broker.
 ## Endpoint URL
 
 ```http
-Local Host   :  POST http://127.0.0.1:5000/api/v1/intervals
+Local Host   :  POST http://127.0.0.1:5001/api/v1/intervals
 Ngrok Domain :  POST https://<your-ngrok-domain>.ngrok-free.app/api/v1/intervals
 Custom Domain:  POST https://<your-custom-domain>/api/v1/intervals
 ```

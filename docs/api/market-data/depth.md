@@ -5,7 +5,7 @@ Get market depth (Level 2 data) for a symbol showing top 5 bid and ask prices wi
 ## Endpoint URL
 
 ```http
-Local Host   :  POST http://127.0.0.1:5000/api/v1/depth
+Local Host   :  POST http://127.0.0.1:5001/api/v1/depth
 Ngrok Domain :  POST https://<your-ngrok-domain>.ngrok-free.app/api/v1/depth
 Custom Domain:  POST https://<your-custom-domain>/api/v1/depth
 ```

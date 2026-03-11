@@ -3,5 +3,5 @@ credentials-file: <ABSOLUTE_PATH_TO_JSON>
 
 ingress:
   - hostname: demo.example.com
-    service: http://127.0.0.1:5000
+    service: http://127.0.0.1:5001
   - service: http_status:404

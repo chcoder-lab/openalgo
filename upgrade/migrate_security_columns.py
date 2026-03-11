@@ -125,7 +125,7 @@ def main():
         logger.info("\n📌 Next Steps:")
         logger.info("   1. Restart your OpenAlgo application")
         logger.info("   2. The /security endpoint should now work properly")
-        logger.info("   3. You can access security settings at: http://127.0.0.1:5000/security")
+        logger.info("   3. You can access security settings at: http://127.0.0.1:5001/security")
         return 0
     else:
         logger.error("Migration failed! Please check the error messages above.")

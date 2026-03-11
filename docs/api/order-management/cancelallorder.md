@@ -5,7 +5,7 @@ Cancel all open orders and trigger pending orders in a single request.
 ## Endpoint URL
 
 ```http
-Local Host   :  POST http://127.0.0.1:5000/api/v1/cancelallorder
+Local Host   :  POST http://127.0.0.1:5001/api/v1/cancelallorder
 Ngrok Domain :  POST https://<your-ngrok-domain>.ngrok-free.app/api/v1/cancelallorder
 Custom Domain:  POST https://<your-custom-domain>/api/v1/cancelallorder
 ```

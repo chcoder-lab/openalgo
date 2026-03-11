@@ -22,7 +22,7 @@ cd frontend && npm install && npm run build && cd ..
 uv run app.py
 
 # 4. Access
-open http://127.0.0.1:5000
+open http://127.0.0.1:5001
 ```
 
 ---

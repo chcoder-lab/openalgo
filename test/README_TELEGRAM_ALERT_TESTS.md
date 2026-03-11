@@ -17,7 +17,7 @@ This folder contains test scripts for the Telegram Alert API.
 
 1. **OpenAlgo must be running**
    - Start OpenAlgo application
-   - Ensure it's accessible at `http://127.0.0.1:5000`
+   - Ensure it's accessible at `http://127.0.0.1:5001`
 
 2. **Telegram Bot Must Be Running**
    - Go to OpenAlgo Telegram settings (`/telegram`)
@@ -27,7 +27,7 @@ This folder contains test scripts for the Telegram Alert API.
 
 3. **User Must Be Linked**
    - Open your Telegram bot chat
-   - Send `/link your_api_key http://127.0.0.1:5000`
+   - Send `/link your_api_key http://127.0.0.1:5001`
    - Verify linking successful with `/status` command
    - Username must match your OpenAlgo account username
 
@@ -75,7 +75,7 @@ Edit the test file to configure:
 
 ```python
 # Configuration section at the top of the file
-BASE_URL = "http://127.0.0.1:5000"  # Change if using different host/port
+BASE_URL = "http://127.0.0.1:5001"  # Change if using different host/port
 API_KEY = "your_api_key_here"        # Replace with your actual API key
 USERNAME = "your_username_here"      # Replace with your OpenAlgo login username (NOT @telegram_handle)
 ```
@@ -158,7 +158,7 @@ ConnectionError: Failed to send notification
 
 **Solution**:
 1. Open your Telegram bot chat
-2. Send `/link your_api_key http://127.0.0.1:5000`
+2. Send `/link your_api_key http://127.0.0.1:5001`
 3. Verify with `/status` command
 4. **Ensure you're using OpenAlgo login username, NOT Telegram username**
    - ✅ Correct: `"rajandran"` (OpenAlgo login)
@@ -255,7 +255,7 @@ Use `\n` in JSON strings for line breaks:
 import requests
 
 def send_alert(message, priority=5):
-    url = "http://127.0.0.1:5000/api/v1/telegram/notify"
+    url = "http://127.0.0.1:5001/api/v1/telegram/notify"
     payload = {
         "apikey": "your_api_key",
         "username": "your_username",

@@ -447,9 +447,9 @@ export default function ProfilePage() {
 
   const getRedirectUrl = (broker: string): string => {
     // Extract host from current redirect URL or use default
-    const currentUrl = brokerCredentials?.redirect_url || 'http://127.0.0.1:5000'
+    const currentUrl = brokerCredentials?.redirect_url || 'http://127.0.0.1:5001'
     const match = currentUrl.match(/^(https?:\/\/[^/]+)/)
-    const host = match ? match[1] : 'http://127.0.0.1:5000'
+    const host = match ? match[1] : 'http://127.0.0.1:5001'
     return `${host}/${broker}/callback`
   }
 

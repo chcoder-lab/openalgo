@@ -54,7 +54,7 @@ def authenticate_broker(auth_code=None, state=None):
 
         # Get the redirect URL from environment variable
         # This should match the registered redirect URI in Pocketful
-        redirect_uri = os.getenv("REDIRECT_URL", "http://127.0.0.1:5000/pocketful/callback")
+        redirect_uri = os.getenv("REDIRECT_URL", "http://127.0.0.1:5001/pocketful/callback")
 
         # Prepare the token request
         headers = {
@@ -144,7 +144,7 @@ def get_authorization_url():
             return None, "Missing API key. Please set BROKER_API_KEY in your environment."
 
         # Get the redirect URL from environment variable
-        redirect_uri = os.getenv("REDIRECT_URL", "http://127.0.0.1:5000/pocketful/callback")
+        redirect_uri = os.getenv("REDIRECT_URL", "http://127.0.0.1:5001/pocketful/callback")
 
         # Define scopes - add more as needed
         scope = "orders holdings"

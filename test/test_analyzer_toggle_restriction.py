@@ -13,7 +13,7 @@ from datetime import datetime
 import requests
 
 # Configuration
-BASE_URL = "http://127.0.0.1:5000"
+BASE_URL = "http://127.0.0.1:5001"
 API_KEY = "bf1267a177b7ece1b10ca29b0ee8c4d62b153fe60caba3c566619e607cf9169f"
 
 
@@ -69,7 +69,7 @@ def test_analyzer_toggle_restriction():
     log("")
     log("Note: If the test shows WARNING, it means the API key is in Auto mode.")
     log("To test the restriction properly:")
-    log("1. Go to http://127.0.0.1:5000/apikey")
+    log("1. Go to http://127.0.0.1:5001/apikey")
     log("2. Toggle Order Execution Mode to ON (Semi-Auto)")
     log("3. Run this test again")
     log("")

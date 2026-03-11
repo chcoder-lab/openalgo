@@ -93,7 +93,7 @@ Congratulations! You've placed your first order! 🎉
 ### Using cURL
 
 ```bash
-curl -X POST http://127.0.0.1:5000/api/v1/placeorder \
+curl -X POST http://127.0.0.1:5001/api/v1/placeorder \
   -H "Content-Type: application/json" \
   -d '{
     "apikey": "YOUR_API_KEY",
@@ -115,7 +115,7 @@ from openalgo import api
 # Connect to OpenAlgo
 client = api(
     api_key="YOUR_API_KEY",
-    host="http://127.0.0.1:5000"
+    host="http://127.0.0.1:5001"
 )
 
 # Place order

@@ -89,8 +89,8 @@ When making style changes:
    Note: When using Gunicorn, `-w 1` specifies one worker process. This is important because WebSocket connections are persistent and stateful.
 
 2. **Access the Application**:
-   - Open your browser and navigate to [http://127.0.0.1:5000](http://127.0.0.1:5000)
-   - Set up your account at [http://127.0.0.1:5000/setup](http://127.0.0.1:5000/setup)
+   - Open your browser and navigate to [http://127.0.0.1:5001](http://127.0.0.1:5001)
+   - Set up your account at [http://127.0.0.1:5001/setup](http://127.0.0.1:5001/setup)
    - Log in with your credentials
 
 ## Troubleshooting

@@ -257,7 +257,7 @@ def main():
     # Initialize API client
     client = api(
         api_key="be51d361903e0898eafeee5824b2997430acb34116c5677240e1b97fc9c4d068",
-        host="http://127.0.0.1:5000",
+        host="http://127.0.0.1:5001",
         ws_url="ws://127.0.0.1:8765",
     )
 

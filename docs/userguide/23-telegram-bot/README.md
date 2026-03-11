@@ -310,7 +310,7 @@ Send custom notifications from strategies:
 ```python
 from openalgo import api
 
-client = api(api_key="YOUR_KEY", host="http://127.0.0.1:5000")
+client = api(api_key="YOUR_KEY", host="http://127.0.0.1:5001")
 
 # Send custom Telegram message
 client.send_telegram("Custom alert: Strategy triggered!")

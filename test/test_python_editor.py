@@ -12,7 +12,7 @@ from pathlib import Path
 import requests
 
 # Configuration
-BASE_URL = "http://127.0.0.1:5000/python"
+BASE_URL = "http://127.0.0.1:5001/python"
 TEST_STRATEGY_NAME = "Test Editor Strategy"
 TEST_STRATEGY_CODE = '''
 import time

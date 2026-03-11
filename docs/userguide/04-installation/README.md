@@ -23,7 +23,7 @@ cp .sample.env .env
 uv run app.py
 ```
 
-Open `http://127.0.0.1:5000` in your browser. That's it!
+Open `http://127.0.0.1:5001` in your browser. That's it!
 
 ## Detailed Installation
 
@@ -93,10 +93,10 @@ uv run app.py
 
 You should see:
 ```
-* Running on http://127.0.0.1:5000
+* Running on http://127.0.0.1:5001
 ```
 
-Open your browser and go to `http://127.0.0.1:5000`
+Open your browser and go to `http://127.0.0.1:5001`
 
 ### Ubuntu/Linux Installation
 
@@ -278,13 +278,13 @@ docker-compose up
 
 ### Check 1: Web Interface
 
-Open browser → Go to `http://127.0.0.1:5000`
+Open browser → Go to `http://127.0.0.1:5001`
 
 You should see the OpenAlgo login page.
 
 ### Check 2: API Docs
 
-Go to `http://127.0.0.1:5000/api/docs`
+Go to `http://127.0.0.1:5001/api/docs`
 
 You should see Swagger API documentation.
 
@@ -355,7 +355,7 @@ Run this twice - once for APP_KEY, once for API_KEY_PEPPER.
 uv run app.py
 ```
 
-Access at `http://127.0.0.1:5000`
+Access at `http://127.0.0.1:5001`
 
 ## Production Deployment (Ubuntu Server)
 

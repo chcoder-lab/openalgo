@@ -20,7 +20,7 @@ from openalgo import api
 # Initialize client
 client = api(
     api_key="YOUR_API_KEY",
-    host="http://127.0.0.1:5000"
+    host="http://127.0.0.1:5001"
 )
 
 # Test connection
@@ -198,7 +198,7 @@ import numpy as np
 from openalgo import api
 import time
 
-client = api(api_key="YOUR_KEY", host="http://127.0.0.1:5000")
+client = api(api_key="YOUR_KEY", host="http://127.0.0.1:5001")
 
 def get_historical_data(symbol, exchange, interval, days=30):
     """Fetch historical data for analysis"""
@@ -295,7 +295,7 @@ import pandas as pd
 import numpy as np
 import time
 
-client = api(api_key="YOUR_KEY", host="http://127.0.0.1:5000")
+client = api(api_key="YOUR_KEY", host="http://127.0.0.1:5001")
 
 def calculate_rsi(prices, period=14):
     """Calculate RSI indicator"""
@@ -361,7 +361,7 @@ import pandas as pd
 import time
 from concurrent.futures import ThreadPoolExecutor
 
-client = api(api_key="YOUR_KEY", host="http://127.0.0.1:5000")
+client = api(api_key="YOUR_KEY", host="http://127.0.0.1:5001")
 
 # Watchlist
 symbols = ["SBIN", "HDFC", "ICICIBANK", "INFY", "TCS", "RELIANCE"]
@@ -437,7 +437,7 @@ while True:
 from openalgo import api
 import datetime
 
-client = api(api_key="YOUR_KEY", host="http://127.0.0.1:5000")
+client = api(api_key="YOUR_KEY", host="http://127.0.0.1:5001")
 
 def get_option_symbol(underlying, expiry, strike, option_type):
     """Construct option symbol"""
@@ -541,7 +541,7 @@ iron_condor("NIFTY", expiry, 22000, 22100, 21000, 20900, 50)
 import time
 from openalgo import api
 
-client = api(api_key="YOUR_KEY", host="http://127.0.0.1:5000")
+client = api(api_key="YOUR_KEY", host="http://127.0.0.1:5001")
 
 def place_order_with_retry(order_params, max_retries=3):
     """Place order with automatic retry on failure"""
@@ -586,7 +586,7 @@ import schedule
 import time
 from openalgo import api
 
-client = api(api_key="YOUR_KEY", host="http://127.0.0.1:5000")
+client = api(api_key="YOUR_KEY", host="http://127.0.0.1:5001")
 
 def morning_scan():
     """Run at market open"""

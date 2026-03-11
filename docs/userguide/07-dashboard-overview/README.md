@@ -8,7 +8,7 @@ The Dashboard is your command center in OpenAlgo. It provides a quick snapshot o
 
 After logging in, the Dashboard is your default landing page:
 ```
-http://127.0.0.1:5000/dashboard
+http://127.0.0.1:5001/dashboard
 ```
 
 Or click **Dashboard** in the navigation menu.

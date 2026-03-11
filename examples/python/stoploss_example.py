@@ -10,7 +10,7 @@ from openalgo import api
 # Setup OpenAlgo client
 client = api(
     api_key="your-openalgo-api-key",  # Replace with your API key
-    host="http://127.0.0.1:5000",  # Replace with your API host
+    host="http://127.0.0.1:5001",  # Replace with your API host
     ws_url="ws://127.0.0.1:8765",  # Explicit WebSocket URL (can be different from REST API host)
 )
 

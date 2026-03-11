@@ -154,7 +154,7 @@ abc123def456   openalgo:latest   "/app/start.sh"  10 seconds ago   Up 9 seconds 
 ### Step 2: Check Application Health
 
 ```bash
-curl -f http://127.0.0.1:5000/auth/check-setup
+curl -f http://127.0.0.1:5001/auth/check-setup
 ```
 
 Expected output: HTTP 200 response

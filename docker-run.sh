@@ -290,7 +290,7 @@ do_setup() {
     echo "  Logs:           $OPENALGO_DIR/log/"
     echo ""
     echo "  Redirect URL for broker portal:"
-    echo "  http://127.0.0.1:5000/$BROKER_NAME/callback"
+    echo "  http://127.0.0.1:5001/$BROKER_NAME/callback"
     echo ""
     echo "  Documentation: https://docs.openalgo.in"
     echo ""
@@ -436,7 +436,7 @@ do_start() {
         log_success "OpenAlgo started successfully!"
         echo ""
         echo -e "${GREEN}  ========================================${NC}"
-        echo -e "${GREEN}  Web UI:     http://127.0.0.1:5000${NC}"
+        echo -e "${GREEN}  Web UI:     http://127.0.0.1:5001${NC}"
         echo -e "${GREEN}  WebSocket:  ws://127.0.0.1:8765${NC}"
         echo -e "${GREEN}  ========================================${NC}"
         echo ""
@@ -506,7 +506,7 @@ do_status() {
     if docker ps --filter "name=$CONTAINER" --filter "status=running" | grep -q "$CONTAINER"; then
         echo -e "${GREEN}[STATUS]${NC} OpenAlgo is running."
         echo ""
-        echo "  Web UI: http://127.0.0.1:5000"
+        echo "  Web UI: http://127.0.0.1:5001"
     else
         echo -e "${YELLOW}[STATUS]${NC} OpenAlgo is NOT running."
     fi

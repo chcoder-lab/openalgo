@@ -415,7 +415,7 @@ from openalgo import api
 
 # Get credentials from environment
 API_KEY = os.getenv('OPENALGO_APIKEY')
-HOST = os.getenv('OPENALGO_HOST', 'http://127.0.0.1:5000')
+HOST = os.getenv('OPENALGO_HOST', 'http://127.0.0.1:5001')
 
 # Initialize client
 client = api(api_key=API_KEY, host=HOST)

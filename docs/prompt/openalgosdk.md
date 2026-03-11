@@ -22,7 +22,7 @@ from openalgo import api
 # Replace 'your_api_key_here' with your actual API key
 # Specify the host URL with your hosted domain or ngrok domain. 
 # If running locally in windows then use the default host value. 
-client = api(api_key='your_api_key_here', host='http://127.0.0.1:5000')
+client = api(api_key='your_api_key_here', host='http://127.0.0.1:5001')
 
 ```
 
@@ -1745,7 +1745,7 @@ import time
 # Initialize OpenAlgo client
 client = api(
     api_key="your_api_key",                  # Replace with your actual OpenAlgo API key
-    host="http://127.0.0.1:5000",            # REST API host
+    host="http://127.0.0.1:5001",            # REST API host
     ws_url="ws://127.0.0.1:8765"             # WebSocket host
 )
 
@@ -1782,7 +1782,7 @@ import time
 # Initialize OpenAlgo client
 client = api(
     api_key="your_api_key",                  # Replace with your actual OpenAlgo API key
-    host="http://127.0.0.1:5000",            # REST API host
+    host="http://127.0.0.1:5001",            # REST API host
     ws_url="ws://127.0.0.1:8765"             # WebSocket host
 )
 
@@ -1819,7 +1819,7 @@ import time
 # Initialize OpenAlgo client
 client = api(
     api_key="your_api_key",                  # Replace with your actual OpenAlgo API key
-    host="http://127.0.0.1:5000",            # REST API host
+    host="http://127.0.0.1:5001",            # REST API host
     ws_url="ws://127.0.0.1:8765"             # WebSocket host
 )
 

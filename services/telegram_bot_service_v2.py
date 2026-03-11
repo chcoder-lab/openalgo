@@ -513,7 +513,7 @@ class TelegramBotService:
                 "To get started, link your OpenAlgo account:\\n"
                 "`/link <api_key> <host_url>`\\n\\n"
                 "Example:\\n"
-                "`/link your_api_key_here http://127.0.0.1:5000`\\n\\n"
+                "`/link your_api_key_here http://127.0.0.1:5001`\\n\\n"
                 "Use /help to see all available commands.",
                 parse_mode=ParseMode.MARKDOWN,
             )
@@ -568,7 +568,7 @@ class TelegramBotService:
             await update.message.reply_text(
                 "❌ Invalid format\\n"
                 "Usage: `/link <api_key> <host_url>`\\n"
-                "Example: `/link your_api_key http://127.0.0.1:5000`",
+                "Example: `/link your_api_key http://127.0.0.1:5001`",
                 parse_mode=ParseMode.MARKDOWN,
             )
             return

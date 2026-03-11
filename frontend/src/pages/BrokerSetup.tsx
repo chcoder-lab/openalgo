@@ -60,7 +60,7 @@ export default function BrokerSetup() {
   }, [navigate])
 
   const getRedirectUrl = (broker: string): string => {
-    const currentUrl = credentials?.redirect_url || 'http://127.0.0.1:5000'
+    const currentUrl = credentials?.redirect_url || 'http://127.0.0.1:5001'
     const host = currentUrl.split('/').slice(0, 3).join('/')
     return `${host}/${broker}/callback`
   }

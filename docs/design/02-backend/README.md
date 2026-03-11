@@ -345,8 +345,8 @@ uv run gunicorn --worker-class eventlet -w 1 app:app
 
 | URL | Purpose |
 |-----|---------|
-| http://127.0.0.1:5000 | Main application |
-| http://127.0.0.1:5000/api/docs | Swagger API documentation |
+| http://127.0.0.1:5001 | Main application |
+| http://127.0.0.1:5001/api/docs | Swagger API documentation |
 | ws://127.0.0.1:8765 | WebSocket market data |
 
 ## Key Files Reference

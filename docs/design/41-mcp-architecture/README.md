@@ -229,7 +229,7 @@ def get_timings(date):
       "args": [
         "/path/to/openalgo/mcp/mcpserver.py",
         "YOUR_API_KEY",
-        "http://127.0.0.1:5000"
+        "http://127.0.0.1:5001"
       ]
     }
   }
@@ -247,7 +247,7 @@ def get_timings(date):
       "args": [
         "path/to/openalgo/mcp/mcpserver.py",
         "YOUR_API_KEY",
-        "http://127.0.0.1:5000"
+        "http://127.0.0.1:5001"
       ]
     }
   }
@@ -265,7 +265,7 @@ def get_timings(date):
       "args": [
         "path/to/openalgo/mcp/mcpserver.py",
         "YOUR_API_KEY",
-        "http://127.0.0.1:5000"
+        "http://127.0.0.1:5001"
       ]
     }
   }

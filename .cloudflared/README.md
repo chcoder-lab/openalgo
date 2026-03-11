@@ -31,7 +31,7 @@ cloudflared --version
 Use this for quick testing or demos.
 
 ```powershell
-cloudflared tunnel --url http://127.0.0.1:5000
+cloudflared tunnel --url http://127.0.0.1:5001
 ```
 
 Cloudflare will generate a **temporary public URL** like:
@@ -80,7 +80,7 @@ credentials-file: <ABSOLUTE_PATH_TO_JSON>
 
 ingress:
   - hostname: demo.example.com
-    service: http://127.0.0.1:5000
+    service: http://127.0.0.1:5001
   - service: http_status:404
 ```
 

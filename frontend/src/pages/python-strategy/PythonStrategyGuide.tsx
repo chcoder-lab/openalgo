@@ -49,7 +49,7 @@ SLOW_EMA = 21
 # Initialize OpenAlgo client
 client = api(
     api_key="YOUR_OPENALGO_API_KEY",
-    host="http://127.0.0.1:5000"
+    host="http://127.0.0.1:5001"
 )
 
 def calculate_ema(prices, period):
@@ -851,7 +851,7 @@ pip install -r requirements.txt`}
           <div className="grid gap-3 text-sm">
             <div className="bg-muted p-3 rounded-lg">
               <p className="font-medium mb-1">Initialize Client</p>
-              <code className="text-xs">client = api(api_key="YOUR_KEY", host="http://127.0.0.1:5000")</code>
+              <code className="text-xs">client = api(api_key="YOUR_KEY", host="http://127.0.0.1:5001")</code>
             </div>
             <div className="bg-muted p-3 rounded-lg">
               <p className="font-medium mb-1">Place Order</p>

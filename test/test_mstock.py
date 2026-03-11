@@ -16,7 +16,7 @@ class TestMstockBroker(unittest.TestCase):
         self.api_key = os.getenv(
             "OPENALGO_API_KEY", "3bb8d260915ff680a7258108c0483b9eb7675ced31309a36f5846366943ee9fa"
         )
-        self.client = OAClient(api_key=self.api_key, host="http://127.0.0.1:5000")
+        self.client = OAClient(api_key=self.api_key, host="http://127.0.0.1:5001")
 
     def test_place_order(self):
         """Test placing a simple order."""

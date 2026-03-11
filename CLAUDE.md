@@ -144,9 +144,9 @@ uv run gunicorn --worker-class eventlet -w 1 app:app
 ```
 
 Access points:
-- Main app: http://127.0.0.1:5000
-- API docs: http://127.0.0.1:5000/api/docs
-- React frontend: http://127.0.0.1:5000/react
+- Main app: http://127.0.0.1:5001
+- API docs: http://127.0.0.1:5001/api/docs
+- React frontend: http://127.0.0.1:5001/react
 
 ### Testing
 
@@ -171,9 +171,9 @@ npm run e2e                # End-to-end tests
 ```
 
 Most testing is currently manual via:
-- Web UI: http://127.0.0.1:5000
-- Swagger API: http://127.0.0.1:5000/api/docs
-- API Analyzer: http://127.0.0.1:5000/analyzer
+- Web UI: http://127.0.0.1:5001
+- Swagger API: http://127.0.0.1:5001/api/docs
+- API Analyzer: http://127.0.0.1:5001/analyzer
 
 ### Building for Production
 

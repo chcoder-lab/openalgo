@@ -176,6 +176,7 @@ from database.action_center_db import init_db as ensure_action_center_tables_exi
 from database.analyzer_db import init_db as ensure_analyzer_tables_exists
 from database.apilog_db import init_db as ensure_api_log_tables_exists
 from database.auth_db import init_db as ensure_auth_tables_exists
+from database.broker_credentials_db import init_db as ensure_broker_credentials_tables_exists
 from database.chartink_db import init_db as ensure_chartink_tables_exists
 from database.flow_db import init_db as ensure_flow_tables_exists
 from database.historify_db import init_database as ensure_historify_tables_exists
@@ -216,6 +217,11 @@ logger = get_logger(__name__)
 def create_app():
     # Initialize Flask application
     app = Flask(__name__)
+
+    # Ensure per-request broker credential overrides are honored
+    from utils.config import ensure_getenv_patched
+
+    ensure_getenv_patched()
 
     # Initialize SocketIO
     socketio.init_app(app)  # Link SocketIO to the Flask app
@@ -402,6 +408,44 @@ def create_app():
             app.db_ready.wait(timeout=30)
 
     @app.before_request
+    def set_broker_context_for_request():
+        """Attach per-user broker credentials to request context."""
+        from flask import g, request
+
+        # Skip static assets
+        if request.path.startswith("/static/") or request.path.startswith("/assets/"):
+            return
+
+        user_id = session.get("user")
+
+        if not user_id:
+            api_key = None
+            if request.is_json:
+                payload = request.get_json(silent=True) or {}
+                api_key = payload.get("apikey")
+            if not api_key:
+                api_key = request.form.get("apikey") or request.args.get("apikey")
+            if not api_key:
+                api_key = request.headers.get("X-API-KEY")
+
+            if api_key:
+                from database.auth_db import verify_api_key
+
+                user_id = verify_api_key(api_key)
+
+        if not user_id:
+            return
+
+        from database.broker_credentials_db import get_user_broker_credentials
+        from utils.config import set_broker_context
+
+        creds = get_user_broker_credentials(user_id)
+        if not creds:
+            return
+
+        g.broker_context_token = set_broker_context(creds)
+
+    @app.before_request
     def check_session_expiry():
         """Check session validity before each request"""
         from flask import request
@@ -417,6 +461,7 @@ def create_app():
             in [
                 "/",
                 "/auth/login",
+                "/auth/signup",
                 "/auth/reset-password",
                 "/auth/csrf-token",
                 "/auth/broker-config",
@@ -426,6 +471,7 @@ def create_app():
                 "/download",
                 "/faq",
                 "/login",  # React login page
+                "/signup",
             ]
             or request.path.startswith("/auth/broker/")  # OAuth callbacks
             or request.path.startswith("/_reload-ws")
@@ -438,6 +484,17 @@ def create_app():
             revoke_user_tokens(revoke_db_tokens=False)
             session.clear()
             # Don't redirect here, let individual routes handle it
+
+    @app.after_request
+    def clear_broker_context(response):
+        from flask import g
+
+        from utils.config import reset_broker_context
+
+        token = getattr(g, "broker_context_token", None)
+        if token is not None:
+            reset_broker_context(token)
+        return response
 
     @app.errorhandler(400)
     def csrf_error(error):
@@ -563,6 +620,7 @@ def setup_environment(app):
             db_init_functions = [
                 ("Auth DB", ensure_auth_tables_exists),
                 ("User DB", ensure_user_tables_exists),
+                ("Broker Credentials DB", ensure_broker_credentials_tables_exists),
                 ("Master Contract DB", ensure_master_contract_tables_exists),
                 ("API Log DB", ensure_api_log_tables_exists),
                 ("Analyzer DB", ensure_analyzer_tables_exists),

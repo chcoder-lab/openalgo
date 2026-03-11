@@ -27,7 +27,7 @@ import {
   XCircle,
 } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { showToast, toast } from '@/utils/toast'
 import { webClient } from '@/api/client'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
@@ -90,6 +90,7 @@ const ACCENT_COLORS: { value: ThemeColor; label: string; color: string }[] = [
 
 interface ProfileData {
   username: string
+  is_admin: boolean
   smtp_settings: {
     smtp_server: string
     smtp_port: number
@@ -121,6 +122,7 @@ interface BrokerCredentials {
   broker_api_secret_market: string
   broker_api_secret_market_raw_length: number
   redirect_url: string
+  broker_api_environment: string
   current_broker: string
   valid_brokers: string[]
   ngrok_allow: boolean
@@ -270,6 +272,7 @@ export default function ProfilePage() {
   const user = useAuthStore((s) => s.user)
   const { mode, color, appMode, setMode, setColor } = useThemeStore()
   const alertStore = useAlertStore()
+  const location = useLocation()
   const [activeTab, setActiveTab] = useState('account')
   const [isLoading, setIsLoading] = useState(true)
   const [profileData, setProfileData] = useState<ProfileData | null>(null)
@@ -312,12 +315,30 @@ export default function ProfilePage() {
   const [brokerApiKeyMarket, setBrokerApiKeyMarket] = useState('')
   const [brokerApiSecretMarket, setBrokerApiSecretMarket] = useState('')
   const [selectedBroker, setSelectedBroker] = useState('')
+  const [brokerApiEnvironment, setBrokerApiEnvironment] = useState('sandbox')
   const [ngrokEnabled, setNgrokEnabled] = useState(false)
   const [hostServer, setHostServer] = useState('')
   const [websocketUrl, setWebsocketUrl] = useState('')
   const [isSavingBroker, setIsSavingBroker] = useState(false)
   const [isSavingNgrok, setIsSavingNgrok] = useState(false)
   const [showRestartDialog, setShowRestartDialog] = useState(false)
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search)
+    const tab = params.get('tab')
+    const allowedTabs = new Set([
+      'account',
+      'broker',
+      'alerts',
+      'permissions',
+      'theme',
+      'smtp',
+      'totp',
+    ])
+    if (tab && allowedTabs.has(tab)) {
+      setActiveTab(tab)
+    }
+  }, [location.search])
 
   // Permissions state
   const [permissionsData, setPermissionsData] = useState<PermissionsData | null>(null)
@@ -368,6 +389,7 @@ export default function ProfilePage() {
       if (response.data.status === 'success') {
         setBrokerCredentials(response.data.data)
         setSelectedBroker(response.data.data.current_broker)
+        setBrokerApiEnvironment(response.data.data.broker_api_environment || 'sandbox')
         setNgrokEnabled(response.data.data.ngrok_allow)
         setHostServer(response.data.data.host_server)
         setWebsocketUrl(response.data.data.websocket_url || '')
@@ -431,6 +453,14 @@ export default function ProfilePage() {
     return `${host}/${broker}/callback`
   }
 
+  const isEnvToggleBroker = ['tastytrade', 'webull'].includes(
+    selectedBroker || brokerCredentials?.current_broker || ''
+  )
+  const hasEnvironmentChange =
+    isEnvToggleBroker &&
+    brokerApiEnvironment &&
+    brokerApiEnvironment !== (brokerCredentials?.broker_api_environment || 'sandbox')
+
   const handleBrokerSave = async () => {
     setIsSavingBroker(true)
     try {
@@ -442,6 +472,9 @@ export default function ProfilePage() {
       if (selectedBroker && selectedBroker !== brokerCredentials?.current_broker) {
         formData.append('redirect_url', getRedirectUrl(selectedBroker))
       }
+      if (hasEnvironmentChange) {
+        formData.append('broker_api_environment', brokerApiEnvironment)
+      }
 
       const response = await webClient.post<{
         status: string
@@ -451,7 +484,7 @@ export default function ProfilePage() {
 
       if (response.data.status === 'success') {
         showToast.success(response.data.message, 'admin')
-        // Update local state to reflect saved values (don't re-fetch since env vars won't update until restart)
+        // Update local state to reflect saved values
         if (brokerCredentials) {
           setBrokerCredentials({
             ...brokerCredentials,
@@ -459,6 +492,9 @@ export default function ProfilePage() {
             redirect_url: selectedBroker !== brokerCredentials.current_broker
               ? getRedirectUrl(selectedBroker)
               : brokerCredentials.redirect_url,
+            broker_api_environment: hasEnvironmentChange
+              ? brokerApiEnvironment
+              : brokerCredentials.broker_api_environment,
             // Update masked values to show something was changed
             broker_api_key: brokerApiKey ? `${brokerApiKey.slice(0, 6)}${'*'.repeat(Math.max(0, brokerApiKey.length - 6))}` : brokerCredentials.broker_api_key,
             broker_api_key_raw_length: brokerApiKey ? brokerApiKey.length : brokerCredentials.broker_api_key_raw_length,
@@ -471,8 +507,6 @@ export default function ProfilePage() {
         setBrokerApiSecret('')
         setBrokerApiKeyMarket('')
         setBrokerApiSecretMarket('')
-        // Show restart dialog
-        setShowRestartDialog(true)
       } else {
         showToast.error(response.data.message || 'Failed to save credentials', 'admin')
       }
@@ -489,7 +523,8 @@ export default function ProfilePage() {
       brokerApiSecret ||
       brokerApiKeyMarket ||
       brokerApiSecretMarket ||
-      (selectedBroker && selectedBroker !== brokerCredentials?.current_broker)
+      (selectedBroker && selectedBroker !== brokerCredentials?.current_broker) ||
+      hasEnvironmentChange
   )
 
   const hasNgrokChanges = Boolean(
@@ -525,7 +560,6 @@ export default function ProfilePage() {
       if (response.data.status === 'success') {
         showToast.success(response.data.message, 'admin')
         // Update local brokerCredentials state to reflect saved values
-        // Don't re-fetch from server since env vars won't update until restart
         if (brokerCredentials) {
           setBrokerCredentials({
             ...brokerCredentials,
@@ -818,7 +852,7 @@ export default function ProfilePage() {
               <div className="space-y-2">
                 <Label>Account Type</Label>
                 <div className="pt-2">
-                  <Badge>Administrator</Badge>
+                  <Badge>{profileData?.is_admin ? 'Administrator' : 'User'}</Badge>
                 </div>
               </div>
             </CardContent>
@@ -920,10 +954,9 @@ export default function ProfilePage() {
           <Alert>
             <Key className="h-4 w-4" />
             <AlertTitle>Broker API Credentials</AlertTitle>
-            <AlertDescription>
-              Update your broker API credentials. Changes require an application restart to take
-              effect. You will be logged out after saving.
-            </AlertDescription>
+          <AlertDescription>
+              Update your broker API credentials. Changes are saved per user and take effect immediately.
+          </AlertDescription>
           </Alert>
 
           {/* Current Broker */}
@@ -949,6 +982,16 @@ export default function ProfilePage() {
                   </code>
                 </div>
               </div>
+              {['tastytrade', 'webull'].includes(brokerCredentials?.current_broker || '') && (
+                <div className="grid grid-cols-2 gap-4 pt-2">
+                  <div className="space-y-2">
+                    <Label>API Environment</Label>
+                    <Badge variant="outline">
+                      {(brokerCredentials?.broker_api_environment || 'sandbox').toUpperCase()}
+                    </Badge>
+                  </div>
+                </div>
+              )}
               <div className="grid grid-cols-2 gap-4 pt-2">
                 <div className="space-y-2">
                   <Label>API Key</Label>
@@ -1026,6 +1069,28 @@ export default function ProfilePage() {
                   </p>
                 )}
               </div>
+
+              {isEnvToggleBroker && (
+                <div className="flex items-center justify-between rounded-lg border p-4">
+                  <div className="space-y-0.5">
+                    <Label htmlFor="broker-env">Broker API Environment</Label>
+                    <p className="text-sm text-muted-foreground">
+                      Toggle between sandbox and production endpoints for this broker.
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className="text-xs text-muted-foreground">Sandbox</span>
+                    <Switch
+                      id="broker-env"
+                      checked={brokerApiEnvironment === 'production'}
+                      onCheckedChange={(checked) =>
+                        setBrokerApiEnvironment(checked ? 'production' : 'sandbox')
+                      }
+                    />
+                    <span className="text-xs text-muted-foreground">Production</span>
+                  </div>
+                </div>
+              )}
 
               {/* API Credentials */}
               <div className="grid grid-cols-2 gap-4">
@@ -1112,6 +1177,15 @@ export default function ProfilePage() {
                   <AlertTitle>Dhan API Key Format</AlertTitle>
                   <AlertDescription>
                     Format: <code>client_id:::api_key</code>
+                  </AlertDescription>
+                </Alert>
+              )}
+              {selectedBroker === 'webull' && (
+                <Alert className="bg-blue-50 dark:bg-blue-950 border-blue-200">
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertTitle>Webull Credential Mapping</AlertTitle>
+                  <AlertDescription>
+                    Broker API Key/Secret = OAuth client_id/client_secret. Market API Key/Secret = app_key/app_secret (for request signing).
                   </AlertDescription>
                 </Alert>
               )}
@@ -2240,9 +2314,7 @@ export default function ProfilePage() {
               Restart Required
             </AlertDialogTitle>
             <AlertDialogDescription className="space-y-3">
-              <p>
-                Your configuration has been saved to the <code className="bg-muted px-1 rounded">.env</code> file.
-              </p>
+              <p>Your system settings have been saved.</p>
               <p>
                 To apply these changes, please restart the OpenAlgo application using your usual method (terminal, service manager, or container orchestrator).
               </p>

@@ -20,8 +20,6 @@ from utils.logging import get_logger
 
 # Initialize logger
 logger = get_logger(__name__)
-
-BROKER_API_KEY = get_broker_api_key()
 LOGIN_RATE_LIMIT_MIN = get_login_rate_limit_min()
 LOGIN_RATE_LIMIT_HOUR = get_login_rate_limit_hour()
 
@@ -268,26 +266,11 @@ def broker_callback(broker, para=None):
         auth_token, error_message = auth_function(code)
         forward_url = "broker.html"
 
-    elif broker == "tradejini":
-        if request.method == "GET":
-            # Redirect to React TOTP page
-            return redirect("/broker/tradejini/totp")
-
-        elif request.method == "POST":
-            password = request.form.get("password")
-            twofa = request.form.get("twofa")
-            twofatype = request.form.get("twofatype")
-
-            # Get auth token using individual token service
-            auth_token, error_message = auth_function(
-                password=password, twofa=twofa, twofa_type=twofatype
-            )
-
-            if auth_token:
-                return handle_auth_success(auth_token, session["user"], broker)
-            else:
-                return jsonify({"status": "error", "message": error_message}), 401
-
+    elif broker == "tastytrade":
+        code = request.args.get("code")
+        logger.debug(f"Tastytrade broker - The code is {code}")
+        redirect_uri = url_for("brlogin.broker_callback", broker="tastytrade", _external=True)
+        auth_token, error_message = auth_function(code, redirect_uri)
         forward_url = "broker.html"
 
     elif broker == "icici":
@@ -742,7 +725,7 @@ def broker_callback(broker, para=None):
                 # No session data - initial request, redirect to RMoney OAuth login
                 from broker.rmoney.baseurl import INTERACTIVE_URL as RMONEY_INTERACTIVE_URL
 
-                BROKER_API_KEY_LOCAL = os.getenv("BROKER_API_KEY")
+                BROKER_API_KEY_LOCAL = get_broker_api_key()
                 callback_url = url_for(
                     "brlogin.broker_callback", broker="rmoney", _external=True
                 )
@@ -766,7 +749,7 @@ def broker_callback(broker, para=None):
         session["broker"] = broker
         logger.info(f"Successfully connected broker: {broker}")
         if broker == "zerodha":
-            auth_token = f"{BROKER_API_KEY}:{auth_token}"
+            auth_token = f"{get_broker_api_key()}:{auth_token}"
         if broker == "dhan":
             auth_token = f"{auth_token}"
 
@@ -812,19 +795,19 @@ def dhan_initiate_oauth():
     if "user" not in session:
         return redirect(url_for("auth.login"))
 
-    # Get client_id from .env BROKER_API_KEY (format: client_id:::api_key)
-    BROKER_API_KEY = os.getenv("BROKER_API_KEY")
+    # Get client_id from broker API key (format: client_id:::api_key)
+    BROKER_API_KEY = get_broker_api_key()
     client_id = None
 
     if ":::" in BROKER_API_KEY:
         client_id, _ = BROKER_API_KEY.split(":::")
 
     if not client_id:
-        error_message = "Client ID not found in BROKER_API_KEY. Please configure BROKER_API_KEY as 'client_id:::api_key' in .env"
+        error_message = "Client ID not found in BROKER_API_KEY. Please configure your broker API key as 'client_id:::api_key' in Profile > Broker."
         logger.error(error_message)
         return handle_auth_failure(error_message, forward_url="broker.html")
 
-    logger.info(f"Initiating Dhan OAuth flow with client ID from .env: {client_id}")
+    logger.info(f"Initiating Dhan OAuth flow with client ID from broker profile: {client_id}")
 
     # Import the required functions
     from broker.dhan.api.auth_api import generate_consent, get_login_url

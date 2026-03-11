@@ -11,7 +11,7 @@ OpenAlgo already supports XTS API through the `compositedge` plugin. Any broker 
 | `baseurl.py`    | Update to your broker’s base domain and API paths   |
 | `brlogin.py`    | Add your broker’s login redirect logic              |
 | `broker.html`   | Add broker option and JS login switch               |
-| `.sample.env`   | Add the new broker’s credentials                    |
+| `.sample.env`   | Add the new broker to `VALID_BROKERS`               |
 
 > ⚡️ *No other backend or API changes are needed if the broker supports `apibinarymarketdata`.*
 
@@ -25,7 +25,7 @@ OpenAlgo already supports XTS API through the `compositedge` plugin. Any broker 
 cp -r broker/compositedge broker/<yourbroker>
 ```
 
-Or reuse the same folder and override dynamically via `.env`.
+Or reuse the same folder and override dynamically via configuration.
 
 ---
 
@@ -76,23 +76,14 @@ case 'xtsalpha':
 
 ---
 
-### 5. 🔐 Update `.env` or `.sample.env`
+### 5. 🔐 Configure Broker Credentials (Per User)
 
-```env
-# Broker Configuration
-BROKER_API_KEY='YOUR_BROKER_API_KEY'
-BROKER_API_SECRET='YOUR_BROKER_API_SECRET'
+Broker API keys, secrets, and redirect URL are configured per user in the UI:
 
-# Market Data Configuration (XTS only)
-BROKER_API_KEY_MARKET='YOUR_BROKER_MARKET_API_KEY'
-BROKER_API_SECRET_MARKET='YOUR_BROKER_MARKET_API_SECRET'
+- Log in and open `Profile > Broker` or `/broker-setup`.
+- Enter the broker API key, secret, market data credentials (XTS), and redirect URL.
 
-# OAuth Redirect
-REDIRECT_URL='http://127.0.0.1:5000/xtsalpha/callback'
-
-# Valid Brokers (must include new one)
-VALID_BROKERS='fivepaisa,aliceblue,angel,compositedge,dhan,firstock,flattrade,fyers,icici,kotak,paytm,shoonya,upstox,zebu,zerodha,xtsalpha'
-```
+Keep `VALID_BROKERS` in `.sample.env`/`.env` updated so the new broker is allowed.
 
 ---
 
@@ -223,4 +214,4 @@ broker/compositedge/
 
 Thanks to OpenAlgo’s modular and broker-agnostic design:
 
-> 💡 You can integrate **any XTS broker in under 5 minutes** by changing only `baseurl.py`, `.env`, and a few UI/backend hooks.
+> 💡 You can integrate **any XTS broker in under 5 minutes** by changing only `baseurl.py`, updating `VALID_BROKERS`, and a few UI/backend hooks.

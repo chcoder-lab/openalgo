@@ -34,18 +34,11 @@ API_KEY_PEPPER = 'your_32_character_pepper_here'
 
 ### Broker Configuration
 
+Broker credentials are **per-user** and stored in the database. Configure them in **Profile → Broker Configuration** or `/broker-setup`.
+
+Environment variables only control the broker allowlist:
+
 ```bash
-# Broker API credentials
-BROKER_API_KEY = 'YOUR_BROKER_API_KEY'
-BROKER_API_SECRET = 'YOUR_BROKER_API_SECRET'
-
-# XTS API brokers only (5Paisa XTS, Jainam XTS, etc.)
-BROKER_API_KEY_MARKET = 'YOUR_BROKER_MARKET_API_KEY'
-BROKER_API_SECRET_MARKET = 'YOUR_BROKER_MARKET_API_SECRET'
-
-# OAuth redirect URL
-REDIRECT_URL = 'http://127.0.0.1:5000/<broker>/callback'
-
 # Enabled brokers (comma-separated)
 VALID_BROKERS = 'fivepaisa,fivepaisaxts,aliceblue,angel,compositedge,dhan,dhan_sandbox,definedge,firstock,flattrade,fyers,groww,ibulls,iifl,indmoney,jainamxts,kotak,motilal,mstock,nubra,paytm,pocketful,samco,shoonya,tradejini,upstox,wisdom,zebu,zerodha'
 ```
@@ -246,9 +239,6 @@ When deploying to Railway or Render, set these environment variables in the plat
 | Variable | Description |
 |----------|-------------|
 | `HOST_SERVER` | Your app URL (e.g., `https://your-app.up.railway.app`) |
-| `REDIRECT_URL` | Broker OAuth callback URL |
-| `BROKER_API_KEY` | Broker API key |
-| `BROKER_API_SECRET` | Broker API secret |
 | `APP_KEY` | Generated secret key |
 | `API_KEY_PEPPER` | Generated pepper |
 

@@ -21,8 +21,10 @@ from database.user_db import (  # Import the function
     User,
     authenticate_user,
     db_session,
+    any_user_exists,
     find_user_by_email,
     find_user_by_username,
+    get_user_by_username,
 )
 from extensions import socketio
 from limiter import limiter  # Import the limiter instance
@@ -63,32 +65,46 @@ def get_broker_config():
     """
     REDIRECT_URL = os.getenv("REDIRECT_URL")
 
-    # Extract broker name from redirect URL
-    match = re.search(r"/([^/]+)/callback$", REDIRECT_URL)
-    broker_name = match.group(1) if match else None
-
-    if not broker_name:
-        return jsonify({"status": "error", "message": "Broker not configured"}), 500
-
     # Return full config only for authenticated users
     if "user" in session:
-        BROKER_API_KEY = os.getenv("BROKER_API_KEY")
+        from database.broker_credentials_db import get_user_broker_credentials
+
+        creds = get_user_broker_credentials(session.get("user"))
+        if not creds:
+            return jsonify(
+                {
+                    "status": "error",
+                    "message": "Broker credentials not configured",
+                }
+            ), 400
+
+        broker_name = creds.get("broker_name")
         return jsonify(
             {
                 "status": "success",
                 "broker_name": broker_name,
-                "broker_api_key": BROKER_API_KEY,
-                "redirect_url": REDIRECT_URL,
+                "broker_api_key": creds.get("broker_api_key"),
+                "redirect_url": creds.get("redirect_url"),
+                "broker_api_environment": creds.get("broker_api_environment") or "sandbox",
             }
         )
 
     # Unauthenticated: return broker name only so the login button is visible
+    broker_name = None
+    if REDIRECT_URL:
+        match = re.search(r"/([^/]+)/callback$", REDIRECT_URL)
+        broker_name = match.group(1) if match else None
+    if not broker_name:
+        valid_brokers_str = os.getenv("VALID_BROKERS", "")
+        broker_name = valid_brokers_str.split(",")[0].strip() if valid_brokers_str else None
+
     return jsonify(
         {
             "status": "success",
             "broker_name": broker_name,
             "broker_api_key": None,
             "redirect_url": REDIRECT_URL,
+            "broker_api_environment": "sandbox",
         }
     )
 
@@ -96,7 +112,7 @@ def get_broker_config():
 @auth_bp.route("/check-setup", methods=["GET"])
 def check_setup_required():
     """Check if initial setup is required (no users exist)."""
-    needs_setup = find_user_by_username() is None
+    needs_setup = not any_user_exists()
     return jsonify({"status": "success", "needs_setup": needs_setup})
 
 
@@ -107,7 +123,7 @@ def login():
     # Handle POST requests first (for React SPA / AJAX login)
     if request.method == "POST":
         # Check if setup is required
-        if find_user_by_username() is None:
+        if not any_user_exists():
             return jsonify(
                 {
                     "status": "error",
@@ -139,7 +155,7 @@ def login():
             return jsonify({"status": "error", "message": "Invalid credentials"}), 401
 
     # Handle GET requests - redirect to React frontend
-    if find_user_by_username() is None:
+    if not any_user_exists():
         return redirect("/setup")
 
     if "user" in session:
@@ -149,6 +165,78 @@ def login():
         return redirect("/dashboard")
 
     return redirect("/login")
+
+
+@auth_bp.route("/signup", methods=["GET", "POST"])
+@limiter.limit(LOGIN_RATE_LIMIT_MIN)
+@limiter.limit(LOGIN_RATE_LIMIT_HOUR)
+def signup():
+    if request.method == "GET":
+        return redirect("/signup")
+
+    # Require initial admin setup before allowing signup
+    if not any_user_exists():
+        return jsonify(
+            {
+                "status": "error",
+                "message": "Please complete initial setup first.",
+                "redirect": "/setup",
+            }
+        ), 400
+
+    if "user" in session:
+        return jsonify(
+            {"status": "error", "message": "Already logged in", "redirect": "/dashboard"}
+        ), 200
+
+    if request.is_json:
+        data = request.get_json() or {}
+        username = (data.get("username") or "").strip()
+        email = (data.get("email") or "").strip()
+        password = data.get("password") or ""
+        confirm_password = data.get("confirm_password") or ""
+    else:
+        username = (request.form.get("username") or "").strip()
+        email = (request.form.get("email") or "").strip()
+        password = request.form.get("password") or ""
+        confirm_password = request.form.get("confirm_password") or ""
+
+    if not username or not email or not password:
+        return jsonify({"status": "error", "message": "All fields are required"}), 400
+
+    if password != confirm_password:
+        return jsonify({"status": "error", "message": "Passwords do not match"}), 400
+
+    from utils.auth_utils import validate_password_strength
+
+    is_valid, error_message = validate_password_strength(password)
+    if not is_valid:
+        return jsonify({"status": "error", "message": error_message}), 400
+
+    if get_user_by_username(username) is not None:
+        return jsonify({"status": "error", "message": "Username already exists"}), 400
+
+    if find_user_by_email(email) is not None:
+        return jsonify({"status": "error", "message": "Email already exists"}), 400
+
+    from database.user_db import add_user
+
+    user = add_user(username, email, password, is_admin=False)
+    if not user:
+        return jsonify({"status": "error", "message": "Failed to create user"}), 500
+
+    # Clear any stale session and mark as authenticated (no broker yet)
+    session.clear()
+    session["user"] = username
+    logger.info(f"New user {username} created successfully")
+
+    return jsonify(
+        {
+            "status": "success",
+            "message": "Account created",
+            "redirect": "/broker-setup",
+        }
+    ), 200
 
 
 @auth_bp.route("/broker", methods=["GET", "POST"])
@@ -811,6 +899,7 @@ def get_profile_data():
                 "status": "success",
                 "data": {
                     "username": username,
+                    "is_admin": bool(user.is_admin) if user else False,
                     "smtp_settings": smtp_settings,
                     "qr_code": qr_code,
                     "totp_secret": totp_secret,

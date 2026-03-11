@@ -1172,7 +1172,7 @@ User → Broker Login Page → Redirect back with code/request_token
 
 **Brokers:** Zerodha, Fyers, Flattrade, Upstox, Paytm, Pocketful
 
-**Login URL construction:** The `REDIRECT_URL` in `.env` is set to `https://domain/<broker>/callback`. The broker's developer portal is configured with this URL.
+**Login URL construction:** The redirect URL is configured per user in **Profile → Broker Configuration** (e.g., `https://domain/<broker>/callback`). The broker's developer portal is configured with this URL.
 
 ### Pattern B: TOTP/Credential Form
 
@@ -1319,22 +1319,20 @@ MARKET_DATA_URL = "https://xts.yourbroker.com/apimarketdata"
 
 ---
 
-## 17. Environment Variable Reference
+## 17. Broker Credential Reference
 
-### Required for All Brokers
+### Required for All Brokers (Per User)
 
-```env
-BROKER_API_KEY = 'your_api_key'
-BROKER_API_SECRET = 'your_api_secret'
-REDIRECT_URL = 'http://127.0.0.1:5000/your_broker/callback'
-```
+Configure in **Profile → Broker Configuration** or `/broker-setup`:
+- Broker API key
+- Broker API secret
+- Redirect URL (OAuth brokers)
 
 ### Additional for XTS Brokers
 
-```env
-BROKER_API_KEY_MARKET = 'your_market_data_api_key'
-BROKER_API_SECRET_MARKET = 'your_market_data_api_secret'
-```
+Also configure:
+- Market data API key
+- Market data API secret
 
 ### Special API Key Formats
 
@@ -1346,7 +1344,7 @@ Some brokers require compound API key formats:
 | **Flattrade** | `client_id:::api_key` | `FT123456:::abc123def456` |
 | **5paisa** | `user_key:::user_id:::client_id` | `abc123:::12345678:::5P12345678` |
 
-These formats are validated at startup by `utils/env_check.py::load_and_check_env_variables()`.
+These formats are validated when credentials are saved in the broker setup flow.
 
 ---
 
@@ -1355,10 +1353,9 @@ These formats are validated at startup by `utils/env_check.py::load_and_check_en
 ### Manual Testing Steps
 
 1. **Environment Configuration**
-   - [ ] Add broker to `VALID_BROKERS` in `.env`
-   - [ ] Set `REDIRECT_URL` to `http://127.0.0.1:5000/your_broker/callback`
-   - [ ] Configure `BROKER_API_KEY` and `BROKER_API_SECRET`
-   - [ ] For XTS: also set `BROKER_API_KEY_MARKET` and `BROKER_API_SECRET_MARKET`
+   - [ ] Add broker to `VALID_BROKERS` in `.env` / `.sample.env`
+   - [ ] Configure redirect URL and broker credentials in **Profile → Broker Configuration**
+   - [ ] For XTS: also set market data API key/secret
 
 2. **Authentication**
    - [ ] Login redirects correctly to broker
@@ -1468,7 +1465,7 @@ Study these implementations for the pattern closest to your broker:
 | 22 | Pocketful | `pocketful` | OAuth2 | — |
 | 23 | Samco | `samco` | YOB verification | — |
 | 24 | Shoonya | `shoonya` | TOTP | — |
-| 25 | TradeJini | `tradejini` | TOTP | — |
+| 25 | tastytrade | `tastytrade` | TOTP | — |
 | 26 | Upstox | `upstox` | OAuth2 | — |
 | 27 | Wisdom Capital | `wisdom` | XTS | MARKET keys |
 | 28 | Zebu | `zebu` | TOTP | — |

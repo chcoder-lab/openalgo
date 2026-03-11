@@ -41,7 +41,7 @@
   ```
   fivepaisa, fivepaisaxts, aliceblue, angel, compositedge, definedge, deltaexchange, dhan, dhan_sandbox,
   firstock, flattrade, fyers, groww, ibulls, iifl, indmoney, jainamxts, kotak, motilal,
-  mstock, nubra, paytm, pocketful, rmoney, samco, shoonya, tradejini, upstox, wisdom, zebu, zerodha
+  mstock, nubra, paytm, pocketful, rmoney, samco, shoonya, tastytrade, upstox, wisdom, zebu, zerodha
   ```
 - Obtain your broker's API credentials:
   - API Key

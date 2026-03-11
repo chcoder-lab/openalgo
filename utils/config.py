@@ -1,11 +1,64 @@
 # utils/config.py
 
 import os
+from contextvars import ContextVar
 
 from dotenv import load_dotenv
 
 # Load environment variables from .env file with override=True to ensure values are updated
 load_dotenv(override=True)
+
+_broker_context: ContextVar[dict | None] = ContextVar("broker_context", default=None)
+_original_getenv = os.getenv
+_broker_keys = {
+    "BROKER_API_KEY",
+    "BROKER_API_SECRET",
+    "BROKER_API_KEY_MARKET",
+    "BROKER_API_SECRET_MARKET",
+    "REDIRECT_URL",
+    "TASTYTRADE_ENV",
+    "BROKER_API_ENV",
+}
+
+
+def _patched_getenv(key, default=None):
+    if key in _broker_keys:
+        ctx = _broker_context.get()
+        if ctx and key in ctx and ctx[key] is not None:
+            return ctx[key]
+    return _original_getenv(key, default)
+
+
+def ensure_getenv_patched():
+    """Patch os.getenv to honor per-request broker context overrides."""
+    if os.getenv is not _patched_getenv:
+        os.getenv = _patched_getenv
+
+
+def set_broker_context(context: dict) -> object:
+    """Set broker context values for this execution context."""
+    mapped = {}
+    if context.get("broker_api_key") is not None:
+        mapped["BROKER_API_KEY"] = context.get("broker_api_key")
+    if context.get("broker_api_secret") is not None:
+        mapped["BROKER_API_SECRET"] = context.get("broker_api_secret")
+    if context.get("broker_api_key_market") is not None:
+        mapped["BROKER_API_KEY_MARKET"] = context.get("broker_api_key_market")
+    if context.get("broker_api_secret_market") is not None:
+        mapped["BROKER_API_SECRET_MARKET"] = context.get("broker_api_secret_market")
+    if context.get("redirect_url") is not None:
+        mapped["REDIRECT_URL"] = context.get("redirect_url")
+    if context.get("broker_api_environment") is not None:
+        mapped["TASTYTRADE_ENV"] = context.get("broker_api_environment")
+        mapped["BROKER_API_ENV"] = context.get("broker_api_environment")
+
+    ensure_getenv_patched()
+    return _broker_context.set(mapped)
+
+
+def reset_broker_context(token: object) -> None:
+    """Reset broker context to previous value."""
+    _broker_context.reset(token)
 
 
 def get_broker_api_key():
@@ -14,6 +67,18 @@ def get_broker_api_key():
 
 def get_broker_api_secret():
     return os.getenv("BROKER_API_SECRET")
+
+
+def get_broker_api_key_market():
+    return os.getenv("BROKER_API_KEY_MARKET")
+
+
+def get_broker_api_secret_market():
+    return os.getenv("BROKER_API_SECRET_MARKET")
+
+
+def get_redirect_url():
+    return os.getenv("REDIRECT_URL")
 
 
 def get_login_rate_limit_min():

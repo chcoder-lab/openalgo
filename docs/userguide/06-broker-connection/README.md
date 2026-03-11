@@ -28,7 +28,7 @@ OpenAlgo supports 29 Indian brokers through a unified interface. This guide cove
 | Groww | OAuth2 | No |
 | Paytm Money | OAuth2 | No |
 | Pocketful | API Key | Yes |
-| Tradejini | API Key | Yes |
+| tastytrade | API Key | Yes |
 | Zebu | API Key | Yes |
 | Mstock | API Key | Yes |
 | Wisdom Capital | API Key | Yes |
@@ -101,29 +101,7 @@ OpenAlgo supports 29 Indian brokers through a unified interface. This guide cove
 
 ## Configuring Broker in OpenAlgo
 
-### Method 1: Via .env File
-
-Edit your `.env` file:
-
-```ini
-# Select your broker
-BROKER=zerodha
-
-# Zerodha specific
-BROKER_API_KEY=your_api_key_here
-BROKER_API_SECRET=your_api_secret_here
-```
-
-For Angel One:
-```ini
-BROKER=angel
-BROKER_API_KEY=your_api_key
-BROKER_CLIENT_CODE=your_client_code
-BROKER_PASSWORD=your_password
-BROKER_TOTP_KEY=your_totp_secret
-```
-
-### Method 2: Via Web Interface
+### Configure via Web Interface
 
 1. Login to OpenAlgo
 2. Go to **Profile** → **Broker Configuration**
@@ -147,7 +125,7 @@ OpenAlgo → Broker Login Page → Enter Credentials → Approve → Back to Ope
 
 ### API Key Brokers (Dhan, Angel, etc.)
 
-1. Credentials already in .env or profile
+1. Credentials already in profile
 2. Click **Login to Broker**
 3. OpenAlgo uses stored credentials
 4. Connection established automatically
@@ -178,7 +156,7 @@ Some brokers support automatic login using TOTP:
 
 **Requirements**:
 - Broker TOTP secret key
-- Configure in `.env` or profile
+- Configure in **Profile → Broker Configuration**
 
 **Supported Brokers for Auto-Login**:
 - Angel One
@@ -229,12 +207,11 @@ When connected, you can:
 
 ### Switching Brokers
 
-1. Update `BROKER=` in `.env` to new broker
-2. Update corresponding credentials
-3. Restart OpenAlgo
-4. Login to new broker
+1. Select the new broker in **Profile → Broker Configuration**
+2. Update corresponding credentials and redirect URL
+3. Save and login to the new broker
 
-**Note**: Only one broker active at a time per instance
+**Note**: Only one broker active at a time per user session
 
 ### Running Multiple Instances
 

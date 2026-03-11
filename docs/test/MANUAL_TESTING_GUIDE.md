@@ -11,7 +11,7 @@ A systematic testing procedure to ensure quality and catch bugs effectively.
 git clone https://github.com/marketcalls/openalgo.git
 cd openalgo
 cp .sample.env .env
-# Edit .env with your broker credentials
+# Broker credentials are configured per user after signup (Profile > Broker)
 
 # 2. Install & Build
 pip install uv
@@ -100,7 +100,7 @@ open http://127.0.0.1:5000
 |------|-------|----------|--------|
 | Initiate OAuth | Select Zerodha, click Connect | Redirect to Kite login | [ ] |
 | Complete OAuth | Login to Kite | Redirect back with token | [ ] |
-| Invalid API key | Set wrong `BROKER_API_KEY` | Clear error message | [ ] |
+| Invalid API key | Enter wrong broker API key in Profile > Broker | Clear error message | [ ] |
 
 **Upstox:**
 | Test | Steps | Expected | Status |

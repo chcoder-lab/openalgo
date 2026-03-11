@@ -49,7 +49,7 @@ Legend: `Y` = Supported | `-` = Not Implemented | `S` = Stub (function exists bu
 | Pocketful | Y | Y | Y | Y | Y | Y | Y | Y |
 | Samco | Y | Y | Y | Y | Y | Y | Y | Y |
 | Shoonya | Y | Y | Y | Y | Y | Y | Y | Y |
-| Tradejini | Y | Y | Y | Y | Y | Y | Y | Y |
+| tastytrade | Y | Y | Y | Y | Y | Y | Y | Y |
 | Upstox | Y | Y | Y | Y | Y | Y | Y | Y |
 | Wisdom Capital | Y | Y | Y | Y | Y | Y | Y | Y |
 | Zebu | Y | Y | Y | Y | Y | Y | Y | Y |
@@ -85,7 +85,7 @@ Legend: `Y` = Supported | `-` = Not Implemented | `S` = Stub (function exists bu
 | Pocketful | Y | Y | Y | Y | Y | Y | Y | **S** |
 | Samco | Y | Y | Y | Y | Y | Y | Y | Y |
 | Shoonya | Y | Y | Y | Y | Y | Y | Y | Y |
-| Tradejini | Y | Y | Y | Y | Y | Y | Y | **S** |
+| tastytrade | Y | Y | Y | Y | Y | Y | Y | **S** |
 | Upstox | Y | Y | Y | Y | Y | Y | Y | Y |
 | Wisdom Capital | Y | Y | Y | Y | Y | Y | Y | **S** |
 | Zebu | Y | Y | Y | Y | Y | Y | Y | **S** |
@@ -121,7 +121,7 @@ Legend: `Y` = Supported | `-` = Not Implemented | `S` = Stub (function exists bu
 | Pocketful | Y | Y | Y | **S** | **S** | Y |
 | Samco | Y | Y | Y | Y | **-** | Y |
 | Shoonya | Y | Y | Y | Y | **-** | Y |
-| Tradejini | Y | Y | Y | Y | Y | Y |
+| tastytrade | Y | Y | Y | Y | Y | Y |
 | Upstox | Y | Y | Y | Y | **-** | Y |
 | Wisdom Capital | Y | Y | Y | Y | Y | Y |
 | Zebu | Y | Y | Y | Y | **-** | Y |
@@ -160,7 +160,7 @@ Most brokers provide only 5-level market depth via WebSocket. Only Dhan supports
 | Pocketful | Y | **-** | **-** | 5 levels all exchanges |
 | Samco | Y | **-** | **-** | 5 levels all exchanges |
 | Shoonya | Y | **-** | **-** | 5 levels all exchanges |
-| Tradejini | Y | **-** | **-** | 5 levels all exchanges |
+| tastytrade | Y | **-** | **-** | 5 levels all exchanges |
 | Upstox | Y | **-** | **-** | 5 levels all exchanges |
 | Wisdom Capital | Y | **-** | **-** | 5 levels all exchanges |
 | Zebu | Y | **-** | **-** | 5 levels all exchanges |
@@ -198,7 +198,7 @@ Most brokers provide only 5-level market depth via WebSocket. Only Dhan supports
 | Pocketful | Y | Y | Y | Y | Y | Y | Y |
 | Samco | Y | Y | Y | Y | Y | Y | Y |
 | Shoonya | Y | Y | Y | Y | Y | Y | Y |
-| Tradejini | Y | Y | Y | Y | Y | Y | Y |
+| tastytrade | Y | Y | Y | Y | Y | Y | Y |
 | Upstox | Y | Y | Y | Y | Y | Y | Y |
 | Wisdom Capital | Y | Y | Y | Y | Y | Y | Y |
 | Zebu | Y | Y | Y | Y | Y | Y | Y |
@@ -343,7 +343,7 @@ These brokers have `calculate_margin_api` defined but it raises `NotImplementedE
 | Motilal Oswal | Raises NotImplementedError |
 | Paytm Money | Raises NotImplementedError |
 | Pocketful | Raises NotImplementedError |
-| Tradejini | Raises NotImplementedError |
+| tastytrade | Raises NotImplementedError |
 | Wisdom Capital | Raises NotImplementedError |
 | Zebu | Raises NotImplementedError |
 
@@ -400,7 +400,7 @@ Each broker implements its API through three core files in `broker/<name>/api/`:
 | Auth Type | Brokers |
 |-----------|---------|
 | **OAuth** | CompositEdge, Dhan, Flattrade, Fyers, Paytm Money, Pocketful, Upstox, Zerodha |
-| **TOTP/Form** | 5 Paisa, 5 Paisa (XTS), Alice Blue, Angel One, Dhan (Sandbox), Definedge, Firstock, Groww, Ibulls, IIFL, IndMoney, JainamXts, Kotak Securities, Motilal Oswal, mStock, Nubra, Samco, Shoonya, Tradejini, Wisdom Capital, Zebu |
+| **TOTP/Form** | 5 Paisa, 5 Paisa (XTS), Alice Blue, Angel One, Dhan (Sandbox), Definedge, Firstock, Groww, Ibulls, IIFL, IndMoney, JainamXts, Kotak Securities, Motilal Oswal, mStock, Nubra, Samco, Shoonya, tastytrade, Wisdom Capital, Zebu |
 
 ### Per-Broker Feature Summary
 
@@ -616,7 +616,7 @@ Each broker implements its API through three core files in `broker/<name>/api/`:
 - **Margin**: calculate_margin_api
 - **Streaming**: Yes
 
-#### Tradejini (`tradejini`)
+#### tastytrade (`tastytrade`)
 - **Auth**: TOTP
 - **Order API**: All 11 functions
 - **Data API**: get_quotes, get_multiquotes, get_depth, get_history, get_intervals
@@ -688,7 +688,7 @@ Each broker implements its API through three core files in `broker/<name>/api/`:
 | History | **Partial** | Alice Blue | Works for some exchanges only |
 | Intervals | **Missing** | Angel One, Definedge, Dhan, Dhan Sandbox, Firstock, Fyers, mStock, Samco, Shoonya, Upstox, Zebu, Zerodha | `/api/v1/intervals` endpoint unavailable |
 | Intervals | **Stub** | Kotak, Motilal, Paytm, Pocketful | `/api/v1/intervals` returns empty data |
-| Margin Calc | **Stub** | 5 Paisa, 5 Paisa XTS, Alice Blue, CompositEdge, Firstock, Ibulls, IIFL, JainamXts, Motilal, Paytm, Pocketful, Tradejini, Wisdom, Zebu | `/api/v1/margin` raises NotImplementedError |
+| Margin Calc | **Stub** | 5 Paisa, 5 Paisa XTS, Alice Blue, CompositEdge, Firstock, Ibulls, IIFL, JainamXts, Motilal, Paytm, Pocketful, tastytrade, Wisdom, Zebu | `/api/v1/margin` raises NotImplementedError |
 | Multi Quotes | **Missing** | Dhan Sandbox | `/api/v1/multiquotes` endpoint unavailable |
 | WS Depth | **1 level only** | IndMoney | Best bid/ask only, no full 5-level depth |
 | WS 20-Depth | **Dhan only** | 28 brokers | Only Dhan supports 20-level depth (NSE/NFO) |

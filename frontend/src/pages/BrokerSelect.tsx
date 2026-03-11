@@ -41,7 +41,8 @@ const allBrokers = [
   { id: 'rmoney', name: 'RMoney', authType: 'oauth' },
   { id: 'samco', name: 'Samco', authType: 'totp' },
   { id: 'shoonya', name: 'Shoonya', authType: 'totp' },
-  { id: 'tradejini', name: 'Tradejini', authType: 'totp' },
+  { id: 'tastytrade', name: 'TastyTrade', authType: 'oauth' },
+  { id: 'webull', name: 'Webull', authType: 'oauth' },
   { id: 'upstox', name: 'Upstox', authType: 'oauth' },
   { id: 'wisdom', name: 'Wisdom Capital', authType: 'totp' },
   { id: 'zebu', name: 'Zebu', authType: 'totp' },
@@ -52,6 +53,7 @@ interface BrokerConfig {
   broker_name: string
   broker_api_key: string
   redirect_url: string
+  broker_api_environment: string
 }
 
 // Helper function to get Flattrade API key
@@ -122,7 +124,12 @@ export default function BrokerSelect() {
     setIsSubmitting(true)
     let loginUrl = ''
 
-    const { broker_api_key, redirect_url } = brokerConfig
+    const { broker_api_key, redirect_url, broker_api_environment } = brokerConfig
+    const tastytradeAuthBase =
+      broker_api_environment === 'production'
+        ? 'https://my.tastytrade.com/auth.html'
+        : 'https://cert-my.staging-tasty.works/auth.html'
+
 
     // Build login URL based on broker type (matching original broker.html logic)
     switch (selectedBroker) {
@@ -146,7 +153,12 @@ export default function BrokerSelect() {
       case 'kotak':
       case 'rmoney':
       case 'shoonya':
-      case 'tradejini':
+      case 'tastytrade':
+        loginUrl = `${tastytradeAuthBase}?client_id=${broker_api_key}&redirect_uri=${redirect_url}&response_type=code&state=2e9b44629ebb28226224d09db3ffb47c`
+        break
+      case 'webull':
+        loginUrl = '/webull/callback'
+        break
       case 'wisdom':
       case 'zebu':
         // TOTP brokers - redirect to callback page which shows form
@@ -247,13 +259,11 @@ export default function BrokerSelect() {
                       <SelectValue placeholder="Select a Broker" />
                     </SelectTrigger>
                     <SelectContent>
-                      {allBrokers
-                        .filter((broker) => broker.id === brokerConfig?.broker_name)
-                        .map((broker) => (
-                          <SelectItem key={broker.id} value={broker.id}>
-                            {broker.name}
-                          </SelectItem>
-                        ))}
+                      {allBrokers.map((broker) => (
+                        <SelectItem key={broker.id} value={broker.id}>
+                          {broker.name}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>

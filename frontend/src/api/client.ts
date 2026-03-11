@@ -52,7 +52,7 @@ export const authClient = axios.create({
 })
 
 // Endpoints that don't require CSRF token (no session yet)
-const CSRF_EXEMPT_ENDPOINTS = ['/auth/login', '/auth/setup']
+const CSRF_EXEMPT_ENDPOINTS = ['/auth/login', '/auth/setup', '/auth/signup']
 
 // Add CSRF token to auth client requests (except for initial login/setup)
 authClient.interceptors.request.use(

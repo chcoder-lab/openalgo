@@ -118,15 +118,7 @@ None required - all configuration is in `.env` file.
    cp .sample.env .env
    ```
 
-2. **Configure broker credentials in .env:**
-   ```bash
-   # Example for Fyers
-   BROKER_API_KEY = 'Y2DJQVBAU4-100'
-   BROKER_API_SECRET = 'your_secret_here'
-   REDIRECT_URL = 'http://127.0.0.1:5000/fyers/callback'
-   ```
-
-3. **Generate security keys:**
+2. **Generate security keys:**
    ```bash
    # APP_KEY
    python -c "import secrets; print(secrets.token_hex(32))"
@@ -135,11 +127,15 @@ None required - all configuration is in `.env` file.
    python -c "import secrets; print(secrets.token_hex(32))"
    ```
 
-4. **Update .env with generated keys:**
+3. **Update .env with generated keys:**
    ```bash
    APP_KEY = 'generated_key_1'
    API_KEY_PEPPER = 'generated_key_2'
    ```
+
+4. **Configure broker credentials in the UI (after signup):**
+   - Log in and open `Profile > Broker` or `/broker-setup`.
+   - Enter your broker API key, secret, and redirect URL per user.
 
 ## Verification Steps
 

@@ -6,7 +6,7 @@ from flask import Blueprint, flash, redirect, request, session, url_for
 
 from blueprints.apikey import generate_api_key
 from database.auth_db import upsert_api_key
-from database.user_db import add_user, find_user_by_username
+from database.user_db import add_user, any_user_exists
 from utils.logging import get_logger
 
 logger = get_logger(__name__)
@@ -18,7 +18,7 @@ core_bp = Blueprint("core_bp", __name__)
 # This route only handles POST for form submission from React
 @core_bp.route("/setup", methods=["POST"])
 def setup():
-    if find_user_by_username() is not None:
+    if any_user_exists():
         return redirect(url_for("auth.login"))
 
     username = request.form["username"]

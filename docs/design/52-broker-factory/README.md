@@ -271,7 +271,7 @@ class DhanWebSocketAdapter(BaseBrokerWebSocketAdapter):
 | Paytm | 1000 | 5 | Paytm Money |
 | Pocketful | 1000 | 5 | Pocketful API |
 | Shoonya | 1000 | 5 | Shoonya API |
-| Tradejini | 1000 | 5 | Tradejini API |
+| tastytrade | 1000 | 5 | tastytrade API |
 | Wisdom | 1000 | 5 | Wisdom Capital |
 | Zebu | 1000 | 5 | Zebu API |
 | Mstock | 1000 | 5 | Mstock API |

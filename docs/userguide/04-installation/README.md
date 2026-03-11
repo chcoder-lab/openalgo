@@ -322,7 +322,7 @@ openalgo/
 
 ## Configuration Overview
 
-The `.env` file contains all your settings. Key sections:
+The `.env` file contains system settings. Broker credentials are configured per user in the UI. Key sections:
 
 ```ini
 # Application Settings
@@ -336,9 +336,8 @@ API_KEY_PEPPER=your-pepper-here
 # Broker Selection
 BROKER=zerodha
 
-# Broker Credentials
-BROKER_API_KEY=your-api-key
-BROKER_API_SECRET=your-api-secret
+# Broker Credentials (configured per user in UI)
+# Use Profile > Broker or /broker-setup after signup
 ```
 
 **Important**: Generate new APP_KEY and API_KEY_PEPPER:
@@ -830,7 +829,7 @@ sudo sh get-docker.sh
 git clone https://github.com/marketcalls/openalgo
 cd openalgo
 cp .sample.env .env
-# Edit .env with your broker credentials
+# Broker credentials are configured per user after signup (Profile > Broker)
 docker build -t openalgo:latest .
 docker-compose up -d
 ```

@@ -60,7 +60,7 @@ Beyond execution, OpenAlgo empowers traders to completely own their trading infr
 - RMoney
 - Samco
 - Shoonya (Finvasia)
-- Tradejini
+- tastytrade
 - Upstox
 - Wisdom Capital
 - Zebu

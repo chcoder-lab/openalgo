@@ -11,6 +11,7 @@ import { PageLoader } from '@/components/ui/page-loader'
 const Home = lazy(() => import('@/pages/Home'))
 const Faq = lazy(() => import('@/pages/Faq'))
 const Setup = lazy(() => import('@/pages/Setup'))
+const Signup = lazy(() => import('@/pages/Signup'))
 const Login = lazy(() => import('@/pages/Login'))
 const ResetPassword = lazy(() => import('@/pages/ResetPassword'))
 const Download = lazy(() => import('@/pages/Download'))
@@ -21,6 +22,7 @@ const NotFound = lazy(() => import('@/pages/NotFound'))
 // Broker auth
 const BrokerSelect = lazy(() => import('@/pages/BrokerSelect'))
 const BrokerTOTP = lazy(() => import('@/pages/BrokerTOTP'))
+const BrokerSetup = lazy(() => import('@/pages/BrokerSetup'))
 
 // Main pages
 const Dashboard = lazy(() => import('@/pages/Dashboard'))
@@ -118,6 +120,7 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/faq" element={<Faq />} />
               <Route path="/setup" element={<Setup />} />
+              <Route path="/signup" element={<Signup />} />
               <Route path="/login" element={<Login />} />
               <Route path="/reset-password" element={<ResetPassword />} />
               <Route path="/download" element={<Download />} />
@@ -126,6 +129,7 @@ function App() {
 
               {/* Broker auth routes */}
               <Route path="/broker" element={<BrokerSelect />} />
+              <Route path="/broker-setup" element={<BrokerSetup />} />
               <Route path="/broker/:broker/totp" element={<BrokerTOTP />} />
               {/* Dynamic broker TOTP routes for all supported brokers */}
               <Route path="/:broker/auth" element={<BrokerTOTP />} />

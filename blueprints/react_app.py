@@ -61,6 +61,12 @@ def react_login():
     return serve_react_app()
 
 
+# Signup route
+@react_bp.route("/signup")
+def react_signup():
+    return serve_react_app()
+
+
 # Setup route (initial admin setup)
 @react_bp.route("/setup")
 def react_setup():
@@ -100,6 +106,12 @@ def react_rate_limited():
 # Broker selection - serve React at /broker (alias for /auth/broker)
 @react_bp.route("/broker")
 def react_broker():
+    return serve_react_app()
+
+
+# Broker setup (credentials) before broker auth
+@react_bp.route("/broker-setup")
+def react_broker_setup():
     return serve_react_app()
 
 

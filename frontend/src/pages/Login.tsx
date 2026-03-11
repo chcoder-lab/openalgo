@@ -208,6 +208,14 @@ export default function Login() {
                       Forgot password?
                     </Link>
                   </div>
+                  <div className="text-right">
+                    <Link
+                      to="/signup"
+                      className="text-sm text-muted-foreground hover:text-primary"
+                    >
+                      Create an account
+                    </Link>
+                  </div>
                 </div>
 
                 {error && (

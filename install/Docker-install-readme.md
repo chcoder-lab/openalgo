@@ -519,7 +519,7 @@ sudo rm -rf /var/lib/docker
 | RMoney | `rmoney` | Yes |
 | Samco | `samco` | No |
 | Shoonya | `shoonya` | No |
-| Tradejini | `tradejini` | No |
+| tastytrade | `tastytrade` | No |
 | Upstox | `upstox` | No |
 | Wisdom Capital | `wisdom` | Yes |
 | Zebu | `zebu` | No |

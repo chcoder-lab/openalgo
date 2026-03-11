@@ -61,7 +61,7 @@ All broker TOTP forms are handled by a single configurable component: `pages/Bro
 | `nubra.html` | `brokerFields.nubra` | [x] Complete |
 | `samco.html` | `brokerFields.samco` | [x] Complete |
 | `shoonya.html` | `brokerFields.shoonya` | [x] Complete |
-| `tradejini.html` | `brokerFields.tradejini` | [x] Complete |
+| `tastytrade.html` | `brokerFields.tastytrade` | [x] Complete |
 | `zebu.html` | `brokerFields.zebu` | [x] Complete |
 
 #### Layout Components (2)

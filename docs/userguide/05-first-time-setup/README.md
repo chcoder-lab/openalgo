@@ -105,7 +105,7 @@ uv run app.py
 
 ## Step 4: Configure Broker Credentials
 
-Now let's add your broker API credentials.
+Now add your broker API credentials in the UI (per user).
 
 ### Getting Broker Credentials
 
@@ -119,35 +119,11 @@ Each broker has different requirements. Here's a quick reference:
 | Fyers | App ID, Secret | [Fyers API](https://myapi.fyers.in) |
 | Upstox | API Key, Secret | [Upstox Developer](https://api.upstox.com) |
 
-### Update .env with Broker Details
-
-Example for Zerodha:
-```ini
-# Broker Selection
-BROKER=zerodha
-
-# Zerodha Credentials
-BROKER_API_KEY=your_kite_api_key
-BROKER_API_SECRET=your_kite_api_secret
-```
-
-Example for Angel One:
-```ini
-# Broker Selection
-BROKER=angel
-
-# Angel One Credentials
-BROKER_API_KEY=your_angel_api_key
-BROKER_CLIENT_CODE=your_client_code
-BROKER_PASSWORD=your_password
-BROKER_TOTP_KEY=your_totp_secret
-```
-
-### Alternative: Configure via Web Interface
+### Configure via Web Interface
 
 1. Login to OpenAlgo
-2. Go to **Profile** → **Broker Configuration**
-3. Select your broker
+2. Go to **Profile** → **Broker Configuration** (or `/broker-setup`)
+3. Select your broker and enter the required credentials and redirect URL
 4. Enter credentials
 5. Click **Save**
 
@@ -243,7 +219,7 @@ Go to **Telegram Bot** settings if you want alerts:
 ### Issue: "Invalid API credentials"
 
 **Solution**:
-- Double-check credentials in `.env`
+- Double-check credentials in **Profile → Broker Configuration**
 - Ensure no extra spaces
 - Verify broker API is activated
 

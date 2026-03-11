@@ -233,20 +233,6 @@ const brokerFields: Record<string, BrokerConfig> = {
     ],
     callbackUrl: '/shoonya/callback',
   },
-  tradejini: {
-    fields: [
-      { name: 'password', label: 'Password', type: 'password', placeholder: 'Enter your Password' },
-      {
-        name: 'twofa',
-        label: '2FA Code / TOTP',
-        type: 'text',
-        placeholder: 'Enter your 2FA code or TOTP',
-        hint: 'You can get TOTP from Tradejini web app under Profile > Security',
-      },
-    ],
-    callbackUrl: '/tradejini/callback',
-    hiddenFields: { twofatype: 'totp' },
-  },
   zebu: {
     fields: [
       { name: 'userid', label: 'User ID', type: 'text', placeholder: 'Enter your User ID' },
@@ -291,7 +277,6 @@ const brokerNames: Record<string, string> = {
   nubra: 'Nubra (Nuvama)',
   samco: 'Samco',
   shoonya: 'Shoonya',
-  tradejini: 'Tradejini',
   zebu: 'Zebu',
   jmfinancial: 'JM Financial',
 }

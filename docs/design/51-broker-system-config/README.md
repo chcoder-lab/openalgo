@@ -2,7 +2,7 @@
 
 ## Overview
 
-The Profile section in OpenAlgo provides configuration interfaces for broker credentials and system settings. These settings are stored in the `.env` file and database, with security measures for sensitive data.
+The Profile section in OpenAlgo provides configuration interfaces for broker credentials and system settings. Broker credentials are stored per user in the database, while system settings are stored in `.env`, with security measures for sensitive data.
 
 ## Architecture Diagram
 
@@ -56,11 +56,6 @@ The Profile section in OpenAlgo provides configuration interfaces for broker cre
 │                                                                              │
 │  ┌─────────────────────────────────────────────────────────────────────┐   │
 │  │                      .env File                                       │   │
-│  │                                                                      │   │
-│  │  # Broker Configuration                                             │   │
-│  │  BROKER_API_KEY=kite_api_key_xxxx                                   │   │
-│  │  BROKER_API_SECRET=encrypted_or_masked                              │   │
-│  │  BROKER=zerodha                                                     │   │
 │  │                                                                      │   │
 │  │  # System Configuration                                             │   │
 │  │  FLASK_HOST=127.0.0.1                                               │   │

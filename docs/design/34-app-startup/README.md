@@ -26,16 +26,10 @@ OpenAlgo follows a carefully orchestrated startup sequence that ensures all comp
 │  │                                                                     │    │
 │  │ 2. Validate required environment variables (30+ vars)               │    │
 │  │    - APP_KEY, API_KEY_PEPPER (security)                            │    │
-│  │    - BROKER_API_KEY, BROKER_API_SECRET (broker auth)               │    │
 │  │    - DATABASE_URL, WEBSOCKET_PORT (infrastructure)                 │    │
 │  │    - Rate limits, logging config                                   │    │
 │  │                                                                     │    │
-│  │ 3. Validate broker-specific API key formats                         │    │
-│  │    - 5paisa: User_Key:::User_ID:::client_id                        │    │
-│  │    - Flattrade: client_id:::api_key                                │    │
-│  │    - Dhan: client_id:::api_key                                     │    │
-│  │                                                                     │    │
-│  │ 4. Validate REDIRECT_URL matches valid broker                       │    │
+│  │ 3. Broker credentials are validated when saved in Profile > Broker  │    │
 │  │                                                                     │    │
 │  │ 5. Exit with error if any validation fails                          │    │
 │  └─────────────────────────────────────────────────────────────────────┘    │
@@ -209,8 +203,7 @@ OpenAlgo follows a carefully orchestrated startup sequence that ensures all comp
 | `.env` exists | Configuration file must exist | Yes |
 | Version compatibility | ENV_CONFIG_VERSION matches sample | Prompt |
 | Required variables | 30+ env vars must be set | Yes |
-| Broker API format | Broker-specific format validation | Yes |
-| REDIRECT_URL | Must match valid broker | Yes |
+| Broker credentials | Validated on save in Profile > Broker | No |
 | Rate limit format | `N per timeunit` format | Yes |
 | Port numbers | Valid range 0-65535 | Yes |
 | Log configuration | Valid log level, retention | Yes |

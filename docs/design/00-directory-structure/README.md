@@ -332,7 +332,7 @@ broker/
 ├── samco/
 ├── motilal/
 ├── mstock/
-├── tradejini/
+├── tastytrade/
 ├── wisdom/
 ├── zebu/
 ├── ibulls/

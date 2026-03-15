@@ -115,9 +115,12 @@ def get_login_rate_limit_hour() -> str:
 
 def get_host_server() -> str:
     """
-    Retrieve the host server URL.
+    Retrieve the host server URL, ensuring it has a scheme.
 
     Returns:
-        str: The host server URL string.
+        str: The host server URL string with http/https scheme.
     """
-    return os.getenv("HOST_SERVER", "http://127.0.0.1:5001")
+    url = os.getenv("HOST_SERVER", "http://127.0.0.1:5001").strip()
+    if url and not url.startswith(("http://", "https://")):
+        url = f"https://{url}"
+    return url

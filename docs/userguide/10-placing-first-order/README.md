@@ -20,13 +20,13 @@ The Playground is the best way to start - it's a visual interface to test orders
 
 1. Go to **Analyzer** page
 2. Click **Enable Analyzer Mode**
-3. You now have ₹1 Crore sandbox capital to practice
+3. You now have $100,000 sandbox capital to practice
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │  ⚠️ ANALYZER MODE ACTIVE                                        │
 │  Orders will NOT go to your real broker                         │
-│  Sandbox Balance: ₹1,00,00,000                                  │
+│  Sandbox Balance: $100,000                                      │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -40,12 +40,12 @@ Navigate to **Playground** in the sidebar.
 ┌─────────────────────────────────────────────────────────────────┐
 │  Place Order                                                     │
 │                                                                  │
-│  Symbol:      [SBIN                    ]                        │
-│  Exchange:    [NSE           ▾]                                 │
+│  Symbol:      [AAPL                    ]                        │
+│  Exchange:    [EQUITY        ▾]                                 │
 │  Action:      [BUY           ▾]                                 │
 │  Quantity:    [100                     ]                        │
 │  Price Type:  [MARKET        ▾]                                 │
-│  Product:     [MIS           ▾]                                 │
+│  Product:     [CNC           ▾]                                 │
 │  Strategy:    [MyFirstOrder            ]                        │
 │                                                                  │
 │  [Place Order]                                                  │
@@ -56,12 +56,12 @@ Navigate to **Playground** in the sidebar.
 Fill in:
 | Field | Value | Explanation |
 |-------|-------|-------------|
-| Symbol | SBIN | State Bank of India stock |
-| Exchange | NSE | National Stock Exchange |
+| Symbol | AAPL | Apple Inc. stock |
+| Exchange | EQUITY | US Equity market |
 | Action | BUY | We're buying shares |
 | Quantity | 100 | Number of shares |
 | Price Type | MARKET | Buy at current price |
-| Product | MIS | Intraday (will auto-close) |
+| Product | CNC | Delivery/overnight position |
 | Strategy | MyFirstOrder | Label for tracking |
 
 ### Step 4: Execute Order
@@ -84,7 +84,7 @@ Fill in:
 3. Status should be "Complete" (for market orders)
 
 4. Go to **Positions**
-5. See your new SBIN position
+5. See your new AAPL position
 
 Congratulations! You've placed your first order! 🎉
 
@@ -98,12 +98,12 @@ curl -X POST http://127.0.0.1:5001/api/v1/placeorder \
   -d '{
     "apikey": "YOUR_API_KEY",
     "strategy": "CurlTest",
-    "symbol": "SBIN",
-    "exchange": "NSE",
+    "symbol": "AAPL",
+    "exchange": "EQUITY",
     "action": "BUY",
     "quantity": "100",
     "pricetype": "MARKET",
-    "product": "MIS"
+    "product": "CNC"
   }'
 ```
 
@@ -120,12 +120,12 @@ client = api(
 
 # Place order
 response = client.place_order(
-    symbol="SBIN",
-    exchange="NSE",
+    symbol="AAPL",
+    exchange="EQUITY",
     action="BUY",
     quantity=100,
     price_type="MARKET",
-    product="MIS",
+    product="CNC",
     strategy="PythonTest"
 )
 
@@ -206,36 +206,36 @@ Common error messages:
 ### Exercise 1: Market Buy Order
 
 Place a market buy order:
-- Symbol: INFY
-- Exchange: NSE
+- Symbol: AAPL
+- Exchange: EQUITY
 - Quantity: 50
-- Product: MIS
+- Product: CNC
 
 ### Exercise 2: Limit Buy Order
 
 Place a limit order:
-- Symbol: TCS
-- Exchange: NSE
+- Symbol: TSLA
+- Exchange: EQUITY
 - Action: BUY
 - Quantity: 25
 - Price Type: LIMIT
-- Price: ₹3500 (below current price)
+- Price: $200 (below current price)
 
 Watch it appear as "Pending" in order book.
 
 ### Exercise 3: Sell Order
 
 First, ensure you have a position from Exercise 1, then:
-- Symbol: INFY
-- Exchange: NSE
+- Symbol: AAPL
+- Exchange: EQUITY
 - Action: SELL
 - Quantity: 50
-- Product: MIS
+- Product: CNC
 
 ### Exercise 4: Exit Position
 
 Use the Positions page:
-1. Find your SBIN position
+1. Find your AAPL position
 2. Click **Exit**
 3. Watch it close
 
@@ -258,9 +258,9 @@ Once comfortable with sandbox testing:
 
 For your first real order:
 - Use small quantity
-- Choose liquid stocks (SBIN, RELIANCE, INFY)
+- Choose liquid stocks (AAPL, TSLA, MSFT)
 - Use MARKET orders (guaranteed execution)
-- Use MIS (auto-closes if you forget)
+- Use CNC for delivery/overnight positions
 
 ### Step 4: Place Real Order
 
@@ -274,7 +274,7 @@ Same process as before, but now:
 Before every order:
 
 - [ ] Correct symbol?
-- [ ] Correct exchange (NSE/NFO/MCX)?
+- [ ] Correct exchange (EQUITY/OPTIONS/FUTURES)?
 - [ ] BUY or SELL correct?
 - [ ] Quantity correct?
 - [ ] Price type appropriate?
@@ -285,18 +285,18 @@ Before every order:
 
 ### Mistake 1: Wrong Exchange
 
-**Problem**: Trying to buy NIFTY options on NSE
-**Solution**: Use NFO for futures and options
+**Problem**: Trying to buy AAPL options on EQUITY
+**Solution**: Use OPTIONS exchange for options contracts
 
 ### Mistake 2: Wrong Lot Size
 
-**Problem**: Buying 100 NIFTY options (should be lot size of 50)
-**Solution**: Check lot size in Search page
+**Problem**: Buying 1000 AAPL options (check contract size)
+**Solution**: Check contract size in Search page
 
-### Mistake 3: CNC for F&O
+### Mistake 3: Wrong product type for options
 
-**Problem**: Using CNC product for options
-**Solution**: Use NRML for overnight F&O, MIS for intraday
+**Problem**: Using wrong product type for options
+**Solution**: Use CNC for US options positions
 
 ### Mistake 4: Forgetting Strategy Name
 

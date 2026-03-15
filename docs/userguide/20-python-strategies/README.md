@@ -34,12 +34,12 @@ print("Connected to OpenAlgo!")
 ```python
 # Market order
 response = client.place_order(
-    symbol="SBIN",
-    exchange="NSE",
+    symbol="AAPL",
+    exchange="EQUITY",
     action="BUY",
     quantity=100,
     price_type="MARKET",
-    product="MIS",
+    product="CNC",
     strategy="PythonStrategy"
 )
 
@@ -51,38 +51,38 @@ print(f"Order ID: {response['orderid']}")
 ```python
 # Limit order
 client.place_order(
-    symbol="SBIN",
-    exchange="NSE",
+    symbol="AAPL",
+    exchange="EQUITY",
     action="BUY",
     quantity=100,
     price_type="LIMIT",
-    price=620.00,
-    product="MIS",
+    price=185.00,
+    product="CNC",
     strategy="LimitStrategy"
 )
 
 # Stop-loss order
 client.place_order(
-    symbol="SBIN",
-    exchange="NSE",
+    symbol="AAPL",
+    exchange="EQUITY",
     action="SELL",
     quantity=100,
     price_type="SL",
-    price=614.00,
-    trigger_price=615.00,
-    product="MIS",
+    price=180.00,
+    trigger_price=181.00,
+    product="CNC",
     strategy="SLStrategy"
 )
 
 # Stop-loss market order
 client.place_order(
-    symbol="SBIN",
-    exchange="NSE",
+    symbol="AAPL",
+    exchange="EQUITY",
     action="SELL",
     quantity=100,
     price_type="SL-M",
-    trigger_price=615.00,
-    product="MIS",
+    trigger_price=181.00,
+    product="CNC",
     strategy="SLMStrategy"
 )
 ```
@@ -92,13 +92,13 @@ client.place_order(
 ```python
 # Position-aware order
 response = client.place_smart_order(
-    symbol="SBIN",
-    exchange="NSE",
+    symbol="AAPL",
+    exchange="EQUITY",
     action="BUY",
     quantity=100,
     position_size=100,  # Target position
     price_type="MARKET",
-    product="MIS",
+    product="CNC",
     strategy="SmartStrategy"
 )
 ```
@@ -109,28 +109,28 @@ response = client.place_smart_order(
 # Multiple orders at once
 basket = [
     {
-        "symbol": "SBIN",
-        "exchange": "NSE",
+        "symbol": "AAPL",
+        "exchange": "EQUITY",
         "action": "BUY",
         "quantity": 100,
         "price_type": "MARKET",
-        "product": "MIS"
+        "product": "CNC"
     },
     {
-        "symbol": "INFY",
-        "exchange": "NSE",
+        "symbol": "TSLA",
+        "exchange": "EQUITY",
         "action": "BUY",
         "quantity": 50,
         "price_type": "MARKET",
-        "product": "MIS"
+        "product": "CNC"
     },
     {
-        "symbol": "RELIANCE",
-        "exchange": "NSE",
+        "symbol": "MSFT",
+        "exchange": "EQUITY",
         "action": "BUY",
         "quantity": 25,
         "price_type": "MARKET",
-        "product": "MIS"
+        "product": "CNC"
     }
 ]
 
@@ -178,9 +178,9 @@ for order in orders['data']:
 ```python
 # Close specific position
 client.close_position(
-    symbol="SBIN",
-    exchange="NSE",
-    product="MIS",
+    symbol="AAPL",
+    exchange="EQUITY",
+    product="CNC",
     strategy="CloseStrategy"
 )
 
@@ -242,7 +242,7 @@ def run_strategy(symbol, exchange, quantity):
                         action="BUY",
                         quantity=abs(current_position),
                         price_type="MARKET",
-                        product="MIS",
+                        product="CNC",
                         strategy="MA_Crossover"
                     )
 
@@ -253,7 +253,7 @@ def run_strategy(symbol, exchange, quantity):
                     action="BUY",
                     quantity=quantity,
                     price_type="MARKET",
-                    product="MIS",
+                    product="CNC",
                     strategy="MA_Crossover"
                 )
                 current_position = quantity
@@ -269,7 +269,7 @@ def run_strategy(symbol, exchange, quantity):
                         action="SELL",
                         quantity=current_position,
                         price_type="MARKET",
-                        product="MIS",
+                        product="CNC",
                         strategy="MA_Crossover"
                     )
                     current_position = 0
@@ -284,7 +284,7 @@ def run_strategy(symbol, exchange, quantity):
 
 # Run the strategy
 if __name__ == "__main__":
-    run_strategy("SBIN", "NSE", 100)
+    run_strategy("AAPL", "EQUITY", 100)
 ```
 
 ### 2. RSI Mean Reversion
@@ -326,7 +326,7 @@ def rsi_strategy(symbol, exchange, quantity):
                     action="BUY",
                     quantity=quantity,
                     price_type="MARKET",
-                    product="MIS",
+                    product="CNC",
                     strategy="RSI_Strategy"
                 )
                 position = quantity
@@ -340,7 +340,7 @@ def rsi_strategy(symbol, exchange, quantity):
                     action="SELL",
                     quantity=position,
                     price_type="MARKET",
-                    product="MIS",
+                    product="CNC",
                     strategy="RSI_Strategy"
                 )
                 position = 0
@@ -364,12 +364,12 @@ from concurrent.futures import ThreadPoolExecutor
 client = api(api_key="YOUR_KEY", host="http://127.0.0.1:5001")
 
 # Watchlist
-symbols = ["SBIN", "HDFC", "ICICIBANK", "INFY", "TCS", "RELIANCE"]
+symbols = ["AAPL", "MSFT", "TSLA", "NVDA", "AMZN", "GOOGL"]
 
 def analyze_symbol(symbol):
     """Analyze single symbol for trading signal"""
     try:
-        df = get_historical_data(symbol, "NSE", "5min")
+        df = get_historical_data(symbol, "EQUITY", "5min")
 
         # Calculate indicators
         df['sma20'] = df['close'].rolling(20).mean()
@@ -416,11 +416,11 @@ def scan_and_trade(max_positions=3, quantity=100):
     for signal in bullish_signals[:available_slots]:
         client.place_order(
             symbol=signal['symbol'],
-            exchange="NSE",
+            exchange="EQUITY",
             action="BUY",
             quantity=quantity,
             price_type="MARKET",
-            product="MIS",
+            product="CNC",
             strategy="Scanner"
         )
         print(f"Bought {signal['symbol']} at {signal['close']}")
@@ -440,34 +440,35 @@ import datetime
 client = api(api_key="YOUR_KEY", host="http://127.0.0.1:5001")
 
 def get_option_symbol(underlying, expiry, strike, option_type):
-    """Construct option symbol"""
-    # Format: NIFTY25JAN21500CE
-    expiry_str = expiry.strftime("%y%b").upper()
-    return f"{underlying}{expiry_str}{strike}{option_type}"
+    """Construct OCC option symbol"""
+    # Format: AAPL250117C00200000
+    expiry_str = expiry.strftime("%y%m%d")
+    strike_str = str(int(strike * 1000)).zfill(8)
+    return f"{underlying}{expiry_str}{option_type}{strike_str}"
 
 def bull_call_spread(underlying, expiry, lower_strike, upper_strike, lot_size):
     """Execute bull call spread"""
 
-    lower_call = get_option_symbol(underlying, expiry, lower_strike, "CE")
-    upper_call = get_option_symbol(underlying, expiry, upper_strike, "CE")
+    lower_call = get_option_symbol(underlying, expiry, lower_strike, "C")
+    upper_call = get_option_symbol(underlying, expiry, upper_strike, "C")
 
     # Basket order for simultaneous execution
     basket = [
         {
             "symbol": lower_call,
-            "exchange": "NFO",
+            "exchange": "OPTIONS",
             "action": "BUY",
             "quantity": lot_size,
             "price_type": "MARKET",
-            "product": "NRML"
+            "product": "CNC"
         },
         {
             "symbol": upper_call,
-            "exchange": "NFO",
+            "exchange": "OPTIONS",
             "action": "SELL",
             "quantity": lot_size,
             "price_type": "MARKET",
-            "product": "NRML"
+            "product": "CNC"
         }
     ]
 
@@ -483,36 +484,36 @@ def iron_condor(underlying, expiry, call_sell, call_buy, put_sell, put_buy, lot_
 
     basket = [
         {
-            "symbol": get_option_symbol(underlying, expiry, call_sell, "CE"),
-            "exchange": "NFO",
+            "symbol": get_option_symbol(underlying, expiry, call_sell, "C"),
+            "exchange": "OPTIONS",
             "action": "SELL",
             "quantity": lot_size,
             "price_type": "MARKET",
-            "product": "NRML"
+            "product": "CNC"
         },
         {
-            "symbol": get_option_symbol(underlying, expiry, call_buy, "CE"),
-            "exchange": "NFO",
+            "symbol": get_option_symbol(underlying, expiry, call_buy, "C"),
+            "exchange": "OPTIONS",
             "action": "BUY",
             "quantity": lot_size,
             "price_type": "MARKET",
-            "product": "NRML"
+            "product": "CNC"
         },
         {
-            "symbol": get_option_symbol(underlying, expiry, put_sell, "PE"),
-            "exchange": "NFO",
+            "symbol": get_option_symbol(underlying, expiry, put_sell, "P"),
+            "exchange": "OPTIONS",
             "action": "SELL",
             "quantity": lot_size,
             "price_type": "MARKET",
-            "product": "NRML"
+            "product": "CNC"
         },
         {
-            "symbol": get_option_symbol(underlying, expiry, put_buy, "PE"),
-            "exchange": "NFO",
+            "symbol": get_option_symbol(underlying, expiry, put_buy, "P"),
+            "exchange": "OPTIONS",
             "action": "BUY",
             "quantity": lot_size,
             "price_type": "MARKET",
-            "product": "NRML"
+            "product": "CNC"
         }
     ]
 
@@ -524,13 +525,13 @@ def iron_condor(underlying, expiry, call_sell, call_buy, put_sell, put_buy, lot_
     return response
 
 # Execute strategies
-expiry = datetime.date(2025, 1, 30)  # Next expiry
+expiry = datetime.date(2025, 1, 17)  # Next expiry
 
 # Bull call spread
-bull_call_spread("NIFTY", expiry, 21500, 21600, 50)
+bull_call_spread("AAPL", expiry, 200, 210, 1)
 
 # Iron condor
-iron_condor("NIFTY", expiry, 22000, 22100, 21000, 20900, 50)
+iron_condor("AAPL", expiry, 210, 220, 190, 180, 1)
 ```
 
 ## Error Handling
@@ -565,12 +566,12 @@ def place_order_with_retry(order_params, max_retries=3):
 
 # Usage
 order = {
-    'symbol': 'SBIN',
-    'exchange': 'NSE',
+    'symbol': 'AAPL',
+    'exchange': 'EQUITY',
     'action': 'BUY',
     'quantity': 100,
     'price_type': 'MARKET',
-    'product': 'MIS',
+    'product': 'CNC',
     'strategy': 'RetryStrategy'
 }
 
@@ -603,9 +604,9 @@ def check_positions():
     positions = client.get_positions()
     print(f"Open positions: {len(positions.get('data', []))}")
 
-# Schedule tasks
-schedule.every().day.at("09:20").do(morning_scan)
-schedule.every().day.at("15:15").do(square_off)
+# Schedule tasks (Eastern Time)
+schedule.every().day.at("09:35").do(morning_scan)
+schedule.every().day.at("15:55").do(square_off)
 schedule.every(5).minutes.do(check_positions)
 
 # Run scheduler
@@ -628,8 +629,8 @@ while True:
 ```python
 def check_risk_limits(symbol, quantity, price):
     """Check if trade is within risk limits"""
-    max_position_value = 100000  # ₹1 lakh per position
-    max_daily_loss = 5000  # ₹5000 max daily loss
+    max_position_value = 100000  # $100,000 per position
+    max_daily_loss = 5000  # $5,000 max daily loss
 
     position_value = quantity * price
 
@@ -663,10 +664,10 @@ def log_trade(action, symbol, quantity, price):
 from datetime import datetime, time as dt_time
 
 def is_market_open():
-    """Check if market is open"""
+    """Check if US market is open (Eastern Time)"""
     now = datetime.now().time()
-    market_open = dt_time(9, 15)
-    market_close = dt_time(15, 30)
+    market_open = dt_time(9, 30)   # NYSE/NASDAQ open
+    market_close = dt_time(16, 0)  # NYSE/NASDAQ close
 
     weekday = datetime.now().weekday()
 

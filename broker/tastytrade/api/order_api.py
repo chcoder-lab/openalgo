@@ -15,7 +15,11 @@ from typing import Optional
 import httpx
 
 from broker.tastytrade.api.funds import _select_account_number, get_accounts
-from broker.tastytrade.api.urls import get_tastytrade_base_url
+from broker.tastytrade.api.urls import (
+    ORDERS_API_VERSION,
+    POSITIONS_API_VERSION,
+    get_tastytrade_base_url,
+)
 from database.token_db import get_br_symbol, get_oa_symbol, get_token
 from utils.httpx_client import get_httpx_client
 from utils.logging import get_logger
@@ -36,12 +40,15 @@ logger = get_logger(__name__)
 # Helpers
 # ---------------------------------------------------------------------------
 
-def _bearer_headers(auth: str) -> dict:
-    return {
+def _bearer_headers(auth: str, version: str = None) -> dict:
+    headers = {
         "Authorization": f"Bearer {auth}",
         "Content-Type": "application/json",
         "Accept": "application/json",
     }
+    if version:
+        headers["Accept-Version"] = version
+    return headers
 
 
 def _get_account_number(auth: str) -> Optional[str]:
@@ -124,7 +131,7 @@ def _is_cancellable(status: str) -> bool:
 # ---------------------------------------------------------------------------
 
 def get_api_response(endpoint: str, auth: str, method: str = "GET",
-                     data: dict = None, params: dict = None):
+                     data: dict = None, params: dict = None, version: str = None):
     """
     Make an authenticated request to the tastytrade REST API.
 
@@ -134,11 +141,12 @@ def get_api_response(endpoint: str, auth: str, method: str = "GET",
         method: HTTP method (GET, POST, PUT, DELETE)
         data: JSON body for POST/PUT requests
         params: Query parameters for GET/DELETE requests
+        version: Accept-Version header value (e.g. ORDERS_API_VERSION)
 
     Returns:
         dict: Parsed JSON response body, or {} for 204 No Content
     """
-    headers = _bearer_headers(auth)
+    headers = _bearer_headers(auth, version)
     client = get_httpx_client()
     url = f"{get_tastytrade_base_url()}{endpoint}"
 
@@ -182,6 +190,7 @@ def get_order_book(auth: str) -> dict:
             f"/accounts/{account_number}/orders",
             auth=auth,
             params={"per-page": 250},
+            version=ORDERS_API_VERSION,
         )
 
         items = response.get("data", {}).get("items", [])
@@ -333,6 +342,7 @@ def get_positions(auth: str) -> dict:
             f"/accounts/{account_number}/positions",
             auth=auth,
             params={"include-marks": "true"},
+            version=POSITIONS_API_VERSION,
         )
 
         items = response.get("data", {}).get("items", [])
@@ -403,6 +413,7 @@ def get_holdings(auth: str) -> list:
             f"/accounts/{account_number}/positions",
             auth=auth,
             params={"include-marks": "true"},
+            version=POSITIONS_API_VERSION,
         )
 
         items = response.get("data", {}).get("items", [])
@@ -534,7 +545,7 @@ def place_order_api(data: dict, auth: str) -> tuple:
         client = get_httpx_client()
         url = f"{get_tastytrade_base_url()}/accounts/{account_number}/orders"
 
-        response = client.post(url, headers=_bearer_headers(auth), json=payload, timeout=30.0)
+        response = client.post(url, headers=_bearer_headers(auth, ORDERS_API_VERSION), json=payload, timeout=30.0)
         response.raise_for_status()
         response_data = response.json()
 
@@ -658,7 +669,7 @@ def cancel_order(orderid: str, auth: str) -> tuple:
 
         client = get_httpx_client()
         url = f"{get_tastytrade_base_url()}/accounts/{account_number}/orders/{orderid}"
-        response = client.delete(url, headers=_bearer_headers(auth))
+        response = client.delete(url, headers=_bearer_headers(auth, ORDERS_API_VERSION))
         response.raise_for_status()
 
         return {
@@ -740,7 +751,7 @@ def modify_order(data: dict, auth: str) -> tuple:
 
         client = get_httpx_client()
         url = f"{get_tastytrade_base_url()}/accounts/{account_number}/orders/{order_id}"
-        response = client.put(url, headers=_bearer_headers(auth), json=payload, timeout=30.0)
+        response = client.put(url, headers=_bearer_headers(auth, ORDERS_API_VERSION), json=payload, timeout=30.0)
         response.raise_for_status()
 
         resp_data = response.json()

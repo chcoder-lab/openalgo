@@ -2,7 +2,7 @@
 
 ## Overview
 
-GoCharting is a professional HTML5 charting platform optimized for Indian markets. With a **Premium Plan**, you can set up webhook alerts to automate your trading strategies with OpenAlgo.
+GoCharting is a professional HTML5 charting platform optimized for global markets. With a **Premium Plan**, you can set up webhook alerts to automate your trading strategies with OpenAlgo.
 
 ---
 
@@ -82,21 +82,16 @@ If you're running OpenAlgo locally (on your computer) and want to test webhooks,
 
    Fill in the following fields:
 
-   - **Symbol**: Enter the stock/instrument symbol (e.g., SAIL, RELIANCE, NIFTY)
+   - **Symbol**: Enter the stock/instrument symbol (e.g., AAPL, TSLA, MSFT)
      - Start typing and select from the autocomplete suggestions
 
    - **Exchange**: Select the exchange
-     - NSE (National Stock Exchange)
-     - NFO (NSE Futures & Options)
-     - BSE (Bombay Stock Exchange)
-     - BFO (BSE Futures & Options)
-     - CDS (Currency Derivatives)
-     - MCX (Multi Commodity Exchange)
+     - EQUITY
+     - OPTIONS
+     - FUTURES
 
    - **Product Type**: Choose the product type
-     - MIS (Margin Intraday Square-off)
-     - NRML (Normal/Overnight positions)
-     - CNC (Cash & Carry/Delivery)
+     - CNC (US brokers use CNC for all positions)
 
    - **Action**: Select the trade action
      - BUY
@@ -121,11 +116,11 @@ If you're running OpenAlgo locally (on your computer) and want to test webhooks,
      {
        "apikey": "your_api_key_here",
        "strategy": "GoCharting",
-       "symbol": "SAIL",
+       "symbol": "AAPL",
        "action": "BUY",
-       "exchange": "NSE",
+       "exchange": "EQUITY",
        "pricetype": "MARKET",
-       "product": "MIS",
+       "product": "CNC",
        "quantity": "10"
      }
      ```
@@ -156,18 +151,18 @@ If you're running OpenAlgo locally (on your computer) and want to test webhooks,
    - **Expiry**: Set when the alert should expire (optional)
 
 4. **Setup Messaging**
-   - **Name**: Give your alert a descriptive name (e.g., "SAIL BUY ALERT")
+   - **Name**: Give your alert a descriptive name (e.g., "AAPL BUY ALERT")
 
    - **Message**: Paste your copied JSON payload here
      ```json
      {
        "apikey": "your_api_key_here",
        "strategy": "GoCharting",
-       "symbol": "SAIL",
+       "symbol": "AAPL",
        "action": "BUY",
-       "exchange": "NSE",
+       "exchange": "EQUITY",
        "pricetype": "MARKET",
-       "product": "MIS",
+       "product": "CNC",
        "quantity": "10"
      }
      ```
@@ -256,11 +251,11 @@ curl -X POST https://yourdomain.com/api/v1/placeorder \
   -d '{
     "apikey": "your_api_key_here",
     "strategy": "GoCharting",
-    "symbol": "SAIL",
+    "symbol": "AAPL",
     "action": "BUY",
-    "exchange": "NSE",
+    "exchange": "EQUITY",
     "pricetype": "MARKET",
-    "product": "MIS",
+    "product": "CNC",
     "quantity": "1"
   }'
 ```
@@ -292,11 +287,11 @@ curl -X POST https://yourdomain.com/api/v1/placeorder \
 {
   "apikey": "your_api_key_here",      // Your OpenAlgo API key
   "strategy": "GoCharting",            // Strategy identifier
-  "symbol": "SAIL",                    // Trading symbol
+  "symbol": "AAPL",                    // Trading symbol
   "action": "BUY",                     // BUY or SELL
-  "exchange": "NSE",                   // Exchange code
+  "exchange": "EQUITY",                // Exchange code
   "pricetype": "MARKET",               // MARKET, LIMIT, SL, SL-M
-  "product": "MIS",                    // MIS, NRML, CNC
+  "product": "CNC",                    // CNC (US brokers use CNC for all positions)
   "quantity": "10"                     // Number of shares/lots
 }
 ```
@@ -309,9 +304,9 @@ curl -X POST https://yourdomain.com/api/v1/placeorder \
 | strategy | Yes | Strategy name for logging | Any string |
 | symbol | Yes | Trading instrument | Valid symbol |
 | action | Yes | Buy or Sell | BUY, SELL |
-| exchange | Yes | Trading exchange | NSE, NFO, BSE, BFO, CDS, MCX |
+| exchange | Yes | Trading exchange | EQUITY, OPTIONS, FUTURES, FUTURES_OPTION |
 | pricetype | Yes | Order type | MARKET, LIMIT, SL, SL-M |
-| product | Yes | Product type | MIS, NRML, CNC |
+| product | Yes | Product type | CNC |
 | quantity | Yes | Number of shares | Positive integer |
 
 ---
@@ -319,17 +314,17 @@ curl -X POST https://yourdomain.com/api/v1/placeorder \
 ## Common Use Cases
 
 ### 1. Simple Price Alert
-**Scenario**: Buy SAIL when price crosses above 150
+**Scenario**: Buy AAPL when price crosses above $200
 
 ```json
 {
   "apikey": "your_api_key",
-  "strategy": "SAIL Price Breakout",
-  "symbol": "SAIL",
+  "strategy": "AAPL Price Breakout",
+  "symbol": "AAPL",
   "action": "BUY",
-  "exchange": "NSE",
+  "exchange": "EQUITY",
   "pricetype": "MARKET",
-  "product": "MIS",
+  "product": "CNC",
   "quantity": "100"
 }
 ```
@@ -340,12 +335,12 @@ curl -X POST https://yourdomain.com/api/v1/placeorder \
 ```json
 {
   "apikey": "your_api_key",
-  "strategy": "Take Profit SAIL",
-  "symbol": "SAIL",
+  "strategy": "Take Profit AAPL",
+  "symbol": "AAPL",
   "action": "SELL",
-  "exchange": "NSE",
+  "exchange": "EQUITY",
   "pricetype": "MARKET",
-  "product": "MIS",
+  "product": "CNC",
   "quantity": "100"
 }
 ```
@@ -356,12 +351,12 @@ curl -X POST https://yourdomain.com/api/v1/placeorder \
 ```json
 {
   "apikey": "your_api_key",
-  "strategy": "Stop Loss SAIL",
-  "symbol": "SAIL",
+  "strategy": "Stop Loss AAPL",
+  "symbol": "AAPL",
   "action": "SELL",
-  "exchange": "NSE",
+  "exchange": "EQUITY",
   "pricetype": "MARKET",
-  "product": "MIS",
+  "product": "CNC",
   "quantity": "100"
 }
 ```

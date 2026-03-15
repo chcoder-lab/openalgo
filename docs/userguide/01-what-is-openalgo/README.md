@@ -2,7 +2,7 @@
 
 ## Introduction
 
-**OpenAlgo** is a free, open-source algorithmic trading platform that bridges your trading ideas with execution. Built with Python Flask and a modern React frontend, it provides a unified API layer across 29 Indian brokers, enabling seamless automation from TradingView, Amibroker, Python scripts, Excel, and AI agents.
+**OpenAlgo** is a free, open-source algorithmic trading platform that bridges your trading ideas with execution. Built with Python Flask and a modern React frontend, it provides a unified API layer across US and international brokers (including tastytrade and webull), enabling seamless automation from TradingView, Amibroker, Python scripts, Excel, and AI agents.
 
 **Website**: [https://openalgo.in](https://openalgo.in)
 **GitHub**: [https://github.com/marketcalls/openalgo](https://github.com/marketcalls/openalgo)
@@ -72,8 +72,8 @@ All in under 1 second!
 | Feature | Description |
 |---------|-------------|
 | **Smart Order Placement** | Execute trades with position sizing, split orders, and bracket orders |
-| **Multi-Broker Support** | Connect to 29 Indian brokers through a unified API |
-| **Multi-Exchange Trading** | NSE, NFO, BSE, BFO, MCX, CDS, BCD, NCDEX |
+| **Multi-Broker Support** | Connect to US & international brokers (tastytrade, webull) through a unified API |
+| **Multi-Exchange Trading** | EQUITY, OPTIONS, FUTURES, FUTURES_OPTION |
 | **Real-Time Streaming** | WebSocket-based live quotes, depth, and order updates |
 | **Auto Square-Off** | Time-based and one-click position square-off |
 
@@ -91,7 +91,7 @@ All in under 1 second!
 
 | Feature | Description |
 |---------|-------------|
-| **Analyzer Mode** | Sandbox trading with ₹1 Crore sandbox capital |
+| **Analyzer Mode** | Sandbox trading with $100,000 sandbox capital |
 | **Historify** | Download and store historical market data (DuckDB) |
 | **P&L Tracker** | Real-time profit/loss tracking with charts |
 | **Latency Monitor** | Track API and order execution latency |
@@ -149,20 +149,18 @@ All in under 1 second!
 │  ┌───────────────────────────────────────────────────────────────────┐  │
 │  │                    Unified Broker Layer                            │  │
 │  │                                                                    │  │
-│  │  Zerodha │ Angel │ Dhan │ Fyers │ 5paisa │ Upstox │ 20+ more...  │  │
+│  │  tastytrade │ webull │ and more...                              │  │
 │  │                                                                    │  │
 │  └───────────────────────────────────────────────────────────────────┘  │
 │                                                                          │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
 
-## Supported Brokers (29)
+## Supported Brokers
 
 | Category | Brokers |
 |----------|---------|
-| **Tier 1** | Zerodha, Angel One, Dhan, Fyers, Upstox |
-| **Banks** | ICICI Direct, HDFC Securities, Kotak Neo |
-| **Others** | 5paisa, Finvasia, Flattrade, Firstock, Nubra, and more |
+| **US Brokers** | tastytrade, webull |
 
 **Benefit**: Switch brokers without changing your strategy code - OpenAlgo's unified API handles the translation.
 
@@ -170,14 +168,10 @@ All in under 1 second!
 
 | Exchange | Description |
 |----------|-------------|
-| **NSE** | National Stock Exchange (Equity) |
-| **NFO** | NSE Futures & Options |
-| **BSE** | Bombay Stock Exchange (Equity) |
-| **BFO** | BSE Futures & Options |
-| **MCX** | Multi Commodity Exchange |
-| **CDS** | Currency Derivatives Segment |
-| **BCD** | BSE Currency Derivatives |
-| **NCDEX** | National Commodity Exchange |
+| **EQUITY** | US equities and ETFs (AAPL, TSLA, SPY) |
+| **OPTIONS** | US equity and index options |
+| **FUTURES** | US futures contracts (/ES, /CL, /GC) |
+| **FUTURES_OPTION** | Options on US futures contracts |
 
 ## Trading Modes
 
@@ -185,10 +179,10 @@ All in under 1 second!
 Execute real trades with your connected broker. Orders are sent directly to the exchange through your broker's API.
 
 ### Analyzer Mode (Sandbox Trading)
-Test strategies with ₹1 Crore sandbox capital:
+Test strategies with $100,000 sandbox capital:
 - Realistic margin calculations
 - Position and holdings tracking
-- Auto square-off at exchange timings
+- Auto square-off at market close (4:00 PM ET)
 - Complete isolation from live trading
 - Perfect for strategy testing and validation
 
@@ -298,11 +292,11 @@ Ready to begin? Here's your path:
 | Aspect | OpenAlgo |
 |--------|----------|
 | **Cost** | Free (Open Source, MIT License) |
-| **Brokers** | 29 Indian brokers |
-| **Exchanges** | NSE, NFO, BSE, BFO, MCX, CDS, BCD, NCDEX |
+| **Brokers** | US & international brokers (tastytrade, webull) |
+| **Exchanges** | EQUITY, OPTIONS, FUTURES, FUTURES_OPTION |
 | **Signal Sources** | TradingView, Amibroker, ChartInk, Python, AI |
 | **Strategy Building** | Flow (Visual), Python Hosting, External Webhooks |
-| **Sandbox Trading** | Analyzer Mode with ₹1 Crore sandbox capital |
+| **Sandbox Trading** | Analyzer Mode with $100,000 sandbox capital |
 | **Historical Data** | Historify with DuckDB storage |
 | **Real-Time Data** | WebSocket streaming for quotes and orders |
 | **Notifications** | Telegram bot, WebSocket updates |

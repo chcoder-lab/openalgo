@@ -16,24 +16,24 @@ Understanding the symbol format is **essential** for placing orders correctly. I
 │  EQUITY                                                                      │
 │  ───────                                                                     │
 │  Format: [Symbol]                                                           │
-│  Example: SBIN, INFY, RELIANCE, TATAMOTORS                                  │
+│  Example: AAPL, TSLA, MSFT, AMZN                                            │
 │                                                                              │
 │  FUTURES                                                                     │
 │  ────────                                                                    │
-│  Format: [Symbol][DD][MMM][YY]FUT                                           │
-│  Example: NIFTY30JAN25FUT, BANKNIFTY27FEB25FUT                             │
+│  Format: /[Symbol]                                                          │
+│  Example: /ES (E-mini S&P 500), /CL (Crude Oil), /GC (Gold)               │
 │                                                                              │
 │  OPTIONS                                                                     │
 │  ────────                                                                    │
-│  Format: [Symbol][DD][MMM][YY][Strike][CE/PE]                               │
-│  Example: NIFTY30JAN2521500CE, BANKNIFTY27FEB2548000PE                     │
+│  Format: [Symbol][YYMMDD][C/P][Strike×1000 zero-padded to 8 digits]        │
+│  Example: AAPL250117C00200000 (AAPL Jan 17 2025 $200 Call)                 │
 │                                                                              │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ## Equity Symbol Format
 
-Equity symbols use the base trading symbol without any modifications.
+Equity symbols use the base trading symbol (ticker) without any modifications.
 
 ### Format
 
@@ -43,22 +43,22 @@ Equity symbols use the base trading symbol without any modifications.
 
 ### Examples
 
-| Company | Base Symbol | OpenAlgo Symbol |
-|---------|-------------|-----------------|
-| State Bank of India | SBIN | `SBIN` |
-| Infosys | INFY | `INFY` |
-| Reliance Industries | RELIANCE | `RELIANCE` |
-| Tata Motors | TATAMOTORS | `TATAMOTORS` |
-| HDFC Bank | HDFCBANK | `HDFCBANK` |
-| ICICI Bank | ICICIBANK | `ICICIBANK` |
-| Tata Consultancy Services | TCS | `TCS` |
+| Company | Ticker | OpenAlgo Symbol |
+|---------|--------|-----------------|
+| Apple Inc. | AAPL | `AAPL` |
+| Tesla Inc. | TSLA | `TSLA` |
+| Microsoft Corp. | MSFT | `MSFT` |
+| Amazon.com Inc. | AMZN | `AMZN` |
+| NVIDIA Corp. | NVDA | `NVDA` |
+| Alphabet Inc. | GOOGL | `GOOGL` |
+| Meta Platforms | META | `META` |
 
 ### Usage
 
 ```json
 {
-  "symbol": "SBIN",
-  "exchange": "NSE",
+  "symbol": "AAPL",
+  "exchange": "EQUITY",
   "action": "BUY",
   "quantity": "100",
   "pricetype": "MARKET",
@@ -66,110 +66,89 @@ Equity symbols use the base trading symbol without any modifications.
 }
 ```
 
-## Future Symbol Format
+## Futures Symbol Format
 
-Futures symbols include the base symbol, expiry date, and "FUT" suffix.
+US futures symbols use a leading slash followed by the root symbol.
 
 ### Format
 
 ```
-[Base Symbol][DD][MMM][YY]FUT
+/[Root Symbol]
 ```
 
 Where:
-- **Base Symbol**: Underlying symbol (e.g., NIFTY, BANKNIFTY, SBIN)
-- **DD**: Two-digit day of expiry (e.g., 30, 27, 25)
-- **MMM**: Three-letter month in CAPS (JAN, FEB, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC)
-- **YY**: Two-digit year (e.g., 25 for 2025)
-- **FUT**: Literal suffix indicating futures
+- **Root Symbol**: The futures root identifier (e.g., ES, CL, GC, NQ)
 
 ### Examples
 
 | Description | OpenAlgo Symbol |
 |-------------|-----------------|
-| Nifty Future expiring 30th Jan 2025 | `NIFTY30JAN25FUT` |
-| Bank Nifty Future expiring 27th Feb 2025 | `BANKNIFTY27FEB25FUT` |
-| SBIN Future expiring 27th Mar 2025 | `SBIN27MAR25FUT` |
-| SENSEX Future expiring 28th Feb 2025 | `SENSEX28FEB25FUT` |
-| USDINR Future expiring 27th Jan 2025 | `USDINR27JAN25FUT` |
-| Crude Oil Future expiring 19th Feb 2025 | `CRUDEOIL19FEB25FUT` |
+| E-mini S&P 500 Future | `/ES` |
+| E-mini Nasdaq-100 Future | `/NQ` |
+| Crude Oil Future (WTI) | `/CL` |
+| Gold Future | `/GC` |
+| 10-Year Treasury Note Future | `/ZN` |
+| Euro FX Future | `/6E` |
 
 ### Usage
 
 ```json
 {
-  "symbol": "NIFTY30JAN25FUT",
-  "exchange": "NFO",
+  "symbol": "/ES",
+  "exchange": "FUTURES",
   "action": "BUY",
-  "quantity": "50",
+  "quantity": "1",
   "pricetype": "MARKET",
-  "product": "NRML"
+  "product": "CNC"
 }
 ```
 
 ## Options Symbol Format
 
-Options symbols include the base symbol, expiry date, strike price, and option type.
+US equity options symbols follow the OCC (Options Clearing Corporation) standard format.
 
 ### Format
 
 ```
-[Base Symbol][DD][MMM][YY][Strike][CE/PE]
+[Symbol][YYMMDD][C/P][Strike×1000 zero-padded to 8 digits]
 ```
 
 Where:
-- **Base Symbol**: Underlying symbol
-- **DD**: Two-digit day of expiry
-- **MMM**: Three-letter month in CAPS
-- **YY**: Two-digit year
-- **Strike**: Strike price (can include decimals for stock options)
-- **CE**: Call option
-- **PE**: Put option
+- **Symbol**: Underlying ticker (right-padded to 6 chars for OCC, but OpenAlgo accepts compact form)
+- **YYMMDD**: Two-digit year, month, day of expiry
+- **C**: Call option
+- **P**: Put option
+- **Strike**: Strike price multiplied by 1000, zero-padded to 8 digits
 
 ### Examples
 
-#### Index Options (NSE)
+#### Equity Options
 
 | Description | OpenAlgo Symbol |
 |-------------|-----------------|
-| Nifty 21500 Call, 30th Jan 2025 | `NIFTY30JAN2521500CE` |
-| Nifty 21000 Put, 30th Jan 2025 | `NIFTY30JAN2521000PE` |
-| Bank Nifty 48000 Call, 27th Feb 2025 | `BANKNIFTY27FEB2548000CE` |
-| Bank Nifty 47500 Put, 27th Feb 2025 | `BANKNIFTY27FEB2547500PE` |
-| Fin Nifty 22000 Call, 28th Jan 2025 | `FINNIFTY28JAN2522000CE` |
+| AAPL $200 Call, Jan 17 2025 | `AAPL250117C00200000` |
+| AAPL $190 Put, Jan 17 2025 | `AAPL250117P00190000` |
+| TSLA $250 Call, Feb 21 2025 | `TSLA250221C00250000` |
+| MSFT $420 Put, Mar 21 2025 | `MSFT250321P00420000` |
+| NVDA $130 Call, Apr 17 2025 | `NVDA250417C00130000` |
 
-#### Stock Options (NSE)
-
-| Description | OpenAlgo Symbol |
-|-------------|-----------------|
-| SBIN 800 Call, 27th Feb 2025 | `SBIN27FEB25800CE` |
-| RELIANCE 1300 Put, 27th Feb 2025 | `RELIANCE27FEB251300PE` |
-| VEDL 292.50 Call, 24th Apr 2025 | `VEDL24APR25292.5CE` |
-
-#### Currency Options
+#### Index Options
 
 | Description | OpenAlgo Symbol |
 |-------------|-----------------|
-| USDINR 84 Call, 27th Jan 2025 | `USDINR27JAN2584CE` |
-| USDINR 83.50 Put, 27th Jan 2025 | `USDINR27JAN2583.5PE` |
-
-#### Commodity Options (MCX)
-
-| Description | OpenAlgo Symbol |
-|-------------|-----------------|
-| Crude Oil 6500 Call, 17th Feb 2025 | `CRUDEOIL17FEB256500CE` |
-| Gold 62000 Put, 5th Feb 2025 | `GOLD05FEB2562000PE` |
+| SPY $500 Call, Jan 17 2025 | `SPY250117C00500000` |
+| QQQ $450 Put, Jan 17 2025 | `QQQ250117P00450000` |
 
 ### Usage
 
 ```json
 {
-  "symbol": "NIFTY30JAN2521500CE",
-  "exchange": "NFO",
+  "symbol": "AAPL250117C00200000",
+  "exchange": "OPTIONS",
   "action": "BUY",
-  "quantity": "50",
+  "quantity": "1",
   "pricetype": "MARKET",
-  "product": "NRML"
+  "product": "CNC"
 }
 ```
 
@@ -177,98 +156,73 @@ Where:
 
 OpenAlgo uses standardized exchange codes to identify trading venues.
 
-### Equity Exchanges
+### US Market Exchanges
 
 | Exchange | Code | Description |
 |----------|------|-------------|
-| National Stock Exchange | `NSE` | NSE equities |
-| Bombay Stock Exchange | `BSE` | BSE equities |
+| US Equity | `EQUITY` | Stocks and ETFs (AAPL, TSLA, SPY) |
+| US Options | `OPTIONS` | Equity and index options |
+| US Futures | `FUTURES` | Index, commodity, and rate futures (/ES, /CL) |
+| US Futures Options | `FUTURES_OPTION` | Options on futures contracts |
 
-### Derivatives Exchanges
+## Common US Index ETF Symbols
 
-| Exchange | Code | Description |
-|----------|------|-------------|
-| NSE F&O | `NFO` | NSE Futures & Options |
-| BSE F&O | `BFO` | BSE Futures & Options |
-
-### Currency Derivatives
-
-| Exchange | Code | Description |
-|----------|------|-------------|
-| NSE Currency | `CDS` | NSE Currency Derivatives |
-| BSE Currency | `BCD` | BSE Currency Derivatives |
-
-### Commodity Exchange
-
-| Exchange | Code | Description |
-|----------|------|-------------|
-| Multi Commodity Exchange | `MCX` | Commodities trading |
-
-### Index Symbols
-
-| Exchange | Code | Description |
-|----------|------|-------------|
-| NSE Index | `NSE_INDEX` | NSE index values |
-| BSE Index | `BSE_INDEX` | BSE index values |
-
-## Common Index Symbols
-
-### NSE Indices (Exchange: NSE_INDEX)
+### Broad Market ETFs (Exchange: EQUITY)
 
 | Symbol | Description |
 |--------|-------------|
-| `NIFTY` | Nifty 50 |
-| `BANKNIFTY` | Nifty Bank |
-| `FINNIFTY` | Nifty Financial Services |
-| `NIFTYNXT50` | Nifty Next 50 |
-| `MIDCPNIFTY` | Nifty Midcap Select |
-| `INDIAVIX` | India VIX |
+| `SPY` | SPDR S&P 500 ETF |
+| `QQQ` | Invesco Nasdaq-100 ETF |
+| `IWM` | iShares Russell 2000 ETF |
+| `DIA` | SPDR Dow Jones Industrial Average ETF |
+| `VTI` | Vanguard Total Stock Market ETF |
 
-### BSE Indices (Exchange: BSE_INDEX)
+### Common Futures (Exchange: FUTURES)
 
 | Symbol | Description |
 |--------|-------------|
-| `SENSEX` | S&P BSE Sensex |
-| `BANKEX` | S&P BSE Bankex |
-| `SENSEX50` | S&P BSE Sensex 50 |
+| `/ES` | E-mini S&P 500 |
+| `/NQ` | E-mini Nasdaq-100 |
+| `/RTY` | E-mini Russell 2000 |
+| `/CL` | Crude Oil (WTI) |
+| `/GC` | Gold |
+| `/ZN` | 10-Year Treasury Note |
 
 ## Product Types
 
 | Product | Description | Use Case |
 |---------|-------------|----------|
-| `MIS` | Margin Intraday Square-off | Intraday equity/F&O |
-| `CNC` | Cash and Carry | Delivery equity |
-| `NRML` | Normal | Overnight F&O positions |
+| `CNC` | Cash and Carry | All US trading (equity, options, futures) |
 
 ## Complete Order Examples
 
-### Equity Intraday Order
+### Equity Market Order
 
 ```json
 {
   "apikey": "your-api-key",
   "strategy": "MyStrategy",
-  "symbol": "SBIN",
-  "exchange": "NSE",
+  "symbol": "AAPL",
+  "exchange": "EQUITY",
   "action": "BUY",
   "quantity": "100",
   "pricetype": "MARKET",
-  "product": "MIS"
+  "product": "CNC"
 }
 ```
 
-### Equity Delivery Order
+### Equity Limit Order
 
 ```json
 {
   "apikey": "your-api-key",
   "strategy": "Investment",
-  "symbol": "RELIANCE",
-  "exchange": "NSE",
+  "symbol": "TSLA",
+  "exchange": "EQUITY",
   "action": "BUY",
   "quantity": "10",
   "pricetype": "LIMIT",
-  "price": "2450.00",
+  "price": "245.00",
   "product": "CNC"
 }
 ```
@@ -279,12 +233,12 @@ OpenAlgo uses standardized exchange codes to identify trading venues.
 {
   "apikey": "your-api-key",
   "strategy": "FuturesStrategy",
-  "symbol": "NIFTY30JAN25FUT",
-  "exchange": "NFO",
+  "symbol": "/ES",
+  "exchange": "FUTURES",
   "action": "BUY",
-  "quantity": "50",
+  "quantity": "1",
   "pricetype": "MARKET",
-  "product": "NRML"
+  "product": "CNC"
 }
 ```
 
@@ -294,42 +248,27 @@ OpenAlgo uses standardized exchange codes to identify trading venues.
 {
   "apikey": "your-api-key",
   "strategy": "OptionsStrategy",
-  "symbol": "NIFTY30JAN2521500CE",
-  "exchange": "NFO",
-  "action": "BUY",
-  "quantity": "50",
-  "pricetype": "MARKET",
-  "product": "NRML"
-}
-```
-
-### Currency Futures Order
-
-```json
-{
-  "apikey": "your-api-key",
-  "strategy": "CurrencyStrategy",
-  "symbol": "USDINR27JAN25FUT",
-  "exchange": "CDS",
+  "symbol": "AAPL250117C00200000",
+  "exchange": "OPTIONS",
   "action": "BUY",
   "quantity": "1",
   "pricetype": "MARKET",
-  "product": "NRML"
+  "product": "CNC"
 }
 ```
 
-### Commodity Futures Order
+### Crude Oil Futures Order
 
 ```json
 {
   "apikey": "your-api-key",
   "strategy": "CommodityStrategy",
-  "symbol": "CRUDEOIL19FEB25FUT",
-  "exchange": "MCX",
+  "symbol": "/CL",
+  "exchange": "FUTURES",
   "action": "BUY",
   "quantity": "1",
   "pricetype": "MARKET",
-  "product": "NRML"
+  "product": "CNC"
 }
 ```
 
@@ -343,20 +282,20 @@ OpenAlgo uses standardized exchange codes to identify trading venues.
   "strategy": "BullCallSpread",
   "orders": [
     {
-      "symbol": "NIFTY30JAN2521500CE",
-      "exchange": "NFO",
+      "symbol": "AAPL250117C00190000",
+      "exchange": "OPTIONS",
       "action": "BUY",
-      "quantity": "50",
+      "quantity": "1",
       "pricetype": "MARKET",
-      "product": "NRML"
+      "product": "CNC"
     },
     {
-      "symbol": "NIFTY30JAN2521600CE",
-      "exchange": "NFO",
+      "symbol": "AAPL250117C00200000",
+      "exchange": "OPTIONS",
       "action": "SELL",
-      "quantity": "50",
+      "quantity": "1",
       "pricetype": "MARKET",
-      "product": "NRML"
+      "product": "CNC"
     }
   ]
 }
@@ -370,36 +309,36 @@ OpenAlgo uses standardized exchange codes to identify trading venues.
   "strategy": "IronCondor",
   "orders": [
     {
-      "symbol": "NIFTY30JAN2522000CE",
-      "exchange": "NFO",
+      "symbol": "SPY250117C00510000",
+      "exchange": "OPTIONS",
       "action": "SELL",
-      "quantity": "50",
+      "quantity": "1",
       "pricetype": "MARKET",
-      "product": "NRML"
+      "product": "CNC"
     },
     {
-      "symbol": "NIFTY30JAN2522100CE",
-      "exchange": "NFO",
+      "symbol": "SPY250117C00520000",
+      "exchange": "OPTIONS",
       "action": "BUY",
-      "quantity": "50",
+      "quantity": "1",
       "pricetype": "MARKET",
-      "product": "NRML"
+      "product": "CNC"
     },
     {
-      "symbol": "NIFTY30JAN2521000PE",
-      "exchange": "NFO",
+      "symbol": "SPY250117P00480000",
+      "exchange": "OPTIONS",
       "action": "SELL",
-      "quantity": "50",
+      "quantity": "1",
       "pricetype": "MARKET",
-      "product": "NRML"
+      "product": "CNC"
     },
     {
-      "symbol": "NIFTY30JAN2520900PE",
-      "exchange": "NFO",
+      "symbol": "SPY250117P00470000",
+      "exchange": "OPTIONS",
       "action": "BUY",
-      "quantity": "50",
+      "quantity": "1",
       "pricetype": "MARKET",
-      "product": "NRML"
+      "product": "CNC"
     }
   ]
 }
@@ -430,33 +369,33 @@ POST /api/v1/search
 
 ## Common Mistakes
 
-### Mistake 1: Wrong Date Format
+### Mistake 1: Wrong Options Date Format
 
 ```
-❌ NIFTY25JAN2521500CE      (missing day)
-❌ NIFTYJAN2521500CE        (missing day and year format)
-✅ NIFTY30JAN2521500CE      (correct)
+❌ AAPL25JAN17C00200000     (wrong date order - must be YYMMDD)
+❌ AAPL2025-01-17C00200000  (no dashes allowed)
+✅ AAPL250117C00200000      (correct: YYMMDD)
 ```
 
 ### Mistake 2: Wrong Exchange Code
 
 ```
-❌ symbol: "NIFTY30JAN2521500CE", exchange: "NSE"  (wrong exchange)
-✅ symbol: "NIFTY30JAN2521500CE", exchange: "NFO"  (correct)
+❌ symbol: "AAPL250117C00200000", exchange: "EQUITY"  (wrong exchange for options)
+✅ symbol: "AAPL250117C00200000", exchange: "OPTIONS"  (correct)
 ```
 
-### Mistake 3: Wrong Product Type
+### Mistake 3: Wrong Strike Encoding
 
 ```
-❌ Options with product: "CNC"  (CNC is for equity only)
-✅ Options with product: "NRML" (correct for F&O)
+❌ AAPL250117C200            (missing zero-padding)
+✅ AAPL250117C00200000       (correct: strike $200 × 1000 = 200000, padded to 8 digits)
 ```
 
 ### Mistake 4: Case Sensitivity
 
 ```
-❌ "sbin", "Sbin"  (lowercase/mixed case)
-✅ "SBIN"          (uppercase - correct)
+❌ "aapl", "Aapl"  (lowercase/mixed case)
+✅ "AAPL"          (uppercase - correct)
 ```
 
 ## Troubleshooting
@@ -466,7 +405,7 @@ POST /api/v1/search
 | Symbol not found | Incorrect format | Verify symbol using Search |
 | Invalid exchange | Wrong exchange code | Match exchange to instrument type |
 | Order rejected | Expired contract | Update to current expiry |
-| Invalid product | Wrong product type | Use MIS/NRML for F&O, CNC for delivery |
+| Invalid product | Wrong product type | Use CNC for all US instruments |
 
 ## Symbol Format Quick Reference Card
 
@@ -475,26 +414,23 @@ POST /api/v1/search
 │                    OpenAlgo Symbol Quick Reference                          │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
-│  TYPE          FORMAT                      EXAMPLE                          │
-│  ────          ──────                      ───────                          │
-│  Equity        [Symbol]                    SBIN                             │
-│  Future        [Symbol][DD][MMM][YY]FUT    NIFTY30JAN25FUT                  │
-│  Call Option   [Symbol][DD][MMM][YY][Strike]CE   NIFTY30JAN2521500CE       │
-│  Put Option    [Symbol][DD][MMM][YY][Strike]PE   NIFTY30JAN2521000PE       │
+│  TYPE          FORMAT                         EXAMPLE                       │
+│  ────          ──────                         ───────                       │
+│  Equity        [Symbol]                       AAPL                          │
+│  Future        /[RootSymbol]                  /ES, /CL, /GC                 │
+│  Call Option   [Symbol][YYMMDD]C[Strike8]     AAPL250117C00200000           │
+│  Put Option    [Symbol][YYMMDD]P[Strike8]     AAPL250117P00190000           │
 │                                                                              │
 │  EXCHANGE CODES                                                             │
 │  ──────────────                                                             │
-│  NSE     = NSE Equity           NFO = NSE F&O                              │
-│  BSE     = BSE Equity           BFO = BSE F&O                              │
-│  CDS     = NSE Currency         BCD = BSE Currency                         │
-│  MCX     = Commodities                                                      │
-│  NSE_INDEX / BSE_INDEX = Index values                                       │
+│  EQUITY         = US equities and ETFs                                      │
+│  OPTIONS        = US equity and index options                               │
+│  FUTURES        = US futures (/ES, /CL, /GC)                               │
+│  FUTURES_OPTION = Options on futures                                        │
 │                                                                              │
 │  PRODUCT CODES                                                              │
 │  ─────────────                                                              │
-│  MIS  = Intraday                                                            │
-│  CNC  = Delivery (Equity only)                                              │
-│  NRML = Overnight (F&O)                                                     │
+│  CNC  = All US instruments (equity, options, futures)                       │
 │                                                                              │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```

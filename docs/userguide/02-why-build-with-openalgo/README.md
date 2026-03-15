@@ -33,11 +33,11 @@ Host your **Python strategies directly inside OpenAlgo**, alongside strategies f
 
 ### Sandbox Testing & API Analyzer
 
-The **Analyzer Mode** works like a local sandbox—test your signals, APIs, and strategies with ₹1 Crore sandbox capital without hitting real broker servers. Validate everything before going live.
+The **Analyzer Mode** works like a local sandbox—test your signals, APIs, and strategies with $100,000 sandbox capital without hitting real broker servers. Validate everything before going live.
 
 | Feature | Benefit |
 |---------|---------|
-| **Sandbox Capital** | ₹1 Crore to test freely |
+| **Sandbox Capital** | $100,000 to test freely |
 | **Real Market Prices** | Realistic simulation with live data |
 | **Margin Calculations** | Actual margin requirements enforced |
 | **Position Tracking** | Full position and holdings management |
@@ -56,7 +56,7 @@ The **Analyzer Mode** works like a local sandbox—test your signals, APIs, and 
 
 ### Multi-Broker, Multi-Platform
 
-OpenAlgo supports **29 Indian brokers** via a **unified API and WebSocket layer**. Write your strategy once, and run it across Zerodha, Angel One, Dhan, Upstox, Fyers, Flattrade, Firstock, and more—without rewriting code.
+OpenAlgo supports **US and international brokers** (including tastytrade and webull) via a **unified API and WebSocket layer**. Write your strategy once, and run it across supported brokers—without rewriting code.
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -68,12 +68,12 @@ OpenAlgo supports **29 Indian brokers** via a **unified API and WebSocket layer*
 ┌─────────────────────────────────────────────────────────────────┐
 │                   OpenAlgo Unified API                          │
 │              (Common Interface for All Brokers)                 │
-└───┬─────────┬─────────┬─────────┬─────────┬─────────┬──────────┘
-    │         │         │         │         │         │
-    ▼         ▼         ▼         ▼         ▼         ▼
-┌───────┐ ┌───────┐ ┌───────┐ ┌───────┐ ┌───────┐ ┌───────┐
-│Zerodha│ │ Angel │ │  Dhan │ │ Fyers │ │Upstox │ │ More  │
-└───────┘ └───────┘ └───────┘ └───────┘ └───────┘ └───────┘
+└───┬──────────────────┬──────────────────────────────────────┘
+    │                  │
+    ▼                  ▼
+┌──────────┐     ┌──────────┐
+│tastytrade│     │  webull  │
+└──────────┘     └──────────┘
 ```
 
 ### Unified Symbol & Contract Management
@@ -82,9 +82,8 @@ With OpenAlgo's **Common Symbol Format**, you don't have to worry about broker-s
 
 | Broker | Their Format | OpenAlgo Format |
 |--------|--------------|-----------------|
-| Zerodha | `SBIN` | `SBIN` |
-| Angel | `SBIN-EQ` | `SBIN` |
-| Dhan | `SBIN` | `SBIN` |
+| tastytrade | `AAPL` | `AAPL` |
+| webull | `AAPL` | `AAPL` |
 
 **One symbol format. All brokers.**
 
@@ -178,13 +177,13 @@ With direct broker APIs, you'd have to build:
 | Component | What You'd Build | OpenAlgo Provides |
 |-----------|------------------|-------------------|
 | **Strategy Hosting** | Process management, scheduling | Built-in with Python hosting |
-| **Testing Environment** | Sandbox, mock broker | Analyzer Mode with ₹1 Cr capital |
+| **Testing Environment** | Sandbox, mock broker | Analyzer Mode with $100,000 capital |
 | **Symbol Management** | Expiry handling, contract mapping | Unified symbol format |
 | **Connection Pooling** | HTTP/WebSocket optimization | HTTPX with connection reuse |
 | **Trade Dashboard** | React UI, real-time updates | Full React frontend included |
 | **Log Storage** | Database, query interface | SQLite with traffic logs |
 | **Latency Tracking** | Timing, metrics, alerts | Latency monitor built-in |
-| **Multi-Broker Support** | N broker integrations | 29 brokers pre-integrated |
+| **Multi-Broker Support** | N broker integrations | US & international brokers pre-integrated |
 | **Security Layer** | Auth, rate limiting, CSRF | Enterprise security included |
 | **Notifications** | Telegram, alerts | Telegram bot integrated |
 

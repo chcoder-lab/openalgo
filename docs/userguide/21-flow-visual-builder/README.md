@@ -134,11 +134,11 @@ Utility nodes for supporting operations.
 2. Connect Webhook output to Order input
 3. Configure order parameters:
    - Symbol: `{{webhook.symbol}}`
-   - Exchange: `NSE`
+   - Exchange: `EQUITY`
    - Action: `{{webhook.action}}`
    - Quantity: `100`
    - Price Type: `MARKET`
-   - Product: `MIS`
+   - Product: `CNC`
 
 **Step 3: Add Notification**
 
@@ -163,13 +163,13 @@ Utility nodes for supporting operations.
 ```
 Webhook Input:
 {
-  "symbol": "SBIN",
+  "symbol": "AAPL",
   "action": "BUY",
   "quantity": "100"
 }
 
 Access as:
-Symbol: {{webhook.symbol}}      → SBIN
+Symbol: {{webhook.symbol}}      → AAPL
 Action: {{webhook.action}}      → BUY
 Quantity: {{webhook.quantity}}  → 100
 ```
@@ -223,7 +223,7 @@ Configuration:
 ```
 ┌──────────┐     ┌──────────────────────────────────────────┐
 │ Schedule │────▶│              For Each                    │
-│  9:20 AM │     │  Symbols: SBIN, HDFCBANK, ICICIBANK     │
+│  9:30 AM │     │  Symbols: AAPL, TSLA, MSFT              │
 └──────────┘     └──────────────────────────────────────────┘
                                     │
                                     ▼
@@ -315,7 +315,7 @@ OpenAlgo provides pre-built templates:
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
 │  ✅ Webhook Input         Duration: 2ms                                     │
-│     Input: {"symbol": "SBIN", "action": "BUY"}                             │
+│     Input: {"symbol": "AAPL", "action": "BUY"}                             │
 │                                                                              │
 │  ✅ Place Order           Duration: 150ms                                   │
 │     Output: {"status": "success", "orderid": "12345"}                       │
@@ -347,7 +347,7 @@ Always test with sample data before going live.
 
 Name nodes clearly:
 - "TradingView Buy Signal" not "Node 1"
-- "SBIN Order" not "Place Order"
+- "AAPL Order" not "Place Order"
 
 ### 3. Add Error Handling
 

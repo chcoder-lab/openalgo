@@ -143,12 +143,12 @@ Use this JSON template in the **Message** field:
   "apikey": "YOUR_API_KEY",
   "strategy": "{{strategy.order.id}}",
   "symbol": "{{ticker}}",
-  "exchange": "NSE",
+  "exchange": "EQUITY",
   "action": "{{strategy.order.action}}",
   "quantity": "{{strategy.order.contracts}}",
   "position_size": "{{strategy.position_size}}",
   "pricetype": "MARKET",
-  "product": "MIS"
+  "product": "CNC"
 }
 ```
 
@@ -168,8 +168,8 @@ Use this JSON template in the **Message** field:
 
 | Variable | Description | Example |
 |----------|-------------|---------|
-| `{{ticker}}` | Symbol name | SBIN |
-| `{{exchange}}` | Exchange name | NSE |
+| `{{ticker}}` | Symbol name | AAPL |
+| `{{exchange}}` | Exchange name | EQUITY |
 | `{{close}}` | Current close price | 625.50 |
 | `{{time}}` | Alert time | 2024-01-25... |
 
@@ -182,11 +182,11 @@ Use this JSON template in the **Message** field:
   "apikey": "YOUR_API_KEY",
   "strategy": "TVStrategy",
   "symbol": "{{ticker}}",
-  "exchange": "NSE",
+  "exchange": "EQUITY",
   "action": "{{strategy.order.action}}",
   "quantity": "100",
   "pricetype": "MARKET",
-  "product": "MIS"
+  "product": "CNC"
 }
 ```
 
@@ -197,12 +197,12 @@ Use this JSON template in the **Message** field:
   "apikey": "YOUR_API_KEY",
   "strategy": "TVSmart",
   "symbol": "{{ticker}}",
-  "exchange": "NSE",
+  "exchange": "EQUITY",
   "action": "{{strategy.order.action}}",
   "quantity": "{{strategy.order.contracts}}",
   "position_size": "{{strategy.position_size}}",
   "pricetype": "MARKET",
-  "product": "MIS"
+  "product": "CNC"
 }
 ```
 
@@ -213,27 +213,27 @@ Use this JSON template in the **Message** field:
   "apikey": "YOUR_API_KEY",
   "strategy": "TVLimit",
   "symbol": "{{ticker}}",
-  "exchange": "NSE",
+  "exchange": "EQUITY",
   "action": "{{strategy.order.action}}",
   "quantity": "100",
   "pricetype": "LIMIT",
   "price": "{{strategy.order.price}}",
-  "product": "MIS"
+  "product": "CNC"
 }
 ```
 
-### F&O Order
+### Options Order
 
 ```json
 {
   "apikey": "YOUR_API_KEY",
   "strategy": "TVOptions",
-  "symbol": "NIFTY25JAN21500CE",
-  "exchange": "NFO",
+  "symbol": "AAPL250117C00200000",
+  "exchange": "OPTIONS",
   "action": "{{strategy.order.action}}",
-  "quantity": "50",
+  "quantity": "1",
   "pricetype": "MARKET",
-  "product": "NRML"
+  "product": "CNC"
 }
 ```
 
@@ -245,28 +245,28 @@ TradingView symbols map directly:
 
 | TradingView | OpenAlgo |
 |-------------|----------|
-| SBIN | SBIN |
-| RELIANCE | RELIANCE |
-| HDFCBANK | HDFCBANK |
+| AAPL | AAPL |
+| TSLA | TSLA |
+| MSFT | MSFT |
 
 ### Index Symbols
 
 | TradingView | OpenAlgo Exchange |
 |-------------|-------------------|
-| NIFTY | NSE (use INDEX product) |
-| BANKNIFTY | NSE (use INDEX product) |
+| SPX | EQUITY (use INDEX product) |
+| NDX | EQUITY (use INDEX product) |
 
-### F&O Symbols
+### Options Symbols
 
-For F&O, you need to construct the symbol manually:
+For options, you need to construct the symbol manually using OCC format:
 
 ```
-Format: SYMBOL + EXPIRY + STRIKE + OPTION_TYPE
+Format: SYMBOL + EXPIRY (YYMMDD) + CALL/PUT + STRIKE (8 digits, padded)
 
 Examples:
-- NIFTY25JAN21500CE (Nifty Jan 21500 Call)
-- BANKNIFTY25JAN48000PE (BankNifty Jan 48000 Put)
-- SBIN25JANFUT (SBIN January Future)
+- AAPL250117C00200000 (AAPL Jan 17 2025 $200 Call)
+- TSLA250117P00250000 (TSLA Jan 17 2025 $250 Put)
+- /ES250321 (E-mini S&P 500 March 2025 Future)
 ```
 
 ## Testing Your Setup
@@ -317,11 +317,11 @@ Alert message for entry:
   "apikey": "KEY",
   "strategy": "LongOnly",
   "symbol": "{{ticker}}",
-  "exchange": "NSE",
+  "exchange": "EQUITY",
   "action": "BUY",
   "quantity": "100",
   "pricetype": "MARKET",
-  "product": "MIS"
+  "product": "CNC"
 }
 ```
 
@@ -347,12 +347,12 @@ Use smart order for automatic reversal:
   "apikey": "KEY",
   "strategy": "Reversal",
   "symbol": "{{ticker}}",
-  "exchange": "NSE",
+  "exchange": "EQUITY",
   "action": "{{strategy.order.action}}",
   "quantity": "100",
   "position_size": "{{strategy.position_size}}",
   "pricetype": "MARKET",
-  "product": "MIS"
+  "product": "CNC"
 }
 ```
 

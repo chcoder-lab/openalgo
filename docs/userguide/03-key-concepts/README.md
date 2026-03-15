@@ -13,7 +13,7 @@ Before diving into OpenAlgo, let's understand the key terms and concepts you'll 
 **In OpenAlgo**: When TradingView wants to place an order, it sends a request to OpenAlgo's API. OpenAlgo processes it and sends the order to your broker.
 
 ```
-TradingView → "Place BUY order for SBIN" → OpenAlgo API → Broker
+TradingView → "Place BUY order for AAPL" → OpenAlgo API → Broker
 ```
 
 ### 2. API Key
@@ -66,11 +66,11 @@ http://your-server:5000/api/v1/placeorder
 **Examples**:
 | What you want | OpenAlgo Symbol |
 |---------------|-----------------|
-| Reliance on NSE | RELIANCE |
-| SBIN on NSE | SBIN |
-| Nifty 50 Index | NIFTY |
-| Nifty Jan 21500 Call | NIFTY25JAN21500CE |
-| Bank Nifty Future | BANKNIFTY25JANFUT |
+| Apple Inc. equity | AAPL |
+| Tesla equity | TSLA |
+| Microsoft equity | MSFT |
+| E-mini S&P 500 Future | /ES |
+| Crude Oil Future | /CL |
 
 ### 6. Exchange Codes
 
@@ -78,11 +78,10 @@ http://your-server:5000/api/v1/placeorder
 
 | Exchange | Code | What it trades |
 |----------|------|----------------|
-| National Stock Exchange (Equity) | NSE | Stocks |
-| NSE Futures & Options | NFO | F&O |
-| Bombay Stock Exchange | BSE | Stocks |
-| MCX | MCX | Commodities |
-| Currency | CDS | Currency derivatives |
+| US Equity Market | EQUITY | Stocks (AAPL, TSLA, MSFT) |
+| US Options Market | OPTIONS | Equity options |
+| US Futures Market | FUTURES | Index & commodity futures (/ES, /CL) |
+| US Futures Options | FUTURES_OPTION | Options on futures |
 
 ## Order Concepts
 
@@ -103,33 +102,24 @@ http://your-server:5000/api/v1/placeorder
 - Triggers at stop price, executes at market
 
 ```
-Example: SBIN at ₹625
+Example: AAPL at $175
 
 Market Order: "Buy at whatever current price is"
-Limit Order: "Buy only if price is ₹620 or less"
-SL Order: "Sell if price drops to ₹600"
+Limit Order: "Buy only if price is $170 or less"
+SL Order: "Sell if price drops to $160"
 ```
 
 ### 8. Product Types
 
-**CNC (Cash and Carry)**: For delivery-based trading
+**CNC (Cash and Carry)**: For standard equity and overnight positions
 - Hold stocks overnight/long-term
-- No leverage
-- Stocks go to your demat
-
-**MIS (Margin Intraday Square-off)**: For intraday trading
-- Must close before market ends
-- Get margin (trade more with less)
-- Auto square-off if not closed
-
-**NRML (Normal)**: For F&O overnight positions
-- Hold futures/options overnight
-- Margin required
+- No intraday leverage
+- Standard US brokerage account behavior
 
 ```
 Planning to hold for weeks? → Use CNC
-Day trading? → Use MIS
-F&O overnight? → Use NRML
+Day trading equities? → Use CNC
+Futures or options? → Use CNC
 ```
 
 ### 9. Action Types
@@ -145,7 +135,7 @@ F&O overnight? → Use NRML
 
 ### 10. Analyzer Mode (Sandbox Testing)
 
-**Simple Explanation**: A practice mode where you trade with sandbox capital (₹1 Crore) but real market prices.
+**Simple Explanation**: A practice mode where you trade with sandbox capital ($100,000) but real market prices.
 
 **Use it to**:
 - Test strategies without risk
@@ -192,7 +182,7 @@ Strategy: "Breakout_System"
 
 **Example**:
 ```
-You have: 100 shares of SBIN (LONG)
+You have: 100 shares of AAPL (LONG)
 Smart Order says: "Go SHORT 100 shares"
 What happens: Sells 200 shares (100 to close long + 100 to go short)
 ```
@@ -251,11 +241,11 @@ Enter password → Enter 6-digit code → Access granted
 **Simple Explanation**: Open, High, Low, Close - the four key prices for a time period.
 
 ```
-Day's OHLC for SBIN:
-Open: ₹620 (first trade)
-High: ₹635 (highest)
-Low: ₹615 (lowest)
-Close: ₹628 (last trade)
+Day's OHLC for AAPL:
+Open: $172.00 (first trade)
+High: $178.50 (highest)
+Low: $171.00 (lowest)
+Close: $176.25 (last trade)
 ```
 
 ### 20. Market Depth
@@ -265,9 +255,9 @@ Close: ₹628 (last trade)
 ```
         BUY                 SELL
 Qty    Price    |    Price    Qty
-500    ₹624     |    ₹626     800
-1000   ₹623     |    ₹627     1200
-750    ₹622     |    ₹628     500
+500    $174.95  |    $175.05  800
+1000   $174.90  |    $175.10  1200
+750    $174.85  |    $175.15  500
 ```
 
 ## Quick Reference Card
@@ -278,12 +268,11 @@ Qty    Price    |    Price    Qty
 | API Key | Your secret password for API access |
 | Webhook | URL that receives external notifications |
 | Token | Temporary broker access pass |
-| Symbol | Stock identifier (e.g., RELIANCE) |
-| Exchange | Market where stock trades (NSE, NFO, etc.) |
+| Symbol | Stock identifier (e.g., AAPL) |
+| Exchange | Market where stock trades (EQUITY, OPTIONS, etc.) |
 | Market Order | Execute immediately at any price |
 | Limit Order | Execute only at specified price |
-| CNC | Delivery trading (hold overnight) |
-| MIS | Intraday trading (close same day) |
+| CNC | Standard trading (equity, overnight, and derivatives) |
 | Analyzer | Sandbox testing mode |
 | Action Center | Order approval queue |
 | Smart Order | Position-aware order |

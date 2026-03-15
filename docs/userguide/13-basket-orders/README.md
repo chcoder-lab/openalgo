@@ -15,10 +15,10 @@ A basket order bundles multiple individual orders into one request:
 │  Single API Request                                                         │
 │  ┌─────────────────────────────────────────────────────────────────────┐   │
 │  │                                                                      │   │
-│  │  Order 1: BUY 100 SBIN                                              │   │
-│  │  Order 2: BUY 50 INFY                                               │   │
-│  │  Order 3: SELL 25 TCS                                               │   │
-│  │  Order 4: BUY 200 HDFC                                              │   │
+│  │  Order 1: BUY 100 AAPL                                              │   │
+│  │  Order 2: BUY 50 TSLA                                               │   │
+│  │  Order 3: SELL 25 MSFT                                              │   │
+│  │  Order 4: BUY 200 NVDA                                              │   │
 │  │                                                                      │   │
 │  └─────────────────────────────────────────────────────────────────────┘   │
 │                              │                                               │
@@ -35,27 +35,27 @@ A basket order bundles multiple individual orders into one request:
 
 ### 1. Index Replication
 
-Buy all Nifty 50 constituents proportionally:
+Buy S&P 500 constituents proportionally:
 
 ```
 Basket:
-- BUY 100 RELIANCE
-- BUY 50 TCS
-- BUY 75 HDFC
-- BUY 200 INFY
-... (all 50 stocks)
+- BUY 100 AAPL
+- BUY 50 MSFT
+- BUY 75 AMZN
+- BUY 200 TSLA
+... (selected stocks)
 ```
 
 ### 2. Sector Rotation
 
-Rotate into banking sector:
+Rotate into technology sector:
 
 ```
 Basket:
-- SELL 100 RELIANCE (exit energy)
-- SELL 50 TCS (exit IT)
-- BUY 100 HDFCBANK (enter banking)
-- BUY 100 ICICIBANK (enter banking)
+- SELL 100 XOM (exit energy)
+- SELL 50 JPM (exit financials)
+- BUY 100 AAPL (enter tech)
+- BUY 100 MSFT (enter tech)
 ```
 
 ### 3. Pair Trading
@@ -64,8 +64,8 @@ Long-short pair execution:
 
 ```
 Basket:
-- BUY 100 SBIN (long)
-- SELL 100 BANKBARODA (short)
+- BUY 100 AAPL (long)
+- SELL 100 MSFT (short)
 ```
 
 ### 4. Options Strategies
@@ -74,10 +74,10 @@ Multi-leg option strategies:
 
 ```
 Iron Condor Basket:
-- SELL 1 NIFTY 21500 CE
-- BUY 1 NIFTY 21600 CE
-- SELL 1 NIFTY 21000 PE
-- BUY 1 NIFTY 20900 PE
+- SELL 1 AAPL250117C00200000
+- BUY 1 AAPL250117C00210000
+- SELL 1 AAPL250117P00180000
+- BUY 1 AAPL250117P00170000
 ```
 
 ## Basket Order API
@@ -96,28 +96,28 @@ POST /api/v1/basketorder
   "strategy": "BasketStrategy",
   "orders": [
     {
-      "symbol": "SBIN",
-      "exchange": "NSE",
+      "symbol": "AAPL",
+      "exchange": "EQUITY",
       "action": "BUY",
       "quantity": "100",
       "pricetype": "MARKET",
-      "product": "MIS"
+      "product": "CNC"
     },
     {
-      "symbol": "INFY",
-      "exchange": "NSE",
+      "symbol": "TSLA",
+      "exchange": "EQUITY",
       "action": "BUY",
       "quantity": "50",
       "pricetype": "MARKET",
-      "product": "MIS"
+      "product": "CNC"
     },
     {
-      "symbol": "TCS",
-      "exchange": "NSE",
+      "symbol": "MSFT",
+      "exchange": "EQUITY",
       "action": "SELL",
       "quantity": "25",
       "pricetype": "MARKET",
-      "product": "MIS"
+      "product": "CNC"
     }
   ]
 }
@@ -130,17 +130,17 @@ POST /api/v1/basketorder
   "status": "success",
   "results": [
     {
-      "symbol": "SBIN",
+      "symbol": "AAPL",
       "status": "success",
       "orderid": "230125000012345"
     },
     {
-      "symbol": "INFY",
+      "symbol": "TSLA",
       "status": "success",
       "orderid": "230125000012346"
     },
     {
-      "symbol": "TCS",
+      "symbol": "MSFT",
       "status": "success",
       "orderid": "230125000012347"
     }
@@ -161,28 +161,28 @@ client = api(api_key="your-key", host="http://127.0.0.1:5001")
 # Define basket
 basket = [
     {
-        "symbol": "SBIN",
-        "exchange": "NSE",
+        "symbol": "AAPL",
+        "exchange": "EQUITY",
         "action": "BUY",
         "quantity": 100,
         "pricetype": "MARKET",
-        "product": "MIS"
+        "product": "CNC"
     },
     {
-        "symbol": "INFY",
-        "exchange": "NSE",
+        "symbol": "TSLA",
+        "exchange": "EQUITY",
         "action": "BUY",
         "quantity": 50,
         "pricetype": "MARKET",
-        "product": "MIS"
+        "product": "CNC"
     },
     {
-        "symbol": "RELIANCE",
-        "exchange": "NSE",
+        "symbol": "MSFT",
+        "exchange": "EQUITY",
         "action": "BUY",
         "quantity": 25,
         "pricetype": "MARKET",
-        "product": "MIS"
+        "product": "CNC"
     }
 ]
 
@@ -203,12 +203,12 @@ for result in response['results']:
 
 ```json
 {
-  "symbol": "SBIN",
-  "exchange": "NSE",
+  "symbol": "AAPL",
+  "exchange": "EQUITY",
   "action": "BUY",
   "quantity": "100",
   "pricetype": "MARKET",
-  "product": "MIS"
+  "product": "CNC"
 }
 ```
 
@@ -216,13 +216,13 @@ for result in response['results']:
 
 ```json
 {
-  "symbol": "SBIN",
-  "exchange": "NSE",
+  "symbol": "AAPL",
+  "exchange": "EQUITY",
   "action": "BUY",
   "quantity": "100",
   "pricetype": "LIMIT",
-  "price": "620",
-  "product": "MIS"
+  "price": "190.00",
+  "product": "CNC"
 }
 ```
 
@@ -234,14 +234,14 @@ You can mix order types in a basket:
 {
   "orders": [
     {
-      "symbol": "SBIN",
+      "symbol": "AAPL",
       "pricetype": "MARKET",
       ...
     },
     {
-      "symbol": "INFY",
+      "symbol": "TSLA",
       "pricetype": "LIMIT",
-      "price": "1500",
+      "price": "250.00",
       ...
     }
   ]
@@ -256,9 +256,9 @@ Orders are sent to broker in parallel:
 
 ```
 Time 0ms:  All orders submitted
-Time 50ms: SBIN executed
-Time 55ms: INFY executed
-Time 60ms: TCS executed
+Time 50ms: AAPL executed
+Time 55ms: TSLA executed
+Time 60ms: MSFT executed
 ```
 
 ### Partial Success
@@ -268,9 +268,9 @@ Some orders may succeed while others fail:
 ```json
 {
   "results": [
-    {"symbol": "SBIN", "status": "success", "orderid": "123"},
-    {"symbol": "INFY", "status": "error", "message": "Insufficient margin"},
-    {"symbol": "TCS", "status": "success", "orderid": "124"}
+    {"symbol": "AAPL", "status": "success", "orderid": "123"},
+    {"symbol": "TSLA", "status": "error", "message": "Insufficient margin"},
+    {"symbol": "MSFT", "status": "success", "orderid": "124"}
   ],
   "successful": 2,
   "failed": 1
@@ -353,20 +353,20 @@ def execute_basket_with_retry(basket, max_retries=3):
   "strategy": "BullCallSpread",
   "orders": [
     {
-      "symbol": "NIFTY25JAN21500CE",
-      "exchange": "NFO",
+      "symbol": "AAPL250117C00200000",
+      "exchange": "OPTIONS",
       "action": "BUY",
-      "quantity": "50",
+      "quantity": "1",
       "pricetype": "MARKET",
-      "product": "NRML"
+      "product": "CNC"
     },
     {
-      "symbol": "NIFTY25JAN21600CE",
-      "exchange": "NFO",
+      "symbol": "AAPL250117C00210000",
+      "exchange": "OPTIONS",
       "action": "SELL",
-      "quantity": "50",
+      "quantity": "1",
       "pricetype": "MARKET",
-      "product": "NRML"
+      "product": "CNC"
     }
   ]
 }
@@ -378,10 +378,10 @@ def execute_basket_with_retry(basket, max_retries=3):
 {
   "strategy": "IronCondor",
   "orders": [
-    {"symbol": "NIFTY25JAN21500CE", "action": "SELL", ...},
-    {"symbol": "NIFTY25JAN21600CE", "action": "BUY", ...},
-    {"symbol": "NIFTY25JAN21000PE", "action": "SELL", ...},
-    {"symbol": "NIFTY25JAN20900PE", "action": "BUY", ...}
+    {"symbol": "AAPL250117C00200000", "action": "SELL", ...},
+    {"symbol": "AAPL250117C00210000", "action": "BUY", ...},
+    {"symbol": "AAPL250117P00180000", "action": "SELL", ...},
+    {"symbol": "AAPL250117P00170000", "action": "BUY", ...}
   ]
 }
 ```

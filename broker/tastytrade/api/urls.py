@@ -7,6 +7,14 @@ SANDBOX_STREAMER_HOST = "streamer.cert.tastyworks.com"
 PRODUCTION_BASE_URL = "https://api.tastyworks.com"
 PRODUCTION_STREAMER_HOST = "streamer.tastyworks.com"
 
+# API version headers required for versioned tastytrade endpoints.
+# Omitting Accept-Version hits the deprecated default — pin explicitly.
+# Orders API (POST/PUT/DELETE/GET /accounts/.../orders)
+ORDERS_API_VERSION = "20250813"
+# Account Positions API (GET /accounts/.../positions)
+# 20240430 is the unversioned default but is being deprecated.
+POSITIONS_API_VERSION = "20240501"
+
 
 def _normalize_env(value: str | None) -> str:
     if not value:

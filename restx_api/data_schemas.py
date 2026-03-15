@@ -143,10 +143,10 @@ class SearchSchema(Schema):
 
 class ExpirySchema(Schema):
     apikey = fields.Str(required=True, validate=validate.Length(min=1, max=256))  # API Key for authentication
-    symbol = fields.Str(required=True)  # Underlying symbol (e.g., NIFTY, BANKNIFTY)
+    symbol = fields.Str(required=True)  # Underlying symbol (e.g., AAPL, NIFTY, BANKNIFTY)
     exchange = fields.Str(
-        required=True, validate=validate.OneOf(["NFO", "BFO", "MCX", "CDS"])
-    )  # Exchange (e.g., NFO, BFO, MCX, CDS)
+        required=True, validate=validate.OneOf(["NFO", "BFO", "MCX", "CDS", "OPTIONS", "FUTURES", "FUTURES_OPTION"])
+    )  # Exchange (e.g., NFO, BFO, MCX, CDS for Indian; OPTIONS, FUTURES, FUTURES_OPTION for US)
     instrumenttype = fields.Str(
         required=True, validate=validate.OneOf(["futures", "options"])
     )  # futures or options
@@ -157,8 +157,8 @@ class OptionSymbolSchema(Schema):
     strategy = fields.Str(
         required=False, allow_none=True
     )  # DEPRECATED: Strategy name (optional, will be removed in future versions)
-    underlying = fields.Str(required=True)  # Underlying symbol (NIFTY, RELIANCE, NIFTY28OCT25FUT)
-    exchange = fields.Str(required=True, validate=validate.OneOf(VALID_EXCHANGES))  # Exchange (NSE_INDEX, NSE, NFO)
+    underlying = fields.Str(required=True)  # Underlying symbol (AAPL, NIFTY, RELIANCE)
+    exchange = fields.Str(required=True, validate=validate.OneOf(VALID_EXCHANGES))  # Exchange (NSE_INDEX, NSE, NFO, OPTIONS)
     expiry_date = fields.Str(
         required=False
     )  # Expiry date in DDMMMYY format (e.g., 28OCT25). Optional if underlying includes expiry
@@ -175,10 +175,10 @@ class OptionSymbolSchema(Schema):
 
 class OptionGreeksSchema(Schema):
     apikey = fields.Str(required=True, validate=validate.Length(min=1, max=256))  # API Key for authentication
-    symbol = fields.Str(required=True)  # Option symbol (e.g., NIFTY28NOV2424000CE)
+    symbol = fields.Str(required=True)  # Option symbol (e.g., AAPL250117C00200000, NIFTY28NOV2424000CE)
     exchange = fields.Str(
-        required=True, validate=validate.OneOf(["NFO", "BFO", "CDS", "MCX"])
-    )  # Exchange (NFO, BFO, CDS, MCX)
+        required=True, validate=validate.OneOf(["NFO", "BFO", "CDS", "MCX", "OPTIONS", "FUTURES_OPTION"])
+    )  # Exchange (NFO, BFO, CDS, MCX for Indian; OPTIONS, FUTURES_OPTION for US)
     interest_rate = fields.Float(
         required=False, validate=validate.Range(min=0, max=100)
     )  # Risk-free interest rate (annualized %). Optional, defaults per exchange
@@ -236,8 +236,8 @@ class MarketTimingsSchema(Schema):
 class OptionSymbolRequest(Schema):
     """Schema for a single option symbol request in batch"""
 
-    symbol = fields.Str(required=True)  # Option symbol (e.g., NIFTY28NOV2424000CE)
-    exchange = fields.Str(required=True, validate=validate.OneOf(["NFO", "BFO", "CDS", "MCX"]))
+    symbol = fields.Str(required=True)  # Option symbol (e.g., AAPL250117C00200000, NIFTY28NOV2424000CE)
+    exchange = fields.Str(required=True, validate=validate.OneOf(["NFO", "BFO", "CDS", "MCX", "OPTIONS", "FUTURES_OPTION"]))
     underlying_symbol = fields.Str(required=False)  # Optional: Specify underlying symbol
     underlying_exchange = fields.Str(required=False)  # Optional: Specify underlying exchange
 

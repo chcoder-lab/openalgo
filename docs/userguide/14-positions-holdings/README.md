@@ -13,14 +13,14 @@ Understanding the difference between positions and holdings is fundamental to tr
 │  POSITIONS                              HOLDINGS                            │
 │  ──────────                             ────────                            │
 │                                                                              │
-│  • Intraday trades (MIS)               • Delivery trades (CNC)              │
-│  • F&O positions (NRML)                • Stocks in your demat               │
+│  • Day trades (CNC)                    • Long-term trades (CNC)             │
+│  • Options/Futures positions           • Stocks in your account             │
 │  • Active today                        • Long-term investments              │
 │  • Must close or convert               • No expiry (equity)                 │
 │  • Mark-to-market P&L                  • Dividend eligible                  │
 │                                                                              │
 │  Example:                               Example:                            │
-│  Bought SBIN MIS today                 Bought SBIN CNC last month           │
+│  Bought AAPL CNC today                 Bought AAPL CNC last month           │
 │  → Shows in Positions                  → Shows in Holdings                  │
 │                                                                              │
 └─────────────────────────────────────────────────────────────────────────────┘
@@ -31,17 +31,17 @@ Understanding the difference between positions and holdings is fundamental to tr
 ### What is a Position?
 
 A position is an open trade that hasn't been closed yet:
-- Intraday equity trades (MIS product)
-- Futures and Options trades (NRML product)
+- Equity trades (CNC product)
+- Futures and Options trades
 - Any trade that's "open" for the day
 
 ### Position Data Fields
 
 | Field | Description |
 |-------|-------------|
-| Symbol | Trading symbol (e.g., SBIN) |
-| Exchange | NSE, NFO, MCX, etc. |
-| Product | MIS, NRML |
+| Symbol | Trading symbol (e.g., AAPL) |
+| Exchange | EQUITY, OPTIONS, FUTURES, etc. |
+| Product | CNC |
 | Quantity | Number of shares/lots (+ for long, - for short) |
 | Average Price | Your entry price |
 | LTP | Last Traded Price |
@@ -56,12 +56,12 @@ A position is an open trade that hasn't been closed yet:
 ├─────────────────────────────────────────────────────────────────────────────┤
 │  Symbol  │ Qty   │ Avg Price │  LTP   │   P&L   │ Product │ Exchange       │
 │──────────│───────│───────────│────────│─────────│─────────│────────────────│
-│  SBIN    │ +100  │ ₹625.00   │ ₹630.00│ +₹500   │ MIS     │ NSE            │
-│  RELIANCE│ -50   │ ₹2450.00  │ ₹2440  │ +₹500   │ MIS     │ NSE            │
-│  NIFTY   │ +50   │ ₹150.00   │ ₹165.00│ +₹750   │ NRML    │ NFO            │
+│  AAPL    │ +100  │ $185.00   │ $190.00│ +$500   │ CNC     │ EQUITY         │
+│  TSLA    │ -50   │ $250.00   │ $240.00│ +$500   │ CNC     │ EQUITY         │
+│  /ES     │ +1    │ $5150.00  │ $5165.00│ +$750  │ CNC     │ FUTURES        │
 └─────────────────────────────────────────────────────────────────────────────┘
 
-Total Unrealized P&L: +₹1,750
+Total Unrealized P&L: +$1,750
 ```
 
 ### Reading Position Quantity
@@ -76,8 +76,8 @@ Total Unrealized P&L: +₹1,750
 
 ### What are Holdings?
 
-Holdings are stocks you own in your demat account:
-- Purchased using CNC (delivery) product
+Holdings are stocks you own in your brokerage account:
+- Purchased using CNC product
 - Settled after T+1 day
 - No expiry
 - Eligible for dividends and corporate actions
@@ -98,14 +98,14 @@ Holdings are stocks you own in your demat account:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│  Your Holdings                                        Total: ₹5,25,000      │
+│  Your Holdings                                        Total: $52,500        │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │  Symbol  │ Qty  │ Avg Price │  LTP    │ Value    │  P&L    │ P&L %         │
 │──────────│──────│───────────│─────────│──────────│─────────│───────────────│
-│  HDFC    │ 100  │ ₹1500     │ ₹1650   │ ₹1,65,000│+₹15,000 │ +10.0%        │
-│  ICICI   │ 200  │ ₹950      │ ₹1020   │ ₹2,04,000│+₹14,000 │ +7.4%         │
-│  INFY    │ 50   │ ₹1400     │ ₹1560   │ ₹78,000  │+₹8,000  │ +11.4%        │
-│  TCS     │ 25   │ ₹3200     │ ₹3120   │ ₹78,000  │-₹2,000  │ -2.5%         │
+│  AAPL    │ 100  │ $150.00   │ $165.00 │ $16,500  │+$1,500  │ +10.0%        │
+│  MSFT    │ 50   │ $380.00   │ $408.00 │ $20,400  │+$1,400  │ +7.4%         │
+│  TSLA    │ 25   │ $220.00   │ $244.00 │ $6,100   │+$600    │ +10.9%        │
+│  NVDA    │ 10   │ $800.00   │ $780.00 │ $7,800   │-$200    │ -2.5%         │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -123,11 +123,11 @@ Navigate to **Positions** in sidebar:
 │  Filters: [All Products ▾]  [All Exchanges ▾]                               │
 │                                                                              │
 │  ┌────────────────────────────────────────────────────────────────────┐    │
-│  │  SBIN    NSE    +100    MIS                                        │    │
-│  │  Avg: ₹625.00    LTP: ₹630.00    P&L: +₹500        [Exit]         │    │
+│  │  AAPL    EQUITY    +100    CNC                                     │    │
+│  │  Avg: $185.00    LTP: $190.00    P&L: +$500         [Exit]         │    │
 │  └────────────────────────────────────────────────────────────────────┘    │
 │                                                                              │
-│  Total P&L: +₹1,750                                                        │
+│  Total P&L: +$1,750                                                        │
 │                                                                              │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -141,14 +141,14 @@ Navigate to **Holdings** in sidebar:
 │  Holdings                                         [Refresh] [Download]     │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
-│  Portfolio Value: ₹5,25,000                                                 │
-│  Total Investment: ₹4,75,000                                                │
-│  Total P&L: +₹50,000 (+10.5%)                                              │
+│  Portfolio Value: $52,500                                                   │
+│  Total Investment: $47,500                                                  │
+│  Total P&L: +$5,000 (+10.5%)                                               │
 │                                                                              │
 │  ┌────────────────────────────────────────────────────────────────────┐    │
-│  │  HDFC Bank                                                         │    │
-│  │  100 shares @ ₹1500 avg                                           │    │
-│  │  Current: ₹1,65,000    P&L: +₹15,000 (+10%)        [Sell]         │    │
+│  │  Apple Inc. (AAPL)                                                 │    │
+│  │  100 shares @ $150.00 avg                                         │    │
+│  │  Current: $16,500    P&L: +$1,500 (+10%)            [Sell]         │    │
 │  └────────────────────────────────────────────────────────────────────┘    │
 │                                                                              │
 └─────────────────────────────────────────────────────────────────────────────┘
@@ -169,12 +169,12 @@ Navigate to **Holdings** in sidebar:
 {
   "apikey": "your-key",
   "strategy": "ManualExit",
-  "symbol": "SBIN",
-  "exchange": "NSE",
+  "symbol": "AAPL",
+  "exchange": "EQUITY",
   "action": "SELL",
   "quantity": "100",
   "pricetype": "MARKET",
-  "product": "MIS"
+  "product": "CNC"
 }
 ```
 
@@ -200,7 +200,7 @@ POST /api/v1/closeallpositions
 ```python
 # Increase position
 client.place_order(
-    symbol="SBIN",
+    symbol="AAPL",
     action="BUY",
     quantity=50,  # Add 50 more
     ...
@@ -208,7 +208,7 @@ client.place_order(
 
 # Decrease position
 client.place_order(
-    symbol="SBIN",
+    symbol="AAPL",
     action="SELL",
     quantity=30,  # Reduce by 30
     ...
@@ -232,12 +232,12 @@ POST /api/v1/positions
   "status": "success",
   "data": [
     {
-      "symbol": "SBIN",
-      "exchange": "NSE",
-      "product": "MIS",
+      "symbol": "AAPL",
+      "exchange": "EQUITY",
+      "product": "CNC",
       "quantity": 100,
-      "average_price": 625.00,
-      "ltp": 630.00,
+      "average_price": 185.00,
+      "ltp": 190.00,
       "pnl": 500.00
     }
   ]
@@ -259,12 +259,12 @@ POST /api/v1/holdings
   "status": "success",
   "data": [
     {
-      "symbol": "HDFC",
-      "exchange": "NSE",
+      "symbol": "AAPL",
+      "exchange": "EQUITY",
       "quantity": 100,
-      "average_price": 1500.00,
-      "ltp": 1650.00,
-      "pnl": 15000.00,
+      "average_price": 150.00,
+      "ltp": 165.00,
+      "pnl": 1500.00,
       "pnl_percent": 10.0
     }
   ]
@@ -278,9 +278,9 @@ POST /api/v1/openposition
 {
   "apikey": "your-key",
   "strategy": "MyStrategy",
-  "symbol": "SBIN",
-  "exchange": "NSE",
-  "product": "MIS"
+  "symbol": "AAPL",
+  "exchange": "EQUITY",
+  "product": "CNC"
 }
 ```
 
@@ -295,9 +295,9 @@ P&L = (LTP - Average Price) × Quantity
 For SHORT positions:
 P&L = (Average Price - LTP) × Quantity
 
-Example (Long 100 SBIN):
-Average: ₹625, LTP: ₹630
-P&L = (630 - 625) × 100 = +₹500
+Example (Long 100 AAPL):
+Average: $185, LTP: $190
+P&L = (190 - 185) × 100 = +$500
 ```
 
 ### Holdings P&L
@@ -307,32 +307,31 @@ P&L = (Current Price - Average Cost) × Quantity
 
 P&L % = ((Current Price - Average Cost) / Average Cost) × 100
 
-Example (100 HDFC):
-Average: ₹1500, Current: ₹1650
-P&L = (1650 - 1500) × 100 = +₹15,000
-P&L % = ((1650 - 1500) / 1500) × 100 = +10%
+Example (100 AAPL):
+Average: $150, Current: $165
+P&L = (165 - 150) × 100 = +$1,500
+P&L % = ((165 - 150) / 150) × 100 = +10%
 ```
 
-## Auto Square-Off (MIS)
+## Auto Square-Off (Day Trades)
 
-MIS positions are automatically squared off:
+Day trade positions may be automatically squared off by your broker:
 
-| Segment | Auto Square-Off Time |
-|---------|---------------------|
-| Equity | 3:15 PM |
-| F&O | 3:25 PM |
-| Currency | 4:55 PM |
-| Commodity | 11:30 PM |
+| Segment | Auto Square-Off Time (ET) |
+|---------|--------------------------|
+| Equity | 3:55 PM |
+| Options | 3:55 PM |
+| Futures | 3:55 PM |
 
 **Tip**: Close positions yourself before auto square-off for better prices.
 
 ## Converting Positions
 
-### MIS to NRML/CNC
+### Product Conversion
 
-Convert intraday to overnight:
+Convert position product type:
 - Must be done before square-off time
-- Additional margin required
+- Additional margin may be required
 - Check broker-specific rules
 
 ### Product Conversion API
@@ -341,10 +340,10 @@ Convert intraday to overnight:
 POST /api/v1/convertposition
 {
   "apikey": "your-key",
-  "symbol": "SBIN",
-  "exchange": "NSE",
+  "symbol": "AAPL",
+  "exchange": "EQUITY",
   "quantity": "100",
-  "from_product": "MIS",
+  "from_product": "CNC",
   "to_product": "CNC"
 }
 ```

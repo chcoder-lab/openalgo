@@ -35,7 +35,7 @@ def validate_symbol_exchange(symbol: str, exchange: str) -> tuple[bool, str | No
 
     Args:
         symbol: Trading symbol
-        exchange: Exchange (e.g., NSE, NFO)
+        exchange: Exchange (e.g., EQUITY, OPTIONS, NSE, NFO)
 
     Returns:
         Tuple of (is_valid, error_message)
@@ -93,7 +93,7 @@ def get_history_with_auth(
         feed_token: Feed token for market data (if required by broker)
         broker: Name of the broker
         symbol: Trading symbol
-        exchange: Exchange (e.g., NSE, BSE)
+        exchange: Exchange (e.g., EQUITY, OPTIONS, NSE, BSE)
         interval: Time interval (e.g., 1m, 5m, 15m, 1h, 1d)
         start_date: Start date in YYYY-MM-DD format
         end_date: End date in YYYY-MM-DD format
@@ -151,7 +151,7 @@ def get_history_from_db(
 
     Args:
         symbol: Trading symbol
-        exchange: Exchange (e.g., NSE, BSE)
+        exchange: Exchange (e.g., EQUITY, OPTIONS, NSE, BSE)
         interval: Time interval (e.g., 1m, 5m, 15m, 1h, D, W, M, Q, Y)
         start_date: Start date in YYYY-MM-DD format
         end_date: End date in YYYY-MM-DD format
@@ -237,7 +237,7 @@ def get_history(
 
     Args:
         symbol: Trading symbol
-        exchange: Exchange (e.g., NSE, BSE)
+        exchange: Exchange (e.g., EQUITY, OPTIONS, NSE, BSE)
         interval: Time interval (e.g., 1m, 5m, 15m, 1h, D, W, M, Q, Y)
         start_date: Start date in YYYY-MM-DD format
         end_date: End date in YYYY-MM-DD format

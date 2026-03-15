@@ -17,7 +17,7 @@ def validate_symbol_exchange(symbol: str, exchange: str) -> tuple[bool, str | No
 
     Args:
         symbol: Trading symbol
-        exchange: Exchange (e.g., NSE, NFO)
+        exchange: Exchange (e.g., EQUITY, OPTIONS, NSE, NFO)
 
     Returns:
         Tuple of (is_valid, error_message)
@@ -73,7 +73,7 @@ def get_depth_with_auth(
         feed_token: Feed token for market data (if required by broker)
         broker: Name of the broker
         symbol: Trading symbol
-        exchange: Exchange (e.g., NSE, BSE)
+        exchange: Exchange (e.g., EQUITY, OPTIONS, NSE, BSE)
         user_id: User ID for broker-specific functionality
 
     Returns:
@@ -133,7 +133,7 @@ def get_depth(
 
     Args:
         symbol: Trading symbol
-        exchange: Exchange (e.g., NSE, BSE)
+        exchange: Exchange (e.g., EQUITY, OPTIONS, NSE, BSE)
         api_key: OpenAlgo API key (for API-based calls)
         auth_token: Direct broker authentication token (for internal calls)
         feed_token: Direct broker feed token (for internal calls)

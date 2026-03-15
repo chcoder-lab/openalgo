@@ -26,13 +26,13 @@ Schedule-based workflow execution.
 | Field | Type | Description |
 |-------|------|-------------|
 | scheduleType | `once` \| `daily` \| `weekly` \| `interval` | Execution frequency |
-| time | string | Time in HH:MM format (IST) |
+| time | string | Time in HH:MM format (ET/US Eastern) |
 | days | string[] | Days of week for weekly schedule |
 | intervalMinutes | number | Minutes between executions |
 
 **Example:**
 ```
-Schedule: Daily at 09:15 IST
+Schedule: Daily at 09:30 ET
 Days: Mon, Tue, Wed, Thu, Fri
 ```
 
@@ -50,7 +50,7 @@ External HTTP webhook trigger.
 ```json
 {
   "secret": "your_webhook_secret",
-  "symbol": "RELIANCE",
+  "symbol": "AAPL",
   "action": "BUY"
 }
 ```
@@ -62,7 +62,7 @@ Trigger when price crosses threshold.
 | Field | Type | Description |
 |-------|------|-------------|
 | symbol | string | Trading symbol |
-| exchange | string | NSE, NFO, BSE, etc. |
+| exchange | string | EQUITY, OPTIONS, FUTURES, etc. |
 | field | string | ltp, open, high, low, close |
 | operator | string | >, <, ==, >=, <= |
 | value | number | Threshold value |
@@ -91,10 +91,10 @@ Place a regular order.
 | Field | Type | Description |
 |-------|------|-------------|
 | symbol | string | Trading symbol |
-| exchange | string | NSE, NFO, BSE, MCX, CDS, BFO |
+| exchange | string | EQUITY, OPTIONS, FUTURES, FUTURES_OPTION |
 | action | string | BUY, SELL |
 | quantity | number | Order quantity |
-| product | string | MIS, CNC, NRML |
+| product | string | CNC |
 | priceType | string | MARKET, LIMIT, SL, SL-M |
 | price | number | Limit price (if LIMIT/SL) |
 | triggerPrice | number | Trigger price (if SL/SL-M) |
@@ -119,7 +119,7 @@ Position-aware order placement.
 | action | string | BUY, SELL |
 | quantity | number | Order quantity |
 | positionSize | number | Target position size |
-| product | string | MIS, CNC, NRML |
+| product | string | CNC |
 | priceType | string | MARKET, LIMIT |
 
 **Behavior:**
@@ -133,13 +133,13 @@ Single-leg options trade.
 
 | Field | Type | Description |
 |-------|------|-------------|
-| underlying | string | NIFTY, BANKNIFTY, etc. |
+| underlying | string | AAPL, TSLA, /ES, etc. |
 | expiry | string | Expiry date |
 | strike | number | Strike price |
 | optionType | string | CE, PE |
 | action | string | BUY, SELL |
 | quantity | number | Lot quantity |
-| product | string | MIS, NRML |
+| product | string | CNC |
 
 ### Options Multi-Order
 
@@ -148,7 +148,7 @@ Multi-leg options strategies.
 | Field | Type | Description |
 |-------|------|-------------|
 | strategy | string | STRADDLE, STRANGLE, SPREAD, IRON_CONDOR |
-| underlying | string | NIFTY, BANKNIFTY |
+| underlying | string | AAPL, TSLA |
 | expiry | string | Expiry date |
 | atmStrike | number | ATM strike price |
 | quantity | number | Lot quantity |
@@ -171,8 +171,8 @@ Multiple orders in single execution.
 **Order Object:**
 ```json
 {
-  "symbol": "SBIN",
-  "exchange": "NSE",
+  "symbol": "AAPL",
+  "exchange": "EQUITY",
   "action": "BUY",
   "quantity": 100
 }
@@ -224,7 +224,7 @@ Square off all open positions.
 
 | Field | Type | Description |
 |-------|------|-------------|
-| product | string | MIS, NRML, or ALL |
+| product | string | CNC or ALL |
 
 ---
 
@@ -281,7 +281,7 @@ Check if within time range.
 
 **Example:**
 ```
-Start: 09:15, End: 15:15
+Start: 09:30, End: 16:00
 Days: Mon, Tue, Wed, Thu, Fri
 ```
 
@@ -400,10 +400,10 @@ Get symbol information.
 **Output:**
 ```json
 {
-  "symbol": "RELIANCE",
+  "symbol": "AAPL",
   "token": "2885",
   "lotSize": 1,
-  "tickSize": 0.05
+  "tickSize": 0.01
 }
 ```
 
@@ -413,7 +413,7 @@ Resolve option symbol from parameters.
 
 | Field | Type | Description |
 |-------|------|-------------|
-| underlying | string | NIFTY, BANKNIFTY |
+| underlying | string | AAPL, TSLA |
 | expiry | string | Expiry date |
 | strike | number | Strike price |
 | optionType | string | CE, PE |
@@ -425,7 +425,7 @@ Get available expiry dates.
 
 | Field | Type | Description |
 |-------|------|-------------|
-| underlying | string | NIFTY, BANKNIFTY |
+| underlying | string | AAPL, TSLA |
 | outputVariable | string | Store expiry list |
 
 ### Option Chain
@@ -434,7 +434,7 @@ Fetch option chain data.
 
 | Field | Type | Description |
 |-------|------|-------------|
-| underlying | string | NIFTY, BANKNIFTY |
+| underlying | string | AAPL, TSLA |
 | expiry | string | Expiry date |
 | outputVariable | string | Store option chain |
 

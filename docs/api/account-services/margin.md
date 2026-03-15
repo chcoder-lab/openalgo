@@ -17,20 +17,20 @@ Custom Domain:  POST https://<your-custom-domain>/api/v1/margin
   "apikey": "<your_app_apikey>",
   "positions": [
     {
-      "symbol": "NIFTY25NOV2525000CE",
-      "exchange": "NFO",
+      "symbol": "AAPL250117C00200000",
+      "exchange": "OPTIONS",
       "action": "BUY",
-      "product": "NRML",
+      "product": "CNC",
       "pricetype": "MARKET",
-      "quantity": "65"
+      "quantity": "1"
     },
     {
-      "symbol": "NIFTY25NOV2525500CE",
-      "exchange": "NFO",
+      "symbol": "AAPL250117C00205000",
+      "exchange": "OPTIONS",
       "action": "SELL",
-      "product": "NRML",
+      "product": "CNC",
       "pricetype": "MARKET",
-      "quantity": "65"
+      "quantity": "1"
     }
   ]
 }
@@ -42,9 +42,9 @@ Custom Domain:  POST https://<your-custom-domain>/api/v1/margin
 {
   "status": "success",
   "data": {
-    "total_margin_required": 91555.7625,
+    "total_margin_required": 500.00,
     "span_margin": 0.0,
-    "exposure_margin": 91555.7625
+    "exposure_margin": 500.00
   }
 }
 ```
@@ -61,10 +61,10 @@ Custom Domain:  POST https://<your-custom-domain>/api/v1/margin
 | Field | Description | Mandatory/Optional | Default Value |
 |-------|-------------|-------------------|---------------|
 | symbol | Trading symbol | Mandatory | - |
-| exchange | Exchange code: NSE, NFO, BFO, etc. | Mandatory | - |
+| exchange | Exchange code: EQUITY, OPTIONS, FUTURES, etc. | Mandatory | - |
 | action | BUY or SELL | Mandatory | - |
 | quantity | Position quantity | Mandatory | - |
-| product | Product type: MIS, CNC, NRML | Mandatory | - |
+| product | Product type: CNC | Mandatory | - |
 | pricetype | Price type: MARKET, LIMIT | Mandatory | - |
 | price | Order price (for LIMIT) | Optional | 0 |
 
@@ -104,10 +104,10 @@ Custom Domain:  POST https://<your-custom-domain>/api/v1/margin
 {
   "apikey": "<your_app_apikey>",
   "positions": [
-    {"symbol": "NIFTY25NOV2526500CE", "exchange": "NFO", "action": "SELL", "quantity": "65", "product": "NRML", "pricetype": "MARKET"},
-    {"symbol": "NIFTY25NOV2527000CE", "exchange": "NFO", "action": "BUY", "quantity": "65", "product": "NRML", "pricetype": "MARKET"},
-    {"symbol": "NIFTY25NOV2525500PE", "exchange": "NFO", "action": "SELL", "quantity": "65", "product": "NRML", "pricetype": "MARKET"},
-    {"symbol": "NIFTY25NOV2525000PE", "exchange": "NFO", "action": "BUY", "quantity": "65", "product": "NRML", "pricetype": "MARKET"}
+    {"symbol": "AAPL250117C00200000", "exchange": "OPTIONS", "action": "SELL", "quantity": "1", "product": "CNC", "pricetype": "MARKET"},
+    {"symbol": "AAPL250117C00205000", "exchange": "OPTIONS", "action": "BUY", "quantity": "1", "product": "CNC", "pricetype": "MARKET"},
+    {"symbol": "AAPL250117P00195000", "exchange": "OPTIONS", "action": "SELL", "quantity": "1", "product": "CNC", "pricetype": "MARKET"},
+    {"symbol": "AAPL250117P00190000", "exchange": "OPTIONS", "action": "BUY", "quantity": "1", "product": "CNC", "pricetype": "MARKET"}
   ]
 }
 ```

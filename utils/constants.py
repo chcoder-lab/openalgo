@@ -16,6 +16,12 @@ EXCHANGE_NSE_INDEX = "NSE_INDEX"  # NSE Index
 EXCHANGE_BSE_INDEX = "BSE_INDEX"  # BSE Index
 EXCHANGE_CRYPTO = "CRYPTO"  # Crypto Exchanges (broker-agnostic; brexchange carries broker name)
 
+# US Broker Exchange Types (tastytrade, webull)
+EXCHANGE_EQUITY = "EQUITY"                  # US Equity
+EXCHANGE_OPTIONS = "OPTIONS"                # US Options (OCC symbol format: AAPL250117C00200000)
+EXCHANGE_FUTURES = "FUTURES"                # US Futures (e.g., /ESZ5, /CLZ5)
+EXCHANGE_FUTURES_OPTION = "FUTURES_OPTION"  # US Futures Options
+
 # Set of all crypto-family exchanges.
 # Use `exchange in CRYPTO_EXCHANGES` instead of `exchange == "CRYPTO"` so that
 # onboarding a second crypto exchange (e.g. BINANCE, BYBIT) is a one-line change here.
@@ -57,6 +63,11 @@ VALID_EXCHANGES = [
     EXCHANGE_NSE_INDEX,
     EXCHANGE_BSE_INDEX,
     EXCHANGE_CRYPTO,
+    # US Broker Exchanges (tastytrade, webull)
+    EXCHANGE_EQUITY,
+    EXCHANGE_OPTIONS,
+    EXCHANGE_FUTURES,
+    EXCHANGE_FUTURES_OPTION,
 ]
 
 # Product Types

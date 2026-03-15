@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Analyzer Mode is OpenAlgo's sandbox testing environment. It lets you test strategies with real market data but sandbox capital (₹1 Crore), ensuring you never risk real money while learning or validating strategies.
+Analyzer Mode is OpenAlgo's sandbox testing environment. It lets you test strategies with real market data but sandbox capital ($100,000), ensuring you never risk real money while learning or validating strategies.
 
 ## What is Analyzer Mode?
 
@@ -19,7 +19,7 @@ Analyzer Mode is OpenAlgo's sandbox testing environment. It lets you test strate
 │                                                                              │
 │  ┌─────────────────────────────────────────────────────────────────────┐   │
 │  │                                                                      │   │
-│  │  You get ₹1,00,00,000 (1 Crore) sandbox capital                     │   │
+│  │  You get $100,000 sandbox capital                                    │   │
 │  │  Trade freely, learn safely                                         │   │
 │  │                                                                      │   │
 │  └─────────────────────────────────────────────────────────────────────┘   │
@@ -75,7 +75,7 @@ When Analyzer Mode is ON, you'll see:
 │  ⚠️ ANALYZER MODE ACTIVE                                                    │
 │                                                                              │
 │  All orders are simulated. No real trades will be executed.                │
-│  Sandbox Balance: ₹1,00,00,000                                             │
+│  Sandbox Balance: $100,000                                                 │
 │                                                                              │
 │  Theme changes to PURPLE to remind you                                      │
 └─────────────────────────────────────────────────────────────────────────────┘
@@ -87,7 +87,7 @@ When Analyzer Mode is ON, you'll see:
 
 | Feature | Value |
 |---------|-------|
-| Starting Capital | ₹1,00,00,000 |
+| Starting Capital | $100,000 |
 | Margin Available | Based on product type |
 | Reset Option | Reset to starting capital |
 
@@ -117,12 +117,12 @@ Orders work exactly the same as live trading:
 {
   "apikey": "your-api-key",
   "strategy": "TestStrategy",
-  "symbol": "SBIN",
-  "exchange": "NSE",
+  "symbol": "AAPL",
+  "exchange": "EQUITY",
   "action": "BUY",
   "quantity": "100",
   "pricetype": "MARKET",
-  "product": "MIS"
+  "product": "CNC"
 }
 ```
 
@@ -138,8 +138,8 @@ Analyzer positions appear in a separate view:
 ├─────────────────────────────────────────────────────────────────────────────┤
 │  Symbol  │ Qty   │ Avg Price │  LTP   │   P&L   │ Product                  │
 │──────────│───────│───────────│────────│─────────│──────────────────────────│
-│  SBIN    │ +100  │ ₹625.00   │ ₹630.00│ +₹500   │ MIS                      │
-│  NIFTY   │ +50   │ ₹21500    │ ₹21550 │ +₹2500  │ NRML                     │
+│  AAPL    │ +100  │ $175.00   │ $180.00│ +$500   │ CNC                      │
+│  TSLA    │ +50   │ $250.00   │ $255.00│ +$250   │ CNC                      │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -152,13 +152,13 @@ View sandbox P&L on the Sandbox P&L page:
 │  Sandbox P&L                                                                │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
-│  Starting Capital:     ₹1,00,00,000                                        │
-│  Current Value:        ₹1,02,50,000                                        │
-│  Total P&L:            +₹2,50,000 (+2.5%)                                  │
+│  Starting Capital:     $100,000                                            │
+│  Current Value:        $102,500                                            │
+│  Total P&L:            +$2,500 (+2.5%)                                     │
 │                                                                              │
-│  Today's P&L:          +₹15,000                                            │
-│  Realized:             +₹10,000                                            │
-│  Unrealized:           +₹5,000                                             │
+│  Today's P&L:          +$1,500                                             │
+│  Realized:             +$1,000                                             │
+│  Unrealized:           +$500                                               │
 │                                                                              │
 │  Total Trades:         45                                                   │
 │  Winning Trades:       28 (62%)                                            │
@@ -201,12 +201,12 @@ client = api(api_key="your-key", host="http://127.0.0.1:5001")
 
 # When Analyzer Mode is ON, this goes to sandbox
 response = client.place_order(
-    symbol="SBIN",
-    exchange="NSE",
+    symbol="AAPL",
+    exchange="EQUITY",
     action="BUY",
     quantity=100,
     price_type="MARKET",
-    product="MIS",
+    product="CNC",
     strategy="TestStrategy"
 )
 
@@ -219,28 +219,28 @@ print(positions)
 
 Analyzer Mode simulates realistic margins:
 
-### Equity (MIS)
+### Equity (CNC)
 
 | Segment | Margin |
 |---------|--------|
-| Large Cap | 5× leverage |
-| Mid Cap | 4× leverage |
-| Small Cap | 3× leverage |
+| Large Cap | Full cash required |
+| Mid Cap | Full cash required |
+| Small Cap | Full cash required |
 
-### F&O (NRML)
+### Derivatives
 
 | Product | Margin |
 |---------|--------|
-| Futures | SPAN + Exposure |
+| Futures | Initial margin required |
 | Options Buy | Premium |
-| Options Sell | SPAN margin |
+| Options Sell | Margin required |
 
 ### Example
 
 ```
-Available: ₹1,00,00,000
-Buy NIFTY Future: Requires ~₹1,50,000 margin
-Remaining: ₹98,50,000
+Available: $100,000
+Buy /ES Future: Requires ~$12,000 initial margin
+Remaining: ~$88,000
 ```
 
 ## Auto Square-Off
@@ -249,8 +249,8 @@ Sandbox simulates auto square-off:
 
 | Segment | Time |
 |---------|------|
-| Equity MIS | 3:15 PM |
-| F&O MIS | 3:25 PM |
+| Equity (CNC) | 4:00 PM ET |
+| Futures/Options | 4:00 PM ET |
 
 Positions are marked closed at these times.
 
@@ -261,7 +261,7 @@ If you want to start fresh:
 1. Go to **Analyzer** page
 2. Click **Reset Sandbox Account**
 3. Confirm action
-4. Capital restored to ₹1 Crore
+4. Capital restored to $100,000
 5. All positions and history cleared
 
 ## Best Practices
@@ -360,9 +360,9 @@ View sandbox-specific logs:
 ┌─────────────────────────────────────────────────────────────────────────────┐
 │  Analyzer Logs                                                              │
 ├─────────────────────────────────────────────────────────────────────────────┤
-│  10:30:15 │ BUY  │ SBIN    │ 100 │ ₹625.00 │ Executed                      │
-│  10:45:22 │ BUY  │ INFY    │ 50  │ ₹1500   │ Executed                      │
-│  11:00:05 │ SELL │ SBIN    │ 100 │ ₹630.00 │ Executed │ P&L: +₹500        │
+│  10:30:15 │ BUY  │ AAPL    │ 100 │ $175.00 │ Executed                      │
+│  10:45:22 │ BUY  │ MSFT    │ 50  │ $415.00 │ Executed                      │
+│  11:00:05 │ SELL │ AAPL    │ 100 │ $180.00 │ Executed │ P&L: +$500        │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
 

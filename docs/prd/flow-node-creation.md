@@ -64,10 +64,10 @@ outputVariable?: string
 
 // For trading nodes
 symbol?: string
-exchange?: string  // NSE, NFO, BSE, etc.
+exchange?: string  // EQUITY, OPTIONS, FUTURES, etc.
 action?: 'BUY' | 'SELL'
 quantity?: number
-product?: 'MIS' | 'CNC' | 'NRML'
+product?: 'CNC'  // US brokers use CNC only
 priceType?: 'MARKET' | 'LIMIT' | 'SL' | 'SL-M'
 
 // For condition nodes
@@ -253,7 +253,7 @@ export const DEFAULT_NODE_DATA: Record<string, unknown> = {
   yourNewNode: {
     label: '',
     symbol: '',
-    exchange: 'NSE',
+    exchange: 'EQUITY',
     threshold: 0,
     action: 'BUY',
     outputVariable: '',
@@ -275,7 +275,7 @@ Add a section for your node type:
       <Label className="text-xs">Symbol</Label>
       <Input
         className="h-8"
-        placeholder="RELIANCE"
+        placeholder="AAPL"
         value={(nodeData.symbol as string) || ''}
         onChange={(e) => handleDataChange('symbol', e.target.value)}
       />
@@ -285,7 +285,7 @@ Add a section for your node type:
     <div className="space-y-2">
       <Label className="text-xs">Exchange</Label>
       <Select
-        value={(nodeData.exchange as string) || 'NSE'}
+        value={(nodeData.exchange as string) || 'EQUITY'}
         onValueChange={(value) => handleDataChange('exchange', value)}
       >
         <SelectTrigger className="h-8">
@@ -431,7 +431,7 @@ class NodeExecutor:
         """Execute your new node"""
         # Get node parameters with interpolation
         symbol = self.context.interpolate(self.get_str(node_data, "symbol"))
-        exchange = self.get_str(node_data, "exchange", "NSE")
+        exchange = self.get_str(node_data, "exchange", "EQUITY")
         threshold = self.get_float(node_data, "threshold", 0)
         action = self.get_str(node_data, "action", "BUY")
 
@@ -453,7 +453,7 @@ class NodeExecutor:
                     action=action,
                     quantity=1,
                     price_type="MARKET",
-                    product="MIS"
+                    product="CNC"
                 )
             else:
                 result = {"status": "skipped", "message": f"LTP {ltp} <= threshold {threshold}"}
@@ -624,7 +624,7 @@ export const AtrStopLossNode = memo(({ data, selected }: Props) => {
 ```python
 def execute_atr_stop_loss(self, node_data: dict) -> dict:
     symbol = self.context.interpolate(self.get_str(node_data, "symbol"))
-    exchange = self.get_str(node_data, "exchange", "NSE")
+    exchange = self.get_str(node_data, "exchange", "EQUITY")
     period = self.get_int(node_data, "period", 14)
     multiplier = self.get_float(node_data, "multiplier", 2.0)
     action = self.get_str(node_data, "action", "BUY")

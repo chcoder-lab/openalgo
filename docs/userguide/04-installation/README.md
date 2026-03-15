@@ -334,7 +334,7 @@ APP_KEY=your-secret-key-here
 API_KEY_PEPPER=your-pepper-here
 
 # Broker Selection
-BROKER=zerodha
+BROKER=tastytrade
 
 # Broker Credentials (configured per user in UI)
 # Use Profile > Broker or /broker-setup after signup

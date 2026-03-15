@@ -6,7 +6,13 @@ It returns strikes around ATM with real-time quotes for both CE and PE options.
 Each CE and PE option includes its own label (ATM, ITM1, ITM2, OTM1, OTM2, etc.).
 
 Example Usage:
-    Input:
+    Input (US):
+        underlying: "AAPL"
+        exchange: "OPTIONS"
+        expiry_date: "17JAN25"
+        strike_count: 10
+
+    Input (Indian):
         underlying: "NIFTY"
         exchange: "NSE_INDEX"
         expiry_date: "30DEC25"
@@ -15,23 +21,23 @@ Example Usage:
     Output:
         {
             "status": "success",
-            "underlying": "NIFTY",
-            "underlying_ltp": 24250.50,
-            "expiry_date": "30DEC25",
-            "atm_strike": 24250.0,
+            "underlying": "AAPL",
+            "underlying_ltp": 230.50,
+            "expiry_date": "17JAN25",
+            "atm_strike": 230.0,
             "chain": [
                 {
-                    "strike": 24000.0,
+                    "strike": 220.0,
                     "ce": { "symbol": "...", "label": "ITM5", "ltp": ..., ... },
                     "pe": { "symbol": "...", "label": "OTM5", "ltp": ..., ... }
                 },
                 {
-                    "strike": 24250.0,
+                    "strike": 230.0,
                     "ce": { "symbol": "...", "label": "ATM", ... },
                     "pe": { "symbol": "...", "label": "ATM", ... }
                 },
                 {
-                    "strike": 24500.0,
+                    "strike": 240.0,
                     "ce": { "symbol": "...", "label": "OTM5", ... },
                     "pe": { "symbol": "...", "label": "ITM5", ... }
                 },
@@ -223,8 +229,8 @@ def get_option_chain(
     Main function to get option chain data.
 
     Args:
-        underlying: Underlying symbol (e.g., NIFTY, BANKNIFTY, RELIANCE)
-        exchange: Exchange (NSE_INDEX, NSE, NFO, BSE_INDEX, BSE, BFO, MCX, CDS)
+        underlying: Underlying symbol (e.g., AAPL, NIFTY, BANKNIFTY, RELIANCE)
+        exchange: Exchange (OPTIONS, FUTURES_OPTION for US; NSE_INDEX, NSE, NFO, BSE_INDEX, BSE, BFO, MCX, CDS for Indian)
         expiry_date: Expiry date in DDMMMYY format (e.g., 28NOV25)
         strike_count: Number of strikes above and below ATM
         api_key: OpenAlgo API key

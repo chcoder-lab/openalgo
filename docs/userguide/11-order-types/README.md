@@ -42,11 +42,11 @@ Executes immediately at the current best available price.
 ### Example
 
 ```
-Stock: SBIN
-Current Price: ₹625.50
+Stock: AAPL
+Current Price: $150.50
 You place: MARKET BUY 100 shares
 
-Result: You get 100 shares at approximately ₹625.50
+Result: You get 100 shares at approximately $150.50
 (Actual price may vary slightly based on market)
 ```
 
@@ -72,12 +72,12 @@ Result: You get 100 shares at approximately ₹625.50
 ```json
 {
   "apikey": "your-key",
-  "symbol": "SBIN",
-  "exchange": "NSE",
+  "symbol": "AAPL",
+  "exchange": "EQUITY",
   "action": "BUY",
   "quantity": "100",
   "pricetype": "MARKET",
-  "product": "MIS"
+  "product": "CNC"
 }
 ```
 
@@ -92,18 +92,18 @@ Executes only at your specified price or better.
 ### Example
 
 ```
-Stock: SBIN
-Current Price: ₹625
-You place: LIMIT BUY 100 at ₹620
+Stock: AAPL
+Current Price: $150
+You place: LIMIT BUY 100 at $148
 
-Scenario 1: Price drops to ₹620
-Result: Order executes at ₹620 ✓
+Scenario 1: Price drops to $148
+Result: Order executes at $148 ✓
 
-Scenario 2: Price stays above ₹620
+Scenario 2: Price stays above $148
 Result: Order remains pending
 
-Scenario 3: Price drops to ₹615
-Result: Order executes at ₹620 (or better at ₹615)
+Scenario 3: Price drops to $145
+Result: Order executes at $148 (or better at $145)
 ```
 
 ### When to Use
@@ -128,13 +128,13 @@ Result: Order executes at ₹620 (or better at ₹615)
 ```json
 {
   "apikey": "your-key",
-  "symbol": "SBIN",
-  "exchange": "NSE",
+  "symbol": "AAPL",
+  "exchange": "EQUITY",
   "action": "BUY",
   "quantity": "100",
   "pricetype": "LIMIT",
-  "price": "620",
-  "product": "MIS"
+  "price": "148",
+  "product": "CNC"
 }
 ```
 
@@ -149,16 +149,16 @@ Combines a trigger price and a limit price:
 ### Example
 
 ```
-You own: SBIN at ₹625
-Current Price: ₹625
-You place: SL SELL at Trigger ₹615, Limit ₹614
+You own: AAPL at $150
+Current Price: $150
+You place: SL SELL at Trigger $145, Limit $144
 
 Price Movement:
-₹625 → ₹620 → ₹617 → ₹615 (TRIGGERED!)
+$150 → $148 → $146 → $145 (TRIGGERED!)
                        ↓
-           Limit sell order at ₹614 placed
+           Limit sell order at $144 placed
                        ↓
-           Executes at ₹614 or better
+           Executes at $144 or better
 ```
 
 ### When to Use
@@ -186,14 +186,14 @@ SELL Stop-Loss (for long positions):
 ```json
 {
   "apikey": "your-key",
-  "symbol": "SBIN",
-  "exchange": "NSE",
+  "symbol": "AAPL",
+  "exchange": "EQUITY",
   "action": "SELL",
   "quantity": "100",
   "pricetype": "SL",
-  "price": "614",
-  "trigger_price": "615",
-  "product": "MIS"
+  "price": "144",
+  "trigger_price": "145",
+  "product": "CNC"
 }
 ```
 
@@ -208,17 +208,17 @@ Triggers a market order when trigger price is reached:
 ### Example
 
 ```
-You own: SBIN at ₹625
-Current Price: ₹625
-You place: SL-M SELL at Trigger ₹615
+You own: AAPL at $150
+Current Price: $150
+You place: SL-M SELL at Trigger $145
 
 Price Movement:
-₹625 → ₹620 → ₹617 → ₹615 (TRIGGERED!)
+$150 → $148 → $146 → $145 (TRIGGERED!)
                        ↓
            Market sell order placed
                        ↓
            Executes immediately at market price
-           (Could be ₹614, ₹613, or ₹616)
+           (Could be $144, $143, or $146)
 ```
 
 ### When to Use
@@ -244,13 +244,13 @@ Price Movement:
 ```json
 {
   "apikey": "your-key",
-  "symbol": "SBIN",
-  "exchange": "NSE",
+  "symbol": "AAPL",
+  "exchange": "EQUITY",
   "action": "SELL",
   "quantity": "100",
   "pricetype": "SL-M",
-  "trigger_price": "615",
-  "product": "MIS"
+  "trigger_price": "145",
+  "product": "CNC"
 }
 ```
 
@@ -265,25 +265,28 @@ Price Movement:
 
 ## Product Types
 
+### CNC (Cash and Carry)
+
+- Standard product type for US brokers
+- Used for all positions: equities, options, and futures
+- For delivery and overnight positions
+- No auto square-off
+- Stocks settle to your account
+
 ### MIS (Margin Intraday Square-off)
 
-- For intraday trading
+- For intraday trading (Indian brokers)
 - Auto-closes before market end
 - Higher leverage available
 - Lower margin required
 
-### CNC (Cash and Carry)
-
-- For delivery trading
-- No auto square-off
-- Stocks go to demat
-- Full amount required
-
 ### NRML (Normal)
 
-- For F&O overnight positions
+- For overnight F&O positions (Indian brokers)
 - No auto square-off (within expiry)
 - Standard margin applies
+
+**Note**: For US brokers (tastytrade, webull), CNC is the standard product type for all position types.
 
 ## Validity Types
 
@@ -301,21 +304,21 @@ Most brokers support:
 
 ### Mistake 1: SL Order Triggered Immediately
 
-**Problem**: SL buy at trigger ₹625 when price is ₹620
+**Problem**: SL buy at trigger $150 when price is $148
 **Why**: Trigger price is below current price (already triggered!)
 **Fix**: For SL BUY, trigger must be ABOVE current price
 
 ### Mistake 2: Limit Order Not Executing
 
-**Problem**: BUY LIMIT at ₹600 when price is ₹625
+**Problem**: BUY LIMIT at $140 when price is $150
 **Why**: Price never reached your limit
 **Fix**: Set realistic limit prices or use market orders
 
 ### Mistake 3: Wrong Product Type
 
-**Problem**: CNC order for options
-**Why**: Options can't be delivered
-**Fix**: Use MIS or NRML for F&O
+**Problem**: Using wrong product type for US broker
+**Why**: US brokers use CNC for all position types
+**Fix**: Use CNC for overnight/delivery positions with US brokers
 
 ## Quick Decision Guide
 

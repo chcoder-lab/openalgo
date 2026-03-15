@@ -6,13 +6,13 @@
 - **Audit date:** 2026-03-03
 - **Auditor:** Claude Opus 4.6
 - **Scope:** Full codebase audit of `openalgo/services/`, `openalgo/blueprints/`, `openalgo/restx_api/`, `openalgo/database/`, `openalgo/sandbox/`, `openalgo/broker/`, `openalgo/upgrade/`
-- **Focus:** SQL injection, input validation, security vulnerabilities, crypto integration impact on existing Indian broker functionality
+- **Focus:** SQL injection, input validation, security vulnerabilities, crypto integration impact on existing broker functionality
 
 ---
 
 ## Executive Summary
 
-A full codebase audit beyond the PR #947 diff was conducted across all backend Python files. The codebase demonstrates strong security fundamentals (Argon2 hashing with pepper, CSRF protection, CSP middleware, HttpOnly/SameSite cookies, constant-time webhook secret comparison). However, **1 High-severity SQL injection**, **2 High-severity input validation gaps**, and **7 Medium-severity issues** were identified in the existing codebase. Existing Indian broker functionality is at **very low risk** from crypto integration -- hardcoded exchange whitelists are additive.
+A full codebase audit beyond the PR #947 diff was conducted across all backend Python files. The codebase demonstrates strong security fundamentals (Argon2 hashing with pepper, CSRF protection, CSP middleware, HttpOnly/SameSite cookies, constant-time webhook secret comparison). However, **1 High-severity SQL injection**, **2 High-severity input validation gaps**, and **7 Medium-severity issues** were identified in the existing codebase. Existing broker functionality is at **very low risk** from crypto integration -- hardcoded exchange whitelists are additive.
 
 **Finding counts:** Critical: 0 | High: 3 | Medium: 7 | Low: 13
 
@@ -86,7 +86,7 @@ if compression not in VALID_COMPRESSIONS:
 | `OptionChainSchema` | `data_schemas.py` | 213 |
 | `SearchSchema` | `data_schemas.py` | 139 |
 
-**Only 4 schemas properly validate exchange:** `MarginPositionSchema`, `ExpirySchema`, `OptionGreeksSchema`, `InstrumentsSchema`.
+**Only 4 schemas properly validate exchange:** `MarginPositionSchema`, `ExpirySchema`, `OptionGreeksSchema`, `InstrumentsSchema`. Note: `ExpirySchema` and `OptionGreeksSchema` have been updated to also accept `OPTIONS` and `FUTURES_OPTION` exchanges for US broker support (tastytrade, webull) — these are now fixed and correctly validate against the expanded exchange list.
 
 The secondary validation in `place_order_service.py` `validate_order_data()` only covers `/placeorder` -- all other endpoints (smart order, basket, split, options, modify, quotes, depth, history, search, symbol) pass unvalidated exchange values to downstream services.
 

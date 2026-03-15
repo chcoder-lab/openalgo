@@ -13,7 +13,7 @@
         "params": [],
         "body": {
           "mode": "json",
-          "json": "{\n    \"apikey\": \"a85992a13ab7db424c239c50826116366e9f4fd8c591345a2d23aad01ffa4d00\",\n    \"strategy\": \"your-strategy\",\n    \"orders\": [\n        {\n            \"symbol\": \"RELIANCE\",\n            \"exchange\": \"NSE\",\n            \"action\": \"BUY\",\n            \"quantity\": \"1\",\n            \"pricetype\": \"MARKET\",\n            \"product\": \"MIS\"\n        },\n        {\n            \"symbol\": \"INFY\",\n            \"exchange\": \"NSE\",\n            \"action\": \"SELL\",\n            \"quantity\": \"1\",\n            \"pricetype\": \"MARKET\",\n            \"product\": \"MIS\"\n        }\n    ]\n}",
+          "json": "{\n    \"apikey\": \"{{apiKey}}\",\n    \"strategy\": \"your-strategy\",\n    \"orders\": [\n        {\n            \"symbol\": \"AAPL\",\n            \"exchange\": \"EQUITY\",\n            \"action\": \"BUY\",\n            \"quantity\": \"1\",\n            \"pricetype\": \"MARKET\",\n            \"product\": \"CNC\"\n        },\n        {\n            \"symbol\": \"TSLA\",\n            \"exchange\": \"EQUITY\",\n            \"action\": \"SELL\",\n            \"quantity\": \"1\",\n            \"pricetype\": \"MARKET\",\n            \"product\": \"CNC\"\n        }\n    ]\n}",
           "formUrlEncoded": [],
           "multipartForm": []
         },
@@ -37,7 +37,7 @@
         "params": [],
         "body": {
           "mode": "json",
-          "json": "{\n    \"apikey\": \"a85992a13ab7db424c239c50826116366e9f4fd8c591345a2d23aad01ffa4d00\",\n    \"strategy\": \"Test Strategy\"\n  \n}",
+          "json": "{\n    \"apikey\": \"{{apiKey}}\",\n    \"strategy\": \"Test Strategy\"\n  \n}",
           "formUrlEncoded": [],
           "multipartForm": []
         },
@@ -61,7 +61,7 @@
         "params": [],
         "body": {
           "mode": "json",
-          "json": "{\n    \"apikey\": \"a85992a13ab7db424c239c50826116366e9f4fd8c591345a2d23aad01ffa4d00\",\n    \"strategy\": \"Test Strategy\",\n    \"orderid\": \"241214000000015\"\n  \n}",
+          "json": "{\n    \"apikey\": \"{{apiKey}}\",\n    \"strategy\": \"Test Strategy\",\n    \"orderid\": \"241214000000015\"\n    \n    // NOTE: TastyTrade supports individual order cancel.\n    // Webull cancels all open orders then re-filters — use cancelallorder for Webull.\n}",
           "formUrlEncoded": [],
           "multipartForm": []
         },
@@ -76,16 +76,16 @@
     },
     {
       "type": "http",
-      "name": "Chartink",
+      "name": "TradingView Webhook",
       "seq": 4,
       "request": {
-        "url": "http://8d32-49-207-193-1.ngrok-free.app/chartink/webhook/0fd7ee15-c83b-4f6e-97ae-68cb4b9bdf95",
+        "url": "http://127.0.0.1:5001/tradingview/webhook/{{webhookId}}",
         "method": "POST",
         "headers": [],
         "params": [],
         "body": {
           "mode": "json",
-          "json": "{\n    \"stocks\": \"RELIANCE\",\n    \"trigger_prices\": \"3.75,541.8,2.1,0.2,329.6,166.8,1.25\",\n    \"triggered_at\": \"2:34 pm\",\n    \"scan_name\": \"SELL\",\n    \"scan_url\": \"short-term-breakouts\",\n    \"alert_name\": \"Alert for Short term breakouts\",\n    \"webhook_url\": \"http://8d32-49-207-193-1.ngrok-free.app/chartink/webhook/835e678a-b278-4371-bb4a-f8055426b28e\"\n}",
+          "json": "{\n    \"apikey\": \"{{apiKey}}\",\n    \"strategy\": \"TV Strategy\",\n    \"symbol\": \"AAPL\",\n    \"exchange\": \"EQUITY\",\n    \"action\": \"BUY\",\n    \"product\": \"CNC\",\n    \"pricetype\": \"MARKET\",\n    \"quantity\": \"1\",\n    \"price\": \"0\"\n}",
           "formUrlEncoded": [],
           "multipartForm": []
         },
@@ -109,7 +109,7 @@
         "params": [],
         "body": {
           "mode": "json",
-          "json": "{\n    \"apikey\": \"a85992a13ab7db424c239c50826116366e9f4fd8c591345a2d23aad01ffa4d00\",\n    \"strategy\": \"Test Strategy\"\n  \n}",
+          "json": "{\n    \"apikey\": \"{{apiKey}}\",\n    \"strategy\": \"Test Strategy\"\n  \n}",
           "formUrlEncoded": [],
           "multipartForm": []
         },
@@ -133,7 +133,7 @@
         "params": [],
         "body": {
           "mode": "json",
-          "json": "{\n    \"apikey\": \"a85992a13ab7db424c239c50826116366e9f4fd8c591345a2d23aad01ffa4d00\",\n    \"symbol\": \"M&M\",\n    \"exchange\": \"NSE\"\n  \n}",
+          "json": "{\n    \"apikey\": \"{{apiKey}}\",\n    \"symbol\": \"AAPL\",\n    \"exchange\": \"EQUITY\"\n  \n}",
           "formUrlEncoded": [],
           "multipartForm": []
         },
@@ -157,7 +157,7 @@
         "params": [],
         "body": {
           "mode": "json",
-          "json": "{\n    \"apikey\": \"a85992a13ab7db424c239c50826116366e9f4fd8c591345a2d23aad01ffa4d00\"\n}",
+          "json": "{\n    \"apikey\": \"{{apiKey}}\"\n}",
           "formUrlEncoded": [],
           "multipartForm": []
         },
@@ -181,7 +181,7 @@
         "params": [],
         "body": {
           "mode": "json",
-          "json": "{\n    \"apikey\": \"a85992a13ab7db424c239c50826116366e9f4fd8c591345a2d23aad01ffa4d00\",\n    \"symbol\": \"SBIN\",\n    \"exchange\": \"NSE\",\n    \"interval\": \"D\",\n    \"start_date\": \"2025-01-01\",\n    \"end_date\": \"2025-11-20\"\n}",
+          "json": "{\n    \"apikey\": \"{{apiKey}}\",\n    \"symbol\": \"AAPL\",\n    \"exchange\": \"EQUITY\",\n    \"interval\": \"D\",\n    \"start_date\": \"2025-01-01\",\n    \"end_date\": \"2025-11-20\"\n}",
           "formUrlEncoded": [],
           "multipartForm": []
         },
@@ -205,7 +205,7 @@
         "params": [],
         "body": {
           "mode": "json",
-          "json": "{\n    \"apikey\": \"a85992a13ab7db424c239c50826116366e9f4fd8c591345a2d23aad01ffa4d00\",\n    \"symbol\": \"SBIN\",\n    \"exchange\": \"NSE\",\n    \"interval\": \"1m\",\n    \"start_date\": \"2025-10-15\",\n    \"end_date\": \"2025-10-20\"\n}",
+          "json": "{\n    \"apikey\": \"{{apiKey}}\",\n    \"symbol\": \"AAPL\",\n    \"exchange\": \"EQUITY\",\n    \"interval\": \"1m\",\n    \"start_date\": \"2025-10-15\",\n    \"end_date\": \"2025-10-20\"\n}",
           "formUrlEncoded": [],
           "multipartForm": []
         },
@@ -229,7 +229,7 @@
         "params": [],
         "body": {
           "mode": "json",
-          "json": "{\n    \"apikey\": \"a85992a13ab7db424c239c50826116366e9f4fd8c591345a2d23aad01ffa4d00\"\n}",
+          "json": "{\n    \"apikey\": \"{{apiKey}}\"\n}",
           "formUrlEncoded": [],
           "multipartForm": []
         },
@@ -253,7 +253,7 @@
         "params": [],
         "body": {
           "mode": "json",
-          "json": "{\n    \"apikey\": \"a85992a13ab7db424c239c50826116366e9f4fd8c591345a2d23aad01ffa4d00\"\n  \n}",
+          "json": "{\n    \"apikey\": \"{{apiKey}}\"\n  \n}",
           "formUrlEncoded": [],
           "multipartForm": []
         },
@@ -268,7 +268,7 @@
     },
     {
       "type": "http",
-      "name": "ModifyOrder",
+      "name": "ModifyOrder (TastyTrade only)",
       "seq": 12,
       "request": {
         "url": "http://127.0.0.1:5001/api/v1/modifyorder",
@@ -277,7 +277,7 @@
         "params": [],
         "body": {
           "mode": "json",
-          "json": "{\n    \"apikey\": \"a85992a13ab7db424c239c50826116366e9f4fd8c591345a2d23aad01ffa4d00\",\n    \"strategy\": \"Test Message\",\n    \"symbol\": \"GOLDPETAL31OCT24FUT\",\n    \"action\": \"BUY\",\n    \"exchange\": \"MCX\",\n    \"orderid\":\"427510324509895\",\n    \"product\":\"MIS\",\n    \"pricetype\":\"LIMIT\",\n    \"price\":\"7410\",\n    \"quantity\":\"1\",\n    \"disclosed_quantity\":\"0\",\n    \"trigger_price\":\"0\"\n}\n",
+          "json": "{\n    \"apikey\": \"{{apiKey}}\",\n    \"strategy\": \"Test Message\",\n    \"symbol\": \"AAPL\",\n    \"action\": \"BUY\",\n    \"exchange\": \"EQUITY\",\n    \"orderid\": \"427510324509895\",\n    \"product\": \"CNC\",\n    \"pricetype\": \"LIMIT\",\n    \"price\": \"195.00\",\n    \"quantity\": \"1\",\n    \"disclosed_quantity\": \"0\",\n    \"trigger_price\": \"0\"\n\n    // NOTE: Supported by TastyTrade only.\n    // Webull does not implement order modification — use cancelorder + placeorder instead.\n}\n",
           "formUrlEncoded": [],
           "multipartForm": []
         },
@@ -301,7 +301,7 @@
         "params": [],
         "body": {
           "mode": "json",
-          "json": "{\n    \"apikey\": \"a85992a13ab7db424c239c50826116366e9f4fd8c591345a2d23aad01ffa4d00\",\n    \"strategy\": \"Test Strategy\",\n    \"symbol\": \"YESBANK\",\n    \"exchange\": \"NSE\",\n    \"product\": \"CNC\"\n}",
+          "json": "{\n    \"apikey\": \"{{apiKey}}\",\n    \"strategy\": \"Test Strategy\",\n    \"symbol\": \"AAPL\",\n    \"exchange\": \"EQUITY\",\n    \"product\": \"CNC\"\n}",
           "formUrlEncoded": [],
           "multipartForm": []
         },
@@ -325,7 +325,7 @@
         "params": [],
         "body": {
           "mode": "json",
-          "json": "{\n    \"apikey\": \"a85992a13ab7db424c239c50826116366e9f4fd8c591345a2d23aad01ffa4d00\"\n}",
+          "json": "{\n    \"apikey\": \"{{apiKey}}\"\n}",
           "formUrlEncoded": [],
           "multipartForm": []
         },
@@ -349,7 +349,7 @@
         "params": [],
         "body": {
           "mode": "json",
-          "json": "{\n    \"apikey\": \"a85992a13ab7db424c239c50826116366e9f4fd8c591345a2d23aad01ffa4d00\",\n    \"strategy\": \"Test Strategy\",\n    \"orderid\": \"24120900146469\"\n  \n}",
+          "json": "{\n    \"apikey\": \"{{apiKey}}\",\n    \"strategy\": \"Test Strategy\",\n    \"orderid\": \"24120900146469\"\n  \n}",
           "formUrlEncoded": [],
           "multipartForm": []
         },
@@ -373,7 +373,31 @@
         "params": [],
         "body": {
           "mode": "json",
-          "json": "{\n    \"apikey\": \"a85992a13ab7db424c239c50826116366e9f4fd8c591345a2d23aad01ffa4d00\",\n    \"strategy\": \"My Strategy\",\n    \"exchange\": \"NSE\",\n    \"symbol\": \"M&M\",\n    \"action\": \"buy\",\n    \"product\": \"MIS\",\n    \"pricetype\": \"MARKET\",\n    \"quantity\": \"100\",\n    \"price\": \"0\",\n    \"trigger_price\": \"0\",\n    \"disclosed_quantity\": \"0\"\n}",
+          "json": "{\n    \"apikey\": \"{{apiKey}}\",\n    \"strategy\": \"My Strategy\",\n    \"exchange\": \"EQUITY\",\n    \"symbol\": \"AAPL\",\n    \"action\": \"BUY\",\n    \"product\": \"CNC\",\n    \"pricetype\": \"MARKET\",\n    \"quantity\": \"1\",\n    \"price\": \"0\",\n    \"trigger_price\": \"0\",\n    \"disclosed_quantity\": \"0\"\n\n    // Exchanges: EQUITY | OPTIONS | FUTURES | FUTURES_OPTION | CRYPTO\n    // Products:  CNC (both TastyTrade and Webull)\n    // Pricetypes: MARKET | LIMIT | STOPLOSS | STOPLOSS_MARKET\n}",
+          "formUrlEncoded": [],
+          "multipartForm": []
+        },
+        "script": {},
+        "vars": {},
+        "assertions": [],
+        "tests": "",
+        "auth": {
+          "mode": "none"
+        }
+      }
+    },
+    {
+      "type": "http",
+      "name": "PlaceOrder - Options (TastyTrade)",
+      "seq": 17,
+      "request": {
+        "url": "http://127.0.0.1:5001/api/v1/placeorder",
+        "method": "POST",
+        "headers": [],
+        "params": [],
+        "body": {
+          "mode": "json",
+          "json": "{\n    \"apikey\": \"{{apiKey}}\",\n    \"strategy\": \"Options Strategy\",\n    \"exchange\": \"OPTIONS\",\n    \"symbol\": \"AAPL250117C00200000\",\n    \"action\": \"BUY\",\n    \"product\": \"CNC\",\n    \"pricetype\": \"LIMIT\",\n    \"quantity\": \"1\",\n    \"price\": \"1.50\",\n    \"trigger_price\": \"0\",\n    \"disclosed_quantity\": \"0\"\n\n    // TastyTrade: Full options support with legs-based order structure.\n    // Webull: Options supported via equity-style order format.\n    // Symbol format: {underlying}{expiry YYMMDD}{C|P}{strike padded to 8 digits}\n    // Example: AAPL250117C00200000 = AAPL Jan 17 2025 $200 Call\n}",
           "formUrlEncoded": [],
           "multipartForm": []
         },
@@ -389,7 +413,7 @@
     {
       "type": "http",
       "name": "PlaceSmartOrder",
-      "seq": 17,
+      "seq": 18,
       "request": {
         "url": "http://127.0.0.1:5001/api/v1/placesmartorder",
         "method": "POST",
@@ -397,7 +421,7 @@
         "params": [],
         "body": {
           "mode": "json",
-          "json": "{\n    \"apikey\": \"a85992a13ab7db424c239c50826116366e9f4fd8c591345a2d23aad01ffa4d00\",\n    \"strategy\": \"Test Strategy\",\n    \"exchange\": \"NSE\",\n    \"symbol\": \"YESBANK\",\n    \"action\": \"BUY\",\n    \"product\": \"MIS\",\n    \"pricetype\": \"MARKET\",\n    \"quantity\": \"10\",\n    \"price\": \"0\",\n    \"trigger_price\": \"0\",\n    \"disclosed_quantity\": \"0\",\n    \"position_size\": \"10\"\n}",
+          "json": "{\n    \"apikey\": \"{{apiKey}}\",\n    \"strategy\": \"Test Strategy\",\n    \"exchange\": \"EQUITY\",\n    \"symbol\": \"TSLA\",\n    \"action\": \"BUY\",\n    \"product\": \"CNC\",\n    \"pricetype\": \"MARKET\",\n    \"quantity\": \"10\",\n    \"price\": \"0\",\n    \"trigger_price\": \"0\",\n    \"disclosed_quantity\": \"0\",\n    \"position_size\": \"10\"\n}",
           "formUrlEncoded": [],
           "multipartForm": []
         },
@@ -413,7 +437,7 @@
     {
       "type": "http",
       "name": "positionbook",
-      "seq": 18,
+      "seq": 19,
       "request": {
         "url": "http://127.0.0.1:5001/api/v1/positionbook",
         "method": "POST",
@@ -421,7 +445,7 @@
         "params": [],
         "body": {
           "mode": "json",
-          "json": "{\n    \"apikey\": \"a85992a13ab7db424c239c50826116366e9f4fd8c591345a2d23aad01ffa4d00\"\n}",
+          "json": "{\n    \"apikey\": \"{{apiKey}}\"\n}",
           "formUrlEncoded": [],
           "multipartForm": []
         },
@@ -437,7 +461,7 @@
     {
       "type": "http",
       "name": "quotes",
-      "seq": 19,
+      "seq": 20,
       "request": {
         "url": "http://127.0.0.1:5001/api/v1/quotes",
         "method": "POST",
@@ -445,7 +469,7 @@
         "params": [],
         "body": {
           "mode": "json",
-          "json": "{\n    \"apikey\": \"a85992a13ab7db424c239c50826116366e9f4fd8c591345a2d23aad01ffa4d00\",\n    \"symbol\":\"SBIN\", \n    \"exchange\":\"NSE\"    \n}",
+          "json": "{\n    \"apikey\": \"{{apiKey}}\",\n    \"symbol\": \"AAPL\", \n    \"exchange\": \"EQUITY\"    \n}",
           "formUrlEncoded": [],
           "multipartForm": []
         },
@@ -461,7 +485,7 @@
     {
       "type": "http",
       "name": "SplitOrder",
-      "seq": 20,
+      "seq": 21,
       "request": {
         "url": "http://127.0.0.1:5001/api/v1/splitorder",
         "method": "POST",
@@ -469,7 +493,7 @@
         "params": [],
         "body": {
           "mode": "json",
-          "json": "{\n    \"apikey\": \"38f99d7d226cc0c3baa19dcacf0b1f049d2f68371da1dda2c97b1b63a3a9ca2e\",\n    \"strategy\": \"Test Strategy\",\n    \"exchange\": \"NSE\",\n    \"symbol\": \"YESBANK\",\n    \"action\": \"SELL\",\n    \"quantity\": \"105\",\n    \"splitsize\": \"20\",\n    \"pricetype\": \"MARKET\",\n    \"product\": \"MIS\"\n}",
+          "json": "{\n    \"apikey\": \"{{apiKey}}\",\n    \"strategy\": \"Test Strategy\",\n    \"exchange\": \"EQUITY\",\n    \"symbol\": \"AAPL\",\n    \"action\": \"SELL\",\n    \"quantity\": \"105\",\n    \"splitsize\": \"20\",\n    \"pricetype\": \"MARKET\",\n    \"product\": \"CNC\"\n}",
           "formUrlEncoded": [],
           "multipartForm": []
         },
@@ -485,7 +509,7 @@
     {
       "type": "http",
       "name": "tradebook",
-      "seq": 21,
+      "seq": 22,
       "request": {
         "url": "http://127.0.0.1:5001/api/v1/tradebook",
         "method": "POST",
@@ -493,7 +517,7 @@
         "params": [],
         "body": {
           "mode": "json",
-          "json": "{\n    \"apikey\": \"a85992a13ab7db424c239c50826116366e9f4fd8c591345a2d23aad01ffa4d00\"\n}",
+          "json": "{\n    \"apikey\": \"{{apiKey}}\"\n}",
           "formUrlEncoded": [],
           "multipartForm": []
         },
@@ -509,15 +533,15 @@
     {
       "type": "http",
       "name": "chart_get",
-      "seq": 22,
+      "seq": 23,
       "request": {
-        "url": "http://127.0.0.1:5001/api/v1/chart?api_key=a85992a13ab7db424c239c50826116366e9f4fd8c591345a2d23aad01ffa4d00",
+        "url": "http://127.0.0.1:5001/api/v1/chart?api_key={{apiKey}}",
         "method": "GET",
         "headers": [],
         "params": [
           {
             "name": "api_key",
-            "value": "a85992a13ab7db424c239c50826116366e9f4fd8c591345a2d23aad01ffa4d00"
+            "value": "{{apiKey}}"
           }
         ],
         "body": {
@@ -535,20 +559,20 @@
     {
       "type": "http",
       "name": "chart_update",
-      "seq": 23,
+      "seq": 24,
       "request": {
         "url": "http://127.0.0.1:5001/api/v1/chart",
         "method": "POST",
         "headers": [
           {
             "name": "X-API-KEY",
-            "value": "a85992a13ab7db424c239c50826116366e9f4fd8c591345a2d23aad01ffa4d00"
+            "value": "{{apiKey}}"
           }
         ],
         "params": [],
         "body": {
           "mode": "json",
-          "json": "{\n    \"tv_watchlist_data\": \"[{\\\"name\\\":\\\"Watchlist 1\\\",\\\"symbols\\\":[\\\"NSE:RELIANCE\\\",\\\"NSE:INFY\\\"]}]\",\n    \"tv_chart_layout\": \"{\\\"timeframe\\\":\\\"1D\\\"}\",\n    \"tv_theme\": \"dark\"\n}",
+          "json": "{\n    \"tv_watchlist_data\": \"[{\\\"name\\\":\\\"Watchlist 1\\\",\\\"symbols\\\":[\\\"EQUITY:AAPL\\\",\\\"EQUITY:TSLA\\\"]}]\",\n    \"tv_chart_layout\": \"{\\\"timeframe\\\":\\\"1D\\\"}\",\n    \"tv_theme\": \"dark\"\n}",
           "formUrlEncoded": [],
           "multipartForm": []
         },
@@ -562,7 +586,18 @@
       }
     }
   ],
-  "environments": [],
+  "environments": [
+    {
+      "name": "local",
+      "variables": [
+        {
+          "name": "apiKey",
+          "value": "",
+          "enabled": true
+        }
+      ]
+    }
+  ],
   "brunoConfig": {
     "version": "1",
     "name": "openalgo",

@@ -2,7 +2,7 @@
 
 ## Introduction
 
-GoCharting is a modern web-based charting platform designed specifically for Indian markets. It offers TradingView-style functionality with native support for Indian exchanges. OpenAlgo integrates seamlessly with GoCharting's webhook system for automated trading.
+GoCharting is a modern web-based charting platform designed for global markets. It offers TradingView-style functionality with support for multiple exchanges. OpenAlgo integrates seamlessly with GoCharting's webhook system for automated trading.
 
 ## How It Works
 
@@ -35,7 +35,7 @@ GoCharting is a modern web-based charting platform designed specifically for Ind
 
 | Feature | Benefit |
 |---------|---------|
-| Indian Market Focus | Native NSE, BSE, MCX symbols |
+| Global Market Support | EQUITY, OPTIONS, FUTURES symbols |
 | Pine Script Compatible | Use existing TradingView scripts |
 | Real-time Data | Live quotes from exchanges |
 | Alert System | Webhook support for automation |
@@ -91,7 +91,7 @@ cloudflared tunnel --url http://localhost:5000
 ### Step 1: Set Up Your Chart
 
 1. Open GoCharting
-2. Load your symbol (e.g., NSE:SBIN)
+2. Load your symbol (e.g., AAPL, TSLA, MSFT)
 3. Add indicators as needed
 
 ### Step 2: Create Alert
@@ -121,7 +121,7 @@ cloudflared tunnel --url http://localhost:5000
   "action": "BUY",
   "quantity": "100",
   "pricetype": "MARKET",
-  "product": "MIS"
+  "product": "CNC"
 }
 ```
 
@@ -136,7 +136,7 @@ cloudflared tunnel --url http://localhost:5000
   "action": "{{action}}",
   "quantity": "{{quantity}}",
   "pricetype": "MARKET",
-  "product": "MIS"
+  "product": "CNC"
 }
 ```
 
@@ -152,7 +152,7 @@ cloudflared tunnel --url http://localhost:5000
   "quantity": "{{quantity}}",
   "position_size": "{{position_size}}",
   "pricetype": "MARKET",
-  "product": "MIS"
+  "product": "CNC"
 }
 ```
 
@@ -162,8 +162,8 @@ cloudflared tunnel --url http://localhost:5000
 
 | Variable | Description | Example |
 |----------|-------------|---------|
-| `{{ticker}}` | Symbol name | SBIN |
-| `{{exchange}}` | Exchange code | NSE |
+| `{{ticker}}` | Symbol name | AAPL |
+| `{{exchange}}` | Exchange code | EQUITY |
 | `{{action}}` | Trade action | BUY / SELL |
 | `{{quantity}}` | Order quantity | 100 |
 | `{{price}}` | Current price | 625.50 |
@@ -188,7 +188,7 @@ cloudflared tunnel --url http://localhost:5000
   "action": "BUY",
   "quantity": "100",
   "pricetype": "MARKET",
-  "product": "MIS"
+  "product": "CNC"
 }
 ```
 
@@ -202,7 +202,7 @@ cloudflared tunnel --url http://localhost:5000
   "action": "SELL",
   "quantity": "100",
   "pricetype": "MARKET",
-  "product": "MIS"
+  "product": "CNC"
 }
 ```
 
@@ -218,7 +218,7 @@ cloudflared tunnel --url http://localhost:5000
   "action": "BUY",
   "quantity": "100",
   "pricetype": "MARKET",
-  "product": "MIS"
+  "product": "CNC"
 }
 ```
 
@@ -232,7 +232,7 @@ cloudflared tunnel --url http://localhost:5000
   "action": "SELL",
   "quantity": "100",
   "pricetype": "MARKET",
-  "product": "MIS"
+  "product": "CNC"
 }
 ```
 
@@ -248,7 +248,7 @@ cloudflared tunnel --url http://localhost:5000
   "action": "BUY",
   "quantity": "100",
   "pricetype": "MARKET",
-  "product": "MIS"
+  "product": "CNC"
 }
 ```
 
@@ -289,7 +289,7 @@ if (shortCondition)
   "action": "{{strategy.order.action}}",
   "quantity": "{{strategy.order.contracts}}",
   "pricetype": "MARKET",
-  "product": "MIS"
+  "product": "CNC"
 }
 ```
 
@@ -301,12 +301,12 @@ if (shortCondition)
 {
   "apikey": "YOUR_API_KEY",
   "strategy": "FuturesStrategy",
-  "symbol": "NIFTY25JANFUT",
-  "exchange": "NFO",
+  "symbol": "AAPL",
+  "exchange": "FUTURES",
   "action": "BUY",
-  "quantity": "50",
+  "quantity": "1",
   "pricetype": "MARKET",
-  "product": "NRML"
+  "product": "CNC"
 }
 ```
 
@@ -316,12 +316,12 @@ if (shortCondition)
 {
   "apikey": "YOUR_API_KEY",
   "strategy": "OptionsStrategy",
-  "symbol": "NIFTY25JAN21500CE",
-  "exchange": "NFO",
+  "symbol": "AAPL",
+  "exchange": "OPTIONS",
   "action": "BUY",
-  "quantity": "50",
+  "quantity": "1",
   "pricetype": "MARKET",
-  "product": "NRML"
+  "product": "CNC"
 }
 ```
 
@@ -331,26 +331,23 @@ if (shortCondition)
 
 | GoCharting | OpenAlgo |
 |------------|----------|
-| NSE:SBIN | SBIN (exchange: NSE) |
-| BSE:SBIN | SBIN (exchange: BSE) |
-| NSE:RELIANCE | RELIANCE (exchange: NSE) |
+| AAPL | AAPL (exchange: EQUITY) |
+| TSLA | TSLA (exchange: EQUITY) |
+| MSFT | MSFT (exchange: EQUITY) |
 
-### Index Symbols
+### Options Symbols
 
 | GoCharting | OpenAlgo |
 |------------|----------|
-| NSE:NIFTY | NIFTY 50 |
-| NSE:BANKNIFTY | NIFTY BANK |
+| AAPL options | AAPL (exchange: OPTIONS) |
+| TSLA options | TSLA (exchange: OPTIONS) |
 
-### F&O Symbols
+### Futures Symbols
 
-Format: `SYMBOL` + `EXPIRY` + `STRIKE` + `CE/PE`
-
-| Type | Example |
+| Type | Exchange |
 |------|---------|
-| Future | NIFTY25JANFUT |
-| Call Option | NIFTY25JAN21500CE |
-| Put Option | NIFTY25JAN21500PE |
+| Equity Futures | FUTURES |
+| Futures Options | FUTURES_OPTION |
 
 ## Testing Your Integration
 
@@ -387,10 +384,10 @@ Format: `SYMBOL` + `EXPIRY` + `STRIKE` + `CE/PE`
 │  GoCharting Alerts                                                          │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                              │
-│  Alert 1: SBIN MA Crossover Buy    [Active]  [Edit]  [Delete]              │
-│  Alert 2: SBIN MA Crossover Sell   [Active]  [Edit]  [Delete]              │
-│  Alert 3: NIFTY Breakout           [Active]  [Edit]  [Delete]              │
-│  Alert 4: BANKNIFTY RSI            [Paused]  [Edit]  [Delete]              │
+│  Alert 1: AAPL MA Crossover Buy    [Active]  [Edit]  [Delete]              │
+│  Alert 2: AAPL MA Crossover Sell   [Active]  [Edit]  [Delete]              │
+│  Alert 3: TSLA Breakout            [Active]  [Edit]  [Delete]              │
+│  Alert 4: MSFT RSI                 [Paused]  [Edit]  [Delete]              │
 │                                                                              │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -412,7 +409,7 @@ Format: `SYMBOL` + `EXPIRY` + `STRIKE` + `CE/PE`
 ### 2. Use Descriptive Strategy Names
 
 ```json
-"strategy": "SBIN_MA_Crossover"
+"strategy": "AAPL_MA_Crossover"
 ```
 
 Instead of:
@@ -480,7 +477,7 @@ Create separate alerts for different timeframes:
 
 | Feature | GoCharting | TradingView |
 |---------|------------|-------------|
-| Indian Market Focus | Native | Through exchange |
+| Global Market Support | Yes | Yes |
 | Pricing | More affordable | Premium plans |
 | Pine Script | Supported | Native |
 | Webhook | Pro plan | Premium+ |

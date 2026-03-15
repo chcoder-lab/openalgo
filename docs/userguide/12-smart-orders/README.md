@@ -9,7 +9,7 @@ Smart Orders are position-aware orders that automatically calculate the correct 
 ### Without Smart Orders
 
 ```
-Current Position: 100 SBIN LONG
+Current Position: 100 AAPL LONG
 Your Strategy: "Go SHORT 100 shares"
 
 Manual Calculation Required:
@@ -23,7 +23,7 @@ You must track position and calculate!
 ### With Smart Orders
 
 ```
-Current Position: 100 SBIN LONG
+Current Position: 100 AAPL LONG
 Smart Order: "position_size = -100" (SHORT 100)
 
 OpenAlgo Automatically:
@@ -71,13 +71,13 @@ No manual calculation needed!
 {
   "apikey": "your-api-key",
   "strategy": "MyStrategy",
-  "symbol": "SBIN",
-  "exchange": "NSE",
+  "symbol": "AAPL",
+  "exchange": "EQUITY",
   "action": "BUY",
   "quantity": "100",
   "position_size": "100",
   "pricetype": "MARKET",
-  "product": "MIS"
+  "product": "CNC"
 }
 ```
 
@@ -170,13 +170,13 @@ Content-Type: application/json
 {
   "apikey": "your-api-key",
   "strategy": "Reversal_System",
-  "symbol": "NIFTY25JANFUT",
-  "exchange": "NFO",
+  "symbol": "/ES",
+  "exchange": "FUTURES",
   "action": "SELL",
   "quantity": "50",
   "position_size": "-50",
   "pricetype": "MARKET",
-  "product": "MIS"
+  "product": "CNC"
 }
 ```
 
@@ -216,21 +216,21 @@ def execute_signal(symbol, signal):
 
     response = client.place_smart_order(
         symbol=symbol,
-        exchange='NSE',
+        exchange='EQUITY',
         action=action,
         quantity=100,
         position_size=position_size,
         price_type='MARKET',
-        product='MIS',
+        product='CNC',
         strategy='SmartSystem'
     )
 
     return response
 
 # Usage
-execute_signal('SBIN', 'LONG')   # Goes long 100
-execute_signal('SBIN', 'SHORT')  # Reverses to short 100
-execute_signal('SBIN', 'FLAT')   # Closes position
+execute_signal('AAPL', 'LONG')   # Goes long 100
+execute_signal('AAPL', 'SHORT')  # Reverses to short 100
+execute_signal('AAPL', 'FLAT')   # Closes position
 ```
 
 ## TradingView Integration
@@ -242,12 +242,12 @@ execute_signal('SBIN', 'FLAT')   # Closes position
   "apikey": "your-api-key",
   "strategy": "TV_Smart",
   "symbol": "{{ticker}}",
-  "exchange": "NSE",
+  "exchange": "EQUITY",
   "action": "{{strategy.order.action}}",
   "quantity": "100",
   "position_size": "{{strategy.position_size}}",
   "pricetype": "MARKET",
-  "product": "MIS"
+  "product": "CNC"
 }
 ```
 
@@ -322,14 +322,14 @@ Smart order for Strategy "A" only considers "A"'s position
 ### 2. Product Type Consistency
 
 Keep product type consistent within a strategy:
-- Don't mix MIS and NRML in same strategy
+- Don't mix CNC and other product types in same strategy
 - Position tracking may be affected
 
 ### 3. Symbol Matching
 
 Ensure exact symbol match:
-- "SBIN" and "SBIN-EQ" are different
-- "NIFTY25JANFUT" is specific to that expiry
+- "AAPL" and "AAPL-EQ" are different
+- "/ES" futures contract is specific to that expiry
 
 ## Troubleshooting
 

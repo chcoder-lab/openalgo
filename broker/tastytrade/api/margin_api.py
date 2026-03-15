@@ -1,6 +1,5 @@
-import httpx
-
 from broker.tastytrade.api.urls import get_tastytrade_base_url
+from utils.httpx_client import get_httpx_client
 from utils.logging import get_logger
 
 logger = get_logger(__name__)
@@ -42,7 +41,7 @@ def get_account_margin(account_number: str, auth_token: str) -> dict | None:
         "Accept": "application/json"
     }
     try:
-        client = httpx.Client()
+        client = get_httpx_client()
         response = client.get(url, headers=headers)
         response.raise_for_status()
         margin_data = response.json().get("data")

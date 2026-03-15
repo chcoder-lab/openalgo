@@ -140,6 +140,10 @@ export default function BrokerSelect() {
 
     // Build login URL based on broker type (matching original broker.html logic)
     switch (broker) {
+      case 'tastytrade': {
+        const state = generateRandomState()
+        return `${tastytradeAuthBase}?client_id=${broker_api_key}&redirect_uri=${redirect_url}&response_type=code&state=${state}`
+      }
       case 'fivepaisa':
       case 'fivepaisaxts':
       case 'aliceblue':
@@ -160,8 +164,7 @@ export default function BrokerSelect() {
       case 'kotak':
       case 'rmoney':
       case 'shoonya':
-      case 'tastytrade':
-        return `${tastytradeAuthBase}?client_id=${broker_api_key}&redirect_uri=${redirect_url}&response_type=code&state=2e9b44629ebb28226224d09db3ffb47c`
+        return `/${broker}/callback`
       case 'webull':
         return '/webull/callback'
       case 'wisdom':

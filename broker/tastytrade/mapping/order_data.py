@@ -51,7 +51,7 @@ def map_order_data(order_data):
             order["quantity"] = int(order_info.get("quantity", 0))
             order["symbol"] = order_info.get("tradingsymbol", "")
             order["timestamp"] = order_info.get("order_time", "")
-            order["trigger_price"] = float(order_info.get("trigPrice", 0))
+            order["trigger_price"] = float(order_info.get("stop_trigger", 0))
 
             # print(f"[DEBUG] map_order_data - Updated order: {order}")
 
@@ -524,7 +524,7 @@ def transform_positions_data(positions_data):
             # Create transformed position with required fields
             transformed_position = {
                 "symbol": position.get("symbol", ""),
-                "exchange": position.get("exchange", "NSE"),
+                "exchange": position.get("exchange", "EQUITY"),
                 "product": position.get("product", "MIS"),
                 "quantity": quantity,
                 "average_price": str(round(float(position.get("average_price", 0.0)), 2)),
@@ -540,57 +540,35 @@ def transform_positions_data(positions_data):
 
 def map_portfolio_data(portfolio_data):
     """
-    Processes and modifies a list of Portfolio dictionaries based on specific conditions and
-    ensures both holdings and totalholding parts are transmitted in a single response.
+    Pass-through for tastytrade holdings data already formatted by get_holdings().
+
+    get_holdings() in order_api.py returns a list of dicts with fields:
+      exchange, pnl, pnlpercent, product, quantity, symbol, avgprice, ltp
 
     Parameters:
-    - portfolio_data: A list of dictionaries, where each dictionary represents portfolio information.
+    - portfolio_data: List of holding dicts from get_holdings()
 
     Returns:
-    - The modified portfolio_data with 'product' fields changed for 'holdings' and 'totalholding' included.
+    - The same list, unchanged
     """
-    # Check if 'portfolio_data' is a list
-    if not isinstance(portfolio_data, list):
-        logger.warning("Portfolio data is not a list.")
-        return []
-
-    # Handle empty list gracefully - it's not an error
-    if len(portfolio_data) == 0:
-        logger.debug("No portfolio data available (empty list)")
-        return []
-
-    # Iterate over the portfolio_data list and process each entry
-    for portfolio in portfolio_data:
-        # Ensure 'stat' is 'Ok' before proceeding
-        if portfolio.get("stat") != "Ok":
-            logger.error(f"Error: {portfolio.get('emsg', 'Unknown error occurred.')}")
-            continue
-
-        # Process the 'exch_tsym' list inside each portfolio entry
-        for exch_tsym in portfolio.get("exch_tsym", []):
-            symbol = exch_tsym.get("tsym", "")
-            exchange = exch_tsym.get("exch", "")
-
-            # Replace 'get_oa_symbol' function with your actual symbol fetching logic
-            symbol_from_db = get_oa_symbol(symbol, exchange)
-
-            if symbol_from_db:
-                exch_tsym["tsym"] = symbol_from_db
-            else:
-                logger.warning(f"Zebu Portfolio - Product Value for {symbol} Not Found or Changed.")
-
-    return portfolio_data
+    if isinstance(portfolio_data, list):
+        return portfolio_data
+    logger.warning("map_portfolio_data - expected list, got %s", type(portfolio_data))
+    return []
 
 
 def calculate_portfolio_statistics(holdings_data):
-    totalholdingvalue = 0
-    totalinvvalue = 0
-    totalprofitandloss = 0
-    totalpnlpercentage = 0
+    """
+    Calculate portfolio statistics from tastytrade holdings data.
 
-    # Check if the data is valid
-    if not isinstance(holdings_data, list):
-        logger.error("Error: Holdings data is not a list.")
+    Holdings data has fields: quantity, avgprice, ltp, pnl
+    """
+    totalholdingvalue = 0.0
+    totalinvvalue = 0.0
+    totalprofitandloss = 0.0
+    totalpnlpercentage = 0.0
+
+    if not isinstance(holdings_data, list) or len(holdings_data) == 0:
         return {
             "totalholdingvalue": totalholdingvalue,
             "totalinvvalue": totalinvvalue,
@@ -598,222 +576,48 @@ def calculate_portfolio_statistics(holdings_data):
             "totalpnlpercentage": totalpnlpercentage,
         }
 
-    # Handle empty list gracefully - it's not an error
-    if len(holdings_data) == 0:
-        logger.debug("No holdings to calculate statistics for (empty list)")
-        return {
-            "totalholdingvalue": totalholdingvalue,
-            "totalinvvalue": totalinvvalue,
-            "totalprofitandloss": totalprofitandloss,
-            "totalpnlpercentage": totalpnlpercentage,
-        }
-
-    # Iterate over the list of holdings
     for holding in holdings_data:
-        # Ensure 'stat' is 'Ok' before proceeding
-        if holding.get("stat") != "Ok":
-            logger.error(f"Error: {holding.get('emsg', 'Unknown error occurred.')}")
-            continue
+        try:
+            quantity = float(holding.get("quantity", 0))
+            avg_price = float(holding.get("avgprice", 0))
+            ltp = float(holding.get("ltp", avg_price))
+            pnl = float(holding.get("pnl", (ltp - avg_price) * quantity))
 
-        # Filter out the NSE entry and ignore BSE for the same symbol
-        nse_entry = next(
-            (exch for exch in holding.get("exch_tsym", []) if exch.get("exch") == "NSE"), None
-        )
-        if not nse_entry:
-            continue  # Skip if no NSE entry is found
+            inv_value = quantity * avg_price
+            current_value = quantity * ltp
 
-        # Process only the NSE entry
-        quantity = float(holding.get("holdqty", 0)) + max(
-            float(holding.get("npoadt1qty", 0)), float(holding.get("dpqty", 0))
-        )
-        upload_price = float(holding.get("upldprc", 0))
-        market_price = float(
-            nse_entry.get("upldprc", 0)
-        )  # Assuming 'pp' is the market price for NSE
+            totalinvvalue += inv_value
+            totalholdingvalue += current_value
+            totalprofitandloss += pnl
+        except Exception as e:
+            logger.error(f"calculate_portfolio_statistics - Error processing holding: {e}")
 
-        # Calculate investment value and holding value for NSE
-        inv_value = quantity * upload_price
-        holding_value = quantity * upload_price
-        profit_and_loss = holding_value - inv_value
-        pnl_percentage = (profit_and_loss / inv_value) * 100 if inv_value != 0 else 0
-
-        # Accumulate the totals
-        # totalholdingvalue += holding_value
-        totalinvvalue += inv_value
-        totalprofitandloss += profit_and_loss
-
-        # Valuation formula from API
-        holdqty = float(holding.get("holdqty", 0))
-        btstqty = float(holding.get("btstqty", 0))
-        brkcolqty = float(holding.get("brkcolqty", 0))
-        unplgdqty = float(holding.get("unplgdqty", 0))
-        benqty = float(holding.get("benqty", 0))
-        npoadqty = float(holding.get("npoadt1qty", 0))
-        dpqty = float(holding.get("dpqty", 0))
-        usedqty = float(holding.get("usedqty", 0))
-
-        # Valuation formula from API
-        valuation = (
-            (btstqty + holdqty + brkcolqty + unplgdqty + benqty + max(npoadqty, dpqty)) - usedqty
-        ) * upload_price
-        logger.debug(f"test valuation: {str(npoadqty)}")
-        logger.debug(f"test valuation: {str(upload_price)}")
-        # Accumulate total valuation
-        totalholdingvalue += valuation
-
-    # Calculate overall P&L percentage
-    totalpnlpercentage = (totalprofitandloss / totalinvvalue) * 100 if totalinvvalue != 0 else 0
+    if totalinvvalue > 0:
+        totalpnlpercentage = (totalprofitandloss / totalinvvalue) * 100
 
     return {
-        "totalholdingvalue": totalholdingvalue,
-        "totalinvvalue": totalinvvalue,
-        "totalprofitandloss": totalprofitandloss,
-        "totalpnlpercentage": totalpnlpercentage,
+        "totalholdingvalue": round(totalholdingvalue, 2),
+        "totalinvvalue": round(totalinvvalue, 2),
+        "totalprofitandloss": round(totalprofitandloss, 2),
+        "totalpnlpercentage": round(totalpnlpercentage, 2),
     }
 
 
 def transform_holdings_data(holdings_data):
     """
-    Transforms tastytrade holdings data to OpenAlgo format.
+    Pass-through for tastytrade holdings data already formatted by get_holdings().
+
+    get_holdings() in order_api.py returns fully formatted OpenAlgo holdings:
+      [{"exchange": "EQUITY", "pnl": ..., "pnlpercent": ..., "product": "CNC",
+        "quantity": ..., "symbol": ..., "avgprice": ..., "ltp": ...}]
 
     Args:
-        holdings_data (list): List of holdings dictionaries from tastytrade API
+        holdings_data: List of holding dicts from map_portfolio_data()
 
     Returns:
-        dict: Holdings data in OpenAlgo format
-        {
-            "data": {
-                "holdings": [
-                    {
-                        "exchange": "NSE",
-                        "pnl": 3.27,
-                        "pnlpercent": 13.04,
-                        "product": "CNC",
-                        "quantity": 1,
-                        "symbol": "BSLNIFTY"
-                    }
-                ],
-                "statistics": {
-                    "totalholdingvalue": 36.46,
-                    "totalinvvalue": 32.17,
-                    "totalpnlpercentage": 13.34,
-                    "totalprofitandloss": 4.29
-                }
-            },
-            "status": "success"
-        }
+        list: The same list, unchanged
     """
-    try:
-        # Handle empty list case gracefully - it's not an error
-        if isinstance(holdings_data, list) and len(holdings_data) == 0:
-            logger.debug("No holdings to transform (empty list)")
-            # Return empty list for service layer
-            return []
-
-        logger.debug(
-            f"Transforming {len(holdings_data) if isinstance(holdings_data, list) else 0} holdings records"
-        )
-
-        # Initialize statistics
-        statistics = {
-            "totalholdingvalue": 0.0,
-            "totalinvvalue": 0.0,
-            "totalprofitandloss": 0.0,
-            "totalpnlpercentage": 0.0,
-        }
-
-        # Transform individual holdings
-        transformed_holdings = []
-
-        if not isinstance(holdings_data, list):
-            logger.error("Holdings data is not a list")
-            # Return empty list for consistency
-            return []
-
-        for holding in holdings_data:
-            try:
-                if not isinstance(holding, dict):
-                    logger.warning("Non-dict item in holdings list")
-                    continue
-
-                # Get symbol details from the sym object
-                sym = holding.get("sym", {})
-
-                # Skip if we don't have basic required data
-                # Check both tradSymbol and tradSymbol (different capitalizations)
-                trade_symbol = (
-                    sym.get("tradSymbol") or sym.get("tradSymbol") or sym.get("symbol", "")
-                )
-                if not sym or not trade_symbol:
-                    logger.warning(f"Missing symbol data in holding: {holding}")
-                    continue
-
-                # Get quantity - use saleable quantity if available, otherwise use total quantity
-                quantity = float(holding.get("saleableQty", holding.get("qty", 0)))
-                avg_price = float(holding.get("avgPrice", 0))
-                ltp = float(
-                    sym.get("lastPrice", avg_price)
-                )  # Use last price if available, otherwise use avg price
-
-                # Calculate P&L values
-                pnl = float(holding.get("realizedPnl", 0))
-                pnl_percent = 0.0
-
-                # Calculate investment value and current value
-                investment_value = quantity * avg_price
-                current_value = quantity * ltp if ltp > 0 else investment_value
-
-                # Calculate P&L percentage
-                if investment_value > 0:
-                    pnl_percent = ((current_value - investment_value) / investment_value) * 100
-
-                # Map product type (CNC for delivery, MIS for intraday)
-                product = "CNC"  # Default to CNC (delivery)
-                if holding.get("product", "").upper() in ["MIS", "INTRADAY"]:
-                    product = "MIS"
-
-                # Create the transformed holding
-                transformed_holding = {
-                    "exchange": sym.get("exchange", "NSE"),  # Default to NSE if not specified
-                    "pnl": round(pnl, 2),
-                    "pnlpercent": round(pnl_percent, 2),
-                    "product": product,
-                    "quantity": int(quantity),
-                    "symbol": trade_symbol.strip(),
-                    # Additional fields that might be useful
-                    "avgprice": round(avg_price, 2),
-                    "ltp": round(ltp, 2),
-                    "investment": round(investment_value, 2),
-                    "current_value": round(current_value, 2),
-                }
-
-                # Update statistics
-                statistics["totalholdingvalue"] += current_value
-                statistics["totalinvvalue"] += investment_value
-                statistics["totalprofitandloss"] += current_value - investment_value
-
-                transformed_holdings.append(transformed_holding)
-
-            except Exception as e:
-                logger.error(
-                    f"Error transforming holding: {str(e)}\nHolding data: {holding}", exc_info=True
-                )
-                continue
-
-        # Calculate final statistics
-        if statistics["totalinvvalue"] > 0:
-            statistics["totalpnlpercentage"] = (
-                statistics["totalprofitandloss"] / statistics["totalinvvalue"]
-            ) * 100
-
-        # Round all statistics to 2 decimal places
-        for key in statistics:
-            statistics[key] = round(statistics[key], 2)
-
-        # Return just the holdings list - service layer handles statistics separately
-        return transformed_holdings
-
-    except Exception as e:
-        logger.error(f"Error in transform_holdings_data: {str(e)}", exc_info=True)
-        # Return empty list on error for consistency
-        return []
+    if isinstance(holdings_data, list):
+        return holdings_data
+    logger.warning("transform_holdings_data - expected list, got %s", type(holdings_data))
+    return []

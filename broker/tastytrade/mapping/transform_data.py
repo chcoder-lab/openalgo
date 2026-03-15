@@ -1,117 +1,183 @@
 # Mapping OpenAlgo API Request https://openalgo.in/docs
-# Mapping Angel Broking Parameters https://smartapi.angelbroking.com/docs/Orders
+# Mapping tastytrade API https://developer.tastytrade.com
 
 from database.token_db import get_br_symbol
 
 
-def transform_data(data, token):
+# Map OpenAlgo exchange codes to tastytrade instrument types
+INSTRUMENT_TYPE_MAP = {
+    "EQUITY": "Equity",
+    "OPTIONS": "Equity Option",
+    "OPTION": "Equity Option",
+    "EQUITY_OPTION": "Equity Option",
+    "FUTURES": "Future",
+    "FUTURE": "Future",
+    "FUTURES_OPTION": "Future Option",
+    "FUTURE_OPTION": "Future Option",
+    "CRYPTO": "Cryptocurrency",
+    "CRYPTOCURRENCY": "Cryptocurrency",
+}
+
+# tastytrade order types
+ORDER_TYPE_MAP = {
+    "MARKET": "Market",
+    "LIMIT": "Limit",
+    "SL": "Stop Limit",    # Stop-loss with limit price
+    "SL-M": "Stop",        # Stop-loss market (stop trigger only)
+}
+
+# tastytrade time-in-force values
+VALIDITY_MAP = {
+    "DAY": "Day",
+    "IOC": "IOC",
+    "GTC": "GTC",
+    "GTD": "GTD",
+}
+
+# Reverse map: tastytrade order type → OpenAlgo pricetype
+REVERSE_ORDER_TYPE_MAP = {v: k for k, v in ORDER_TYPE_MAP.items()}
+
+# Reverse map: tastytrade instrument type → OpenAlgo exchange code
+REVERSE_INSTRUMENT_TYPE_MAP = {v: k for k, v in INSTRUMENT_TYPE_MAP.items()}
+
+
+def map_instrument_type(exchange: str) -> str:
+    """Map OpenAlgo exchange code to tastytrade instrument type."""
+    return INSTRUMENT_TYPE_MAP.get(exchange.upper(), "Equity")
+
+
+def map_order_type(pricetype: str) -> str:
+    """Map OpenAlgo price type to tastytrade order type."""
+    return ORDER_TYPE_MAP.get(pricetype.upper(), "Market")
+
+
+def map_validity(validity: str) -> str:
+    """Map OpenAlgo validity to tastytrade time-in-force."""
+    return VALIDITY_MAP.get(validity.upper(), "Day")
+
+
+def map_action(action: str) -> str:
     """
-    Transforms OpenAlgo order format to tastytrade API format.
+    Map OpenAlgo BUY/SELL to tastytrade leg action.
+
+    tastytrade distinguishes Open/Close, but OpenAlgo does not.
+    Default to Buy to Open / Sell to Close for directional trades.
     """
-    symbol = get_br_symbol(data["symbol"], data["exchange"])
-
-    # Basic mapping
-    transformed = {
-        "symId": f"{symbol}",
-        "qty": str(data["quantity"]),
-        "side": "buy" if data["action"] == "BUY" else "sell",
-        "type": map_order_type(data["pricetype"]),
-        "product": map_product_type(data["product"]),
-        "limitPrice": str(data.get("price", "0")),
-        "trigPrice": str(data.get("trigger_price", "0")),
-        "validity": map_validity(data.get("validity", "DAY")),
-        "discQty": str(data.get("disclosed_quantity", "0")),
-        "amo": data.get("amo", False),
-        "mktProt": str(data.get("market_protection", "0")),
-        "remarks": data.get("remarks", ""),
-    }
-
-    # Remove optional fields if not set
-    for key in ["limitPrice", "trigPrice", "discQty", "mktProt", "remarks"]:
-        if transformed[key] == "0" or transformed[key] == "":
-            del transformed[key]
-
-    return transformed
+    return "Buy to Open" if action.upper() == "BUY" else "Sell to Close"
 
 
-def transform_modify_order_data(data, token):
+def map_product_type(product: str) -> str:
     """
-    Transforms OpenAlgo modify order format to tastytrade API format.
+    tastytrade does not have Indian-style product types (CNC/MIS/NRML).
+    This maps them for internal display consistency only.
+    """
+    mapping = {"CNC": "Equity", "NRML": "Margin", "MIS": "Margin"}
+    return mapping.get(product.upper(), "Equity")
+
+
+def reverse_map_product_type(product: str) -> str:
+    """Map tastytrade product context back to OpenAlgo product type."""
+    mapping = {"equity": "CNC", "margin": "NRML"}
+    return mapping.get(product.lower(), "CNC")
+
+
+def transform_data(data: dict, token) -> dict:
+    """
+    Transform OpenAlgo order format to tastytrade legs-based API format.
+
+    tastytrade orders use a 'legs' structure. Each leg specifies instrument-type,
+    symbol, action (Buy to Open / Sell to Close), and quantity.
 
     Args:
-        data (dict): OpenAlgo modify order data
-        token (str): Broker symbol token
+        data: OpenAlgo order data dict
+        token: Broker symbol token (used to look up broker symbol)
 
     Returns:
-        dict: Transformed data for tastytrade API
+        dict: tastytrade order payload ready to POST to
+              /accounts/{account-number}/orders
     """
-    # Calculate total quantity (filled + modified)
-    filled_qty = int(data.get("filled_quantity", 0))
-    modified_qty = int(data["quantity"])
-    total_qty = filled_qty + modified_qty
+    symbol = get_br_symbol(data["symbol"], data["exchange"])
+    if not symbol:
+        symbol = data["symbol"]
 
-    # Get the correct br_symbol from the database
+    action = map_action(data["action"])
+    order_type = map_order_type(data["pricetype"])
+    instrument_type = map_instrument_type(data["exchange"])
+
+    leg = {
+        "instrument-type": instrument_type,
+        "symbol": symbol,
+        "action": action,
+        "quantity": int(data["quantity"]),
+    }
+
+    payload: dict = {
+        "time-in-force": map_validity(data.get("validity", "DAY")),
+        "order-type": order_type,
+        "legs": [leg],
+    }
+
+    # Limit / Stop Limit orders require a price and price-effect
+    if data["pricetype"] in ("LIMIT", "SL"):
+        price = float(data.get("price", 0))
+        if price:
+            payload["price"] = str(price)
+            payload["price-effect"] = "Debit" if data["action"].upper() == "BUY" else "Credit"
+
+    # Stop / Stop Limit orders require a stop-trigger
+    if data["pricetype"] in ("SL", "SL-M"):
+        trigger = float(data.get("trigger_price", 0))
+        if trigger:
+            payload["stop-trigger"] = str(trigger)
+
+    return payload
+
+
+def transform_modify_order_data(data: dict, token) -> dict:
+    """
+    Transform OpenAlgo modify order format to tastytrade replace order payload.
+
+    tastytrade replace uses PUT /accounts/{account-number}/orders/{order-id}
+    with the same legs-based structure as place order.
+
+    Args:
+        data: OpenAlgo modify order data
+        token: Broker symbol token
+
+    Returns:
+        dict: tastytrade replace-order payload
+    """
     br_symbol = get_br_symbol(data["symbol"], data["exchange"])
     if not br_symbol:
-        raise ValueError(f"Could not find br_symbol for {data['symbol']} on {data['exchange']}")
+        raise ValueError(f"Could not find broker symbol for {data['symbol']} on {data['exchange']}")
 
-    transformed = {
-        "symId": br_symbol,
-        "orderId": data["orderid"],
-        "qty": total_qty,
-        "type": map_order_type(data["pricetype"]),
-        "validity": map_validity(data.get("validity", "DAY")),
-        "side": data["action"].lower(),
+    quantity = int(data["quantity"])
+    action = map_action(data["action"])
+    order_type = map_order_type(data["pricetype"])
+    instrument_type = map_instrument_type(data["exchange"])
+
+    leg = {
+        "instrument-type": instrument_type,
+        "symbol": br_symbol,
+        "action": action,
+        "quantity": quantity,
     }
 
-    # Add optional fields based on order type
-    if data["pricetype"] in ["LIMIT", "SL"]:
-        transformed["limitPrice"] = float(data["price"])
-
-    if data["pricetype"] in ["SL", "SL-M"]:
-        transformed["trigPrice"] = float(data["trigger_price"])
-
-    if data.get("disclosed_quantity"):
-        transformed["discQty"] = int(data["disclosed_quantity"])
-
-    if data.get("market_protection"):
-        transformed["mktProt"] = float(data["market_protection"])
-
-    return transformed
-
-
-def map_order_type(pricetype):
-    """
-    Maps OpenAlgo order types to tastytrade order types.
-    """
-    order_type_mapping = {
-        "MARKET": "market",
-        "LIMIT": "limit",
-        "SL": "stoplimit",
-        "SL-M": "stopmarket",
+    payload: dict = {
+        "time-in-force": map_validity(data.get("validity", "DAY")),
+        "order-type": order_type,
+        "legs": [leg],
     }
-    return order_type_mapping.get(pricetype, "market")
 
+    if data["pricetype"] in ("LIMIT", "SL"):
+        price = float(data.get("price", 0))
+        if price:
+            payload["price"] = str(price)
+            payload["price-effect"] = "Debit" if data["action"].upper() == "BUY" else "Credit"
 
-def map_product_type(product):
-    """
-    Maps OpenAlgo product types to tastytrade product types.
-    """
-    product_type_mapping = {"CNC": "delivery", "NRML": "normal", "MIS": "intraday"}
-    return product_type_mapping.get(product, "intraday")
+    if data["pricetype"] in ("SL", "SL-M"):
+        trigger = float(data.get("trigger_price", 0))
+        if trigger:
+            payload["stop-trigger"] = str(trigger)
 
-
-def map_validity(validity):
-    """
-    Maps OpenAlgo validity types to tastytrade validity types.
-    """
-    validity_mapping = {"DAY": "day", "IOC": "ioc", "GTC": "gtc"}
-    return validity_mapping.get(validity, "day")
-
-
-def reverse_map_product_type(product):
-    """
-    Maps tastytrade product types back to OpenAlgo product types.
-    """
-    reverse_product_type_mapping = {"delivery": "CNC", "normal": "NRML", "intraday": "MIS"}
-    return reverse_product_type_mapping.get(product)
+    return payload

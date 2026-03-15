@@ -2,7 +2,7 @@
 
 ## Introduction
 
-OpenAlgo supports 29 Indian brokers through a unified interface. This guide covers connecting your broker account and understanding the authentication process.
+OpenAlgo supports Webull and tastytrade through a unified interface. This guide covers connecting your broker account and understanding the authentication process.
 
 ## Supported Brokers
 
@@ -10,94 +10,28 @@ OpenAlgo supports 29 Indian brokers through a unified interface. This guide cove
 
 | Broker | Auth Type | Auto Login |
 |--------|-----------|------------|
-| Zerodha (Kite) | OAuth2 | No |
-| Angel One | API Key | Yes* |
-| Dhan | API Key | Yes |
-| Fyers | OAuth2 | No |
-| Upstox | OAuth2 | No |
-| 5paisa | OAuth2 | No |
-| 5paisa XTS | API Key | Yes |
-| Kotak Neo | OAuth2 | No |
-| Flattrade | API Key | Yes |
-| Shoonya (Finvasia) | API Key | Yes |
-| AliceBlue | API Key | Yes |
-| Firstock | API Key | Yes |
-| IIFL | API Key | Yes |
-| Motilal Oswal | OAuth2 | No |
-| Samco | API Key | Yes |
-| Groww | OAuth2 | No |
-| Paytm Money | OAuth2 | No |
-| Pocketful | API Key | Yes |
-| tastytrade | API Key | Yes |
-| Zebu | API Key | Yes |
-| Mstock | API Key | Yes |
-| Wisdom Capital | API Key | Yes |
-| JainamXTS | API Key | Yes |
-| Compositedge | API Key | Yes |
-| Definedge | API Key | Yes |
-| Indmoney | API Key | Yes |
-
-*Auto Login requires TOTP key configuration
+| Webull | OAuth2 | No |
+| tastytrade | OAuth2 | No |
 
 ## Getting Broker API Credentials
 
-### Zerodha (Kite Connect)
+### Webull
 
-1. Go to [kite.trade](https://kite.trade)
-2. Login with your Zerodha credentials
-3. Create a new app under "Apps"
-4. Note down:
-   - **API Key**
-   - **API Secret**
-5. Set redirect URL to: `http://127.0.0.1:5001/callback/zerodha`
+See [webullapidocs.md](webullapidocs.md) for full credential setup instructions.
 
-**Cost**: ₹2,000/month for Kite Connect
+**Summary**:
+- Requires two sets of credentials: OAuth2 (trading) and App Key (market data)
+- Apply for API access via Webull's developer program
+- Sandbox environment available for testing
 
-### Angel One (Smart API)
+### tastytrade
 
-1. Go to [smartapi.angelbroking.com](https://smartapi.angelbroking.com)
-2. Login and generate API credentials
-3. Note down:
-   - **API Key**
-   - **Client Code** (your trading ID)
-4. You'll also need your:
-   - **Password**
-   - **TOTP Secret** (for auto-login)
+See [tastytradeapidocs.md](tastytradeapidocs.md) for full credential setup instructions.
 
-**Cost**: Free
-
-### Dhan
-
-1. Go to [api.dhan.co](https://api.dhan.co)
-2. Login with Dhan credentials
-3. Generate access token
-4. Note down:
-   - **Client ID**
-   - **Access Token**
-
-**Cost**: Free
-
-### Fyers
-
-1. Go to [myapi.fyers.in](https://myapi.fyers.in)
-2. Create developer account
-3. Create an app
-4. Note down:
-   - **App ID**
-   - **Secret ID**
-
-**Cost**: Free
-
-### Upstox
-
-1. Go to [developer.upstox.com](https://developer.upstox.com)
-2. Create developer account
-3. Create an app
-4. Note down:
-   - **API Key**
-   - **API Secret**
-
-**Cost**: Free
+**Summary**:
+- OAuth2 authorization code flow
+- Requires a tastytrade developer account
+- Certification (sandbox) environment available for testing
 
 ## Configuring Broker in OpenAlgo
 
@@ -111,10 +45,10 @@ OpenAlgo supports 29 Indian brokers through a unified interface. This guide cove
 
 ## Logging into Your Broker
 
-### OAuth2 Brokers (Zerodha, Fyers, etc.)
+### OAuth2 Brokers (Webull, tastytrade)
 
 1. In OpenAlgo, click **Login to Broker**
-2. You're redirected to broker's login page
+2. You're redirected to the broker's login page
 3. Enter your broker credentials
 4. Approve the connection
 5. Automatically redirected back to OpenAlgo
@@ -122,13 +56,6 @@ OpenAlgo supports 29 Indian brokers through a unified interface. This guide cove
 ```
 OpenAlgo → Broker Login Page → Enter Credentials → Approve → Back to OpenAlgo
 ```
-
-### API Key Brokers (Dhan, Angel, etc.)
-
-1. Credentials already in profile
-2. Click **Login to Broker**
-3. OpenAlgo uses stored credentials
-4. Connection established automatically
 
 ## Understanding Authentication
 
@@ -138,37 +65,17 @@ Most brokers require you to login every trading day:
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                    Typical Trading Day                          │
+│                    Typical Trading Day (US ET)                   │
 │                                                                  │
-│  8:30 AM  - Login to OpenAlgo                                   │
-│  8:35 AM  - Login to Broker                                     │
-│  9:15 AM  - Market Opens (you're ready to trade)                │
-│  3:30 PM  - Market Closes                                       │
-│  ~6:00 PM - Broker session expires                              │
+│  8:00 AM  - Login to OpenAlgo                                   │
+│  8:30 AM  - Login to Broker                                     │
+│  9:30 AM  - Market Opens (you're ready to trade)                │
+│  4:00 PM  - Market Closes                                       │
+│  8:00 PM  - After-hours trading ends                            │
 │                                                                  │
 │  Next Day - Login again                                         │
 └─────────────────────────────────────────────────────────────────┘
 ```
-
-### Auto-Login (TOTP Based)
-
-Some brokers support automatic login using TOTP:
-
-**Requirements**:
-- Broker TOTP secret key
-- Configure in **Profile → Broker Configuration**
-
-**Supported Brokers for Auto-Login**:
-- Angel One
-- Flattrade
-- Shoonya
-- AliceBlue
-
-**How to get TOTP Secret**:
-1. During broker 2FA setup
-2. Choose "Enter code manually" instead of scanning QR
-3. Copy the secret key shown
-4. Store in `BROKER_TOTP_KEY`
 
 ### Token Storage
 
@@ -207,7 +114,7 @@ When connected, you can:
 
 ### Switching Brokers
 
-1. Select the new broker in **Profile → Broker Configuration**
+1. Select the new broker in **Profile** → **Broker Configuration**
 2. Update corresponding credentials and redirect URL
 3. Save and login to the new broker
 
@@ -222,11 +129,11 @@ To use multiple brokers simultaneously:
 3. Run on different ports
 
 ```bash
-# Instance 1 (Zerodha on port 5000)
-FLASK_PORT=5000 uv run app.py
-
-# Instance 2 (Angel on port 5001)
+# Instance 1 (Webull on port 5001)
 FLASK_PORT=5001 uv run app.py
+
+# Instance 2 (tastytrade on port 5002)
+FLASK_PORT=5002 uv run app.py
 ```
 
 ## Connection Troubleshooting
@@ -255,23 +162,11 @@ FLASK_PORT=5001 uv run app.py
 - Try broker's website
 - Wait and retry
 
-### Issue: "TOTP verification failed"
-
-**Causes**:
-- Wrong TOTP secret
-- Time sync issue
-- Clock drift
-
-**Solutions**:
-- Verify TOTP secret
-- Sync device time
-- Regenerate TOTP
-
 ### Issue: "Session expired"
 
 **Normal behavior** - sessions expire daily.
 
-**Solution**: Login again when markets open.
+**Solution**: Login again before the market opens.
 
 ## Best Practices
 
@@ -284,39 +179,28 @@ FLASK_PORT=5001 uv run app.py
 
 ### Reliability
 
-1. **Login early** - Before market opens (8:30-9:00 AM)
+1. **Login early** - Before market opens (8:00-9:00 AM ET)
 2. **Check status** - Verify connection before trading
-3. **Have backup** - Know broker's web/mobile as fallback
+3. **Have backup** - Know broker's web/mobile app as fallback
 4. **Monitor** - Watch for disconnections
 
 ### For VPS Users
 
 1. Use static IP if possible
-2. Some brokers restrict new IPs
-3. Whitelist VPS IP with broker
-4. Consider VPN if required
+2. Some brokers restrict new IPs — whitelist your VPS IP
+3. Consider VPN if required
 
 ## Broker-Specific Notes
 
-### Zerodha
-- Kite Connect costs ₹2,000/month
-- Order rate limit: 10/second
-- Historical data available
+### Webull
+- Two credential sets required: OAuth2 (trading) + App Key (market data)
+- Supports sandbox environment for testing (`BROKER_API_ENV=sandbox`)
+- Request API access through Webull's developer program
 
-### Angel One
-- Free API access
-- TOTP required for trading
-- Good for beginners
-
-### Dhan
-- Free API access
-- Simple token-based auth
-- Has sandbox mode
-
-### Fyers
-- Free API access
-- Good historical data
-- Web-based OAuth
+### tastytrade
+- OAuth2 only — no separate market data credentials needed
+- Certification environment available (`TASTYTRADE_ENV=sandbox`)
+- Streamer WebSocket available for real-time market data
 
 ---
 

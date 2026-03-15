@@ -205,7 +205,7 @@ fi
 # WEBSOCKET PROXY SERVER
 # ============================================
 echo "[OpenAlgo] Starting WebSocket proxy server on port 8765..."
-/app/.venv/bin/python -m websocket_proxy.server &
+/app/.venv/bin/python -c "import asyncio; from websocket_proxy.server import main; asyncio.run(main())" &
 WEBSOCKET_PID=$!
 echo "[OpenAlgo] WebSocket proxy server started with PID $WEBSOCKET_PID"
 
@@ -231,8 +231,8 @@ APP_PORT="${PORT:-5001}"
 
 echo "[OpenAlgo] Starting application on port ${APP_PORT} with eventlet..."
 
-# Create gunicorn worker temp directory (must be inside container, not mounted volume)
-mkdir -p /tmp/gunicorn_workers
+# Use /app/tmp (pre-created, owned by appuser, matches TMPDIR env) for all gunicorn temp files
+mkdir -p /app/tmp/gunicorn_workers
 
 exec /app/.venv/bin/gunicorn \
     --worker-class eventlet \
@@ -240,6 +240,6 @@ exec /app/.venv/bin/gunicorn \
     --bind 0.0.0.0:${APP_PORT} \
     --timeout 300 \
     --graceful-timeout 30 \
-    --worker-tmp-dir /tmp/gunicorn_workers \
+    --worker-tmp-dir /app/tmp/gunicorn_workers \
     --log-level warning \
     app:app

@@ -21,7 +21,7 @@ export interface StrategySymbolMapping {
   symbol: string
   exchange: string
   quantity: number
-  product_type: 'MIS' | 'CNC' | 'NRML'
+  product_type: 'CNC'
   created_at: string
 }
 
@@ -66,17 +66,14 @@ export const PLATFORMS: { value: Platform; label: string }[] = [
   { value: 'others', label: 'Others' },
 ]
 
-export const EXCHANGES = ['NSE', 'BSE', 'NFO', 'CDS', 'BFO', 'BCD', 'MCX', 'NCDEX'] as const
+export const EXCHANGES = ['EQUITY', 'OPTIONS', 'FUTURES', 'FUTURES_OPTION', 'CRYPTO'] as const
 export type Exchange = (typeof EXCHANGES)[number]
 
-export const EQUITY_EXCHANGES = ['NSE', 'BSE'] as const
-export const DERIVATIVE_EXCHANGES = ['NFO', 'CDS', 'BFO', 'BCD', 'MCX', 'NCDEX'] as const
+export const EQUITY_EXCHANGES = ['EQUITY'] as const
+export const DERIVATIVE_EXCHANGES = ['OPTIONS', 'FUTURES', 'FUTURES_OPTION', 'CRYPTO'] as const
 
-export function getProductTypes(exchange: string): string[] {
-  if (EQUITY_EXCHANGES.includes(exchange as (typeof EQUITY_EXCHANGES)[number])) {
-    return ['MIS', 'CNC']
-  }
-  return ['MIS', 'NRML']
+export function getProductTypes(_exchange: string): string[] {
+  return ['CNC']
 }
 
 export const TRADING_MODES = [

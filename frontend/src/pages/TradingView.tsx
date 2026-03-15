@@ -24,26 +24,23 @@ interface SearchResult {
 }
 
 const EXCHANGES = [
-  { value: 'NSE', label: 'NSE' },
-  { value: 'NFO', label: 'NFO' },
-  { value: 'BSE', label: 'BSE' },
-  { value: 'BFO', label: 'BFO' },
-  { value: 'CDS', label: 'CDS' },
-  { value: 'MCX', label: 'MCX' },
+  { value: 'EQUITY', label: 'EQUITY' },
+  { value: 'OPTIONS', label: 'OPTIONS' },
+  { value: 'FUTURES', label: 'FUTURES' },
+  { value: 'FUTURES_OPTION', label: 'FUTURES_OPTION' },
+  { value: 'CRYPTO', label: 'CRYPTO' },
 ]
 
 const PRODUCTS = [
-  { value: 'MIS', label: 'MIS - Intraday' },
-  { value: 'NRML', label: 'NRML - Carry Forward' },
-  { value: 'CNC', label: 'CNC - Delivery' },
+  { value: 'CNC', label: 'CNC - Cash & Carry' },
 ]
 
 export default function TradingView() {
   // Form state
   const [alertMode, setAlertMode] = useState<'strategy' | 'line'>('strategy')
-  const [symbol, setSymbol] = useState('NHPC')
-  const [exchange, setExchange] = useState('NSE')
-  const [product, setProduct] = useState('MIS')
+  const [symbol, setSymbol] = useState('AAPL')
+  const [exchange, setExchange] = useState('EQUITY')
+  const [product, setProduct] = useState('CNC')
   const [action, setAction] = useState('BUY')
   const [quantity, setQuantity] = useState('1')
 

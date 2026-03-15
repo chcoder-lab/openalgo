@@ -17,38 +17,8 @@ import { webClient } from '@/api/client'
 
 // All supported brokers with their display names and auth types
 const allBrokers = [
-  { id: 'fivepaisa', name: '5 Paisa', authType: 'totp' },
-  { id: 'fivepaisaxts', name: '5 Paisa (XTS)', authType: 'totp' },
-  { id: 'aliceblue', name: 'Alice Blue', authType: 'totp' },
-  { id: 'angel', name: 'Angel One', authType: 'totp' },
-  { id: 'compositedge', name: 'CompositEdge', authType: 'oauth' },
-  { id: 'dhan', name: 'Dhan', authType: 'oauth' },
-  { id: 'deltaexchange', name: 'Delta Exchange', authType: 'totp' },
-  { id: 'indmoney', name: 'IndMoney', authType: 'totp' },
-  { id: 'dhan_sandbox', name: 'Dhan (Sandbox)', authType: 'totp' },
-  { id: 'definedge', name: 'Definedge', authType: 'totp' },
-  { id: 'firstock', name: 'Firstock', authType: 'totp' },
-  { id: 'flattrade', name: 'Flattrade', authType: 'oauth' },
-  { id: 'motilal', name: 'Motilal Oswal', authType: 'totp' },
-  { id: 'fyers', name: 'Fyers', authType: 'oauth' },
-  { id: 'groww', name: 'Groww', authType: 'totp' },
-  { id: 'ibulls', name: 'Ibulls', authType: 'totp' },
-  { id: 'iifl', name: 'IIFL', authType: 'totp' },
-  { id: 'jainamxts', name: 'JainamXts', authType: 'totp' },
-  { id: 'kotak', name: 'Kotak Securities', authType: 'totp' },
-  { id: 'mstock', name: 'mStock by Mirae Asset', authType: 'totp' },
-  { id: 'nubra', name: 'Nubra', authType: 'totp' },
-  { id: 'paytm', name: 'Paytm Money', authType: 'oauth' },
-  { id: 'pocketful', name: 'Pocketful', authType: 'oauth' },
-  { id: 'rmoney', name: 'RMoney', authType: 'oauth' },
-  { id: 'samco', name: 'Samco', authType: 'totp' },
-  { id: 'shoonya', name: 'Shoonya', authType: 'totp' },
   { id: 'tastytrade', name: 'TastyTrade', authType: 'oauth' },
   { id: 'webull', name: 'Webull', authType: 'oauth' },
-  { id: 'upstox', name: 'Upstox', authType: 'oauth' },
-  { id: 'wisdom', name: 'Wisdom Capital', authType: 'totp' },
-  { id: 'zebu', name: 'Zebu', authType: 'totp' },
-  { id: 'zerodha', name: 'Zerodha', authType: 'oauth' },
 ] as const
 
 interface BrokerConfig {
@@ -56,13 +26,6 @@ interface BrokerConfig {
   broker_api_key: string
   redirect_url: string
   broker_api_environment: string
-}
-
-// Helper function to get Flattrade API key
-function getFlattradeApiKey(fullKey: string): string {
-  if (!fullKey) return ''
-  const parts = fullKey.split(':::')
-  return parts.length > 1 ? parts[1] : fullKey
 }
 
 // Generate random state for OAuth
@@ -144,64 +107,8 @@ export default function BrokerSelect() {
         const state = generateRandomState()
         return `${tastytradeAuthBase}?client_id=${broker_api_key}&redirect_uri=${redirect_url}&response_type=code&state=${state}`
       }
-      case 'fivepaisa':
-      case 'fivepaisaxts':
-      case 'aliceblue':
-      case 'angel':
-      case 'mstock':
-      case 'indmoney':
-      case 'deltaexchange':
-      case 'jainamxts':
-      case 'dhan_sandbox':
-      case 'definedge':
-      case 'firstock':
-      case 'samco':
-      case 'motilal':
-      case 'nubra':
-      case 'groww':
-      case 'ibulls':
-      case 'iifl':
-      case 'kotak':
-      case 'rmoney':
-      case 'shoonya':
-        return `/${broker}/callback`
       case 'webull':
         return '/webull/callback'
-      case 'wisdom':
-      case 'zebu':
-        // TOTP brokers - redirect to callback page which shows form
-        return `/${broker}/callback`
-
-      case 'dhan':
-        return '/dhan/initiate-oauth'
-
-      case 'compositedge':
-        return `https://xts.compositedge.com/interactive/thirdparty?appKey=${broker_api_key}&returnURL=${redirect_url}`
-
-      case 'flattrade': {
-        const flattradeApiKey = getFlattradeApiKey(broker_api_key)
-        return `https://auth.flattrade.in/?app_key=${flattradeApiKey}`
-      }
-
-      case 'fyers':
-        return `https://api-t1.fyers.in/api/v3/generate-authcode?client_id=${broker_api_key}&redirect_uri=${redirect_url}&response_type=code&state=2e9b44629ebb28226224d09db3ffb47c`
-
-      case 'upstox':
-        return `https://api.upstox.com/v2/login/authorization/dialog?response_type=code&client_id=${broker_api_key}&redirect_uri=${redirect_url}`
-
-      case 'zerodha':
-        return `https://kite.trade/connect/login?api_key=${broker_api_key}`
-
-      case 'paytm':
-        return `https://login.paytmmoney.com/merchant-login?apiKey=${broker_api_key}&state={default}`
-
-      case 'pocketful': {
-        const state = generateRandomState()
-        localStorage.setItem('pocketful_oauth_state', state)
-        const scope = 'orders holdings'
-        return `https://trade.pocketful.in/oauth2/auth?client_id=${broker_api_key}&redirect_uri=${redirect_url}&response_type=code&scope=${encodeURIComponent(scope)}&state=${encodeURIComponent(state)}`
-      }
-
       default:
         return ''
     }
@@ -461,16 +368,6 @@ export default function BrokerSelect() {
                   </Select>
                 </div>
 
-                {(selectedBroker === 'zerodha' || selectedBroker === 'dhan') && (
-                  <Alert className="border-amber-500/50 bg-amber-500/10">
-                    <Info className="h-4 w-4 text-amber-500" />
-                    <AlertDescription className="text-amber-200">
-                      {selectedBroker === 'zerodha'
-                        ? 'Zerodha requires an active Kite Connect data subscription for market data access.'
-                        : 'Dhan requires an active Data API subscription for market data access.'}
-                    </AlertDescription>
-                  </Alert>
-                )}
 
                 <Button type="submit" className="w-full" disabled={!selectedBroker || isSubmitting}>
                   {isSubmitting ? (

@@ -394,7 +394,7 @@ export default function ConfigureSymbols() {
                 <div className="space-y-2">
                   <Label>CSV Data</Label>
                   <Textarea
-                    placeholder="Symbol,Exchange,Quantity,Product&#10;RELIANCE,NSE,100,CNC&#10;TATAMOTORS,NSE,50,MIS"
+                    placeholder="Symbol,Exchange,Quantity,Product&#10;AAPL,EQUITY,100,CNC&#10;TSLA,EQUITY,50,CNC"
                     value={csvData}
                     onChange={(e) => setCsvData(e.target.value)}
                     rows={6}

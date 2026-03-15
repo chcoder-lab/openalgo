@@ -24,127 +24,28 @@ interface SearchResult {
 }
 
 const EXCHANGES = [
-  { value: 'NSE', label: 'NSE - National Stock Exchange' },
-  { value: 'NFO', label: 'NFO - NSE Futures & Options' },
-  { value: 'BSE', label: 'BSE - Bombay Stock Exchange' },
-  { value: 'BFO', label: 'BFO - BSE Futures & Options' },
-  { value: 'CDS', label: 'CDS - Currency Derivatives' },
-  { value: 'MCX', label: 'MCX - Multi Commodity Exchange' },
-  { value: 'NSE_INDEX', label: 'NSE_INDEX - National Stock Exchange Index' },
-  { value: 'BSE_INDEX', label: 'BSE_INDEX - Bombay Stock Exchange Index' },
-  { value: 'CRYPTO', label: 'CRYPTO - Delta Exchange India' },
+  { value: 'EQUITY', label: 'EQUITY - US Equities' },
+  { value: 'OPTIONS', label: 'OPTIONS - Equity Options' },
+  { value: 'FUTURES', label: 'FUTURES - Futures' },
+  { value: 'FUTURES_OPTION', label: 'FUTURES_OPTION - Futures Options' },
+  { value: 'CRYPTO', label: 'CRYPTO - Cryptocurrency' },
 ]
-
-const FNO_EXCHANGES = ['NFO', 'BFO', 'MCX', 'CDS', 'CRYPTO']
 
 export default function Token() {
   const navigate = useNavigate()
   const [symbol, setSymbol] = useState('')
   const [exchange, setExchange] = useState('')
-  const [underlying, setUnderlying] = useState('')
-  const [instrumentType, setInstrumentType] = useState('')
-  const [expiry, setExpiry] = useState('')
-  const [strikeMin, setStrikeMin] = useState('')
-  const [strikeMax, setStrikeMax] = useState('')
-
-  const [underlyings, setUnderlyings] = useState<string[]>([])
-  const [expiries, setExpiries] = useState<string[]>([])
   const [searchResults, setSearchResults] = useState<SearchResult[]>([])
   const [showResults, setShowResults] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [isFnoLoading, setIsFnoLoading] = useState(false)
   const [symbolError, setSymbolError] = useState('')
 
-  // Refs for click-outside handling and request tracking
   const inputWrapperRef = useRef<HTMLDivElement>(null)
-  const fnoRequestIdRef = useRef(0)
-
-  const isFnoExchange = FNO_EXCHANGES.includes(exchange)
-
-  const hasFnoFilters = underlying || expiry || instrumentType || strikeMin || strikeMax
-
-  const resetFnoFilters = useCallback(() => {
-    setUnderlying('')
-    setInstrumentType('')
-    setExpiry('')
-    setStrikeMin('')
-    setStrikeMax('')
-  }, [])
-
-  // Fetch underlyings when exchange changes to FNO
-  useEffect(() => {
-    if (!isFnoExchange) {
-      setUnderlyings([])
-      setExpiries([])
-      resetFnoFilters()
-      return
-    }
-
-    // Increment request ID to invalidate stale responses
-    const requestId = ++fnoRequestIdRef.current
-    setIsFnoLoading(true)
-
-    const fetchData = async () => {
-      try {
-        const [underlyingsRes, expiriesRes] = await Promise.all([
-          fetch(`/search/api/underlyings?exchange=${exchange}`, { credentials: 'include' }),
-          fetch(`/search/api/expiries?exchange=${exchange}`, { credentials: 'include' }),
-        ])
-
-        // Ignore if this is a stale request
-        if (requestId !== fnoRequestIdRef.current) return
-
-        if (underlyingsRes.ok) {
-          const data = await underlyingsRes.json()
-          if (data.status === 'success' && Array.isArray(data.underlyings)) {
-            setUnderlyings(data.underlyings)
-          }
-        }
-
-        if (expiriesRes.ok) {
-          const data = await expiriesRes.json()
-          if (data.status === 'success' && Array.isArray(data.expiries)) {
-            setExpiries(data.expiries)
-          }
-        }
-      } catch (error) {
-      } finally {
-        if (requestId === fnoRequestIdRef.current) {
-          setIsFnoLoading(false)
-        }
-      }
-    }
-
-    fetchData()
-  }, [exchange, isFnoExchange, resetFnoFilters])
-
-  // Fetch expiries when underlying changes
-  useEffect(() => {
-    if (!isFnoExchange || !underlying) return
-
-    const fetchExpiriesForUnderlying = async () => {
-      try {
-        const response = await fetch(
-          `/search/api/expiries?exchange=${exchange}&underlying=${underlying}`,
-          { credentials: 'include' }
-        )
-        if (response.ok) {
-          const data = await response.json()
-          if (data.status === 'success' && Array.isArray(data.expiries)) {
-            setExpiries(data.expiries)
-          }
-        }
-      } catch (error) {
-      }
-    }
-
-    fetchExpiriesForUnderlying()
-  }, [underlying, exchange, isFnoExchange])
 
   // Debounced search for autocomplete
   const performAutocompleteSearch = useCallback(
     async (query: string, exch: string) => {
-      if (query.length < 2 && !(isFnoExchange && hasFnoFilters)) {
+      if (query.length < 2) {
         setSearchResults([])
         setShowResults(false)
         return
@@ -155,11 +56,6 @@ export default function Token() {
         const params = new URLSearchParams()
         if (query) params.append('q', query)
         if (exch) params.append('exchange', exch)
-        if (underlying) params.append('underlying', underlying)
-        if (expiry) params.append('expiry', expiry)
-        if (instrumentType) params.append('instrumenttype', instrumentType)
-        if (strikeMin) params.append('strike_min', strikeMin)
-        if (strikeMax) params.append('strike_max', strikeMax)
 
         const response = await fetch(`/search/api/search?${params}`, {
           credentials: 'include',
@@ -173,18 +69,18 @@ export default function Token() {
         setIsLoading(false)
       }
     },
-    [underlying, expiry, instrumentType, strikeMin, strikeMax, isFnoExchange, hasFnoFilters]
+    []
   )
 
   // Debounced input handler
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (symbol.length >= 2 || (isFnoExchange && hasFnoFilters)) {
+      if (symbol.length >= 2) {
         performAutocompleteSearch(symbol, exchange)
       }
     }, 300)
     return () => clearTimeout(timer)
-  }, [symbol, exchange, performAutocompleteSearch, hasFnoFilters, isFnoExchange])
+  }, [symbol, exchange, performAutocompleteSearch])
 
   // Click-outside handler to close dropdown
   useEffect(() => {
@@ -202,26 +98,18 @@ export default function Token() {
     setShowResults(false)
     setSymbolError('')
 
-    // Validate: symbol is required unless FNO filters are applied
-    if (!symbol && !(isFnoExchange && hasFnoFilters)) {
+    if (!symbol) {
       setSymbolError('Required - enter a search term')
       return
     }
 
-    // Exchange is required
     if (!exchange) {
       return
     }
 
-    // Navigate to search results page with query params
     const params = new URLSearchParams()
     if (symbol) params.append('symbol', symbol)
     if (exchange) params.append('exchange', exchange)
-    if (underlying) params.append('underlying', underlying)
-    if (expiry) params.append('expiry', expiry)
-    if (instrumentType) params.append('instrumenttype', instrumentType)
-    if (strikeMin) params.append('strike_min', strikeMin)
-    if (strikeMax) params.append('strike_max', strikeMax)
 
     navigate(`/search?${params.toString()}`)
   }
@@ -231,8 +119,6 @@ export default function Token() {
     setExchange(result.exchange)
     setShowResults(false)
   }
-
-  const showStrikeRange = instrumentType === 'CE' || instrumentType === 'PE'
 
   return (
     <div className="max-w-4xl mx-auto py-8 px-4">
@@ -253,24 +139,23 @@ export default function Token() {
               <div className="flex justify-between">
                 <Label htmlFor="symbol">Symbol, Name, or Token</Label>
                 <span
-                  className={`text-xs ${symbolError ? 'text-red-500' : isFnoExchange && hasFnoFilters ? 'text-green-600' : 'text-muted-foreground'}`}
+                  className={`text-xs ${symbolError ? 'text-red-500' : 'text-muted-foreground'}`}
                 >
-                  {symbolError ||
-                    (isFnoExchange && hasFnoFilters ? '(Optional with filters)' : '(Required)')}
+                  {symbolError || '(Required)'}
                 </span>
               </div>
               <div className="relative" ref={inputWrapperRef}>
                 <Input
                   id="symbol"
                   type="text"
-                  placeholder="e.g., nifty, RELIANCE, 2885"
+                  placeholder="e.g., AAPL, TSLA, SPX"
                   value={symbol}
                   onChange={(e) => {
                     setSymbol(e.target.value)
                     setSymbolError('')
                   }}
                   onFocus={() => {
-                    if (symbol.length >= 2 || (isFnoExchange && hasFnoFilters)) {
+                    if (symbol.length >= 2) {
                       setShowResults(true)
                     }
                   }}
@@ -296,8 +181,6 @@ export default function Token() {
                             <div className="font-semibold truncate">{result.symbol}</div>
                             <div className="text-sm text-muted-foreground truncate">
                               {result.name}
-                              {result.expiry && ` | ${result.expiry}`}
-                              {result.strike && result.strike > 0 && ` | Strike: ${result.strike}`}
                             </div>
                             <div className="text-xs text-muted-foreground font-mono">
                               Token: {result.token}
@@ -341,103 +224,6 @@ export default function Token() {
               </Select>
             </div>
 
-            {/* F&O Filters */}
-            {isFnoExchange && (
-              <div className="space-y-4">
-                <div className="relative">
-                  <div className="absolute inset-0 flex items-center">
-                    <span className="w-full border-t" />
-                  </div>
-                  <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-background px-2 text-muted-foreground flex items-center gap-2">
-                      F&O Filters
-                      {isFnoLoading && (
-                        <span className="animate-spin rounded-full h-3 w-3 border-b-2 border-primary"></span>
-                      )}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Row 1: Underlying and Instrument Type */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label>Underlying</Label>
-                    <select
-                      value={underlying}
-                      onChange={(e) => setUnderlying(e.target.value)}
-                      className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-                    >
-                      <option value="">All Underlyings</option>
-                      {(underlyings || []).map((u) => (
-                        <option key={u} value={u}>
-                          {u}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label>Instrument Type</Label>
-                    <Select
-                      value={instrumentType || '_all'}
-                      onValueChange={(v) => setInstrumentType(v === '_all' ? '' : v)}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="All Types" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="_all">All Types</SelectItem>
-                        <SelectItem value="FUT">Futures</SelectItem>
-                        <SelectItem value="CE">Call Options (CE)</SelectItem>
-                        <SelectItem value="PE">Put Options (PE)</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-
-                {/* Row 2: Expiry */}
-                <div className="space-y-2">
-                  <Label>Expiry Date</Label>
-                  <select
-                    value={expiry}
-                    onChange={(e) => setExpiry(e.target.value)}
-                    className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-                  >
-                    <option value="">All Expiries</option>
-                    {(expiries || []).map((e) => (
-                      <option key={e} value={e}>
-                        {e}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                {/* Row 3: Strike Range (for options only) */}
-                {showStrikeRange && (
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label>Min Strike</Label>
-                      <Input
-                        type="number"
-                        placeholder="e.g., 24000"
-                        value={strikeMin}
-                        onChange={(e) => setStrikeMin(e.target.value)}
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Max Strike</Label>
-                      <Input
-                        type="number"
-                        placeholder="e.g., 26000"
-                        value={strikeMax}
-                        onChange={(e) => setStrikeMax(e.target.value)}
-                      />
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-
             {/* Search Button */}
             <Button type="submit" className="w-full" size="lg">
               <Search className="mr-2 h-5 w-5" />
@@ -456,36 +242,34 @@ export default function Token() {
             <div className="font-semibold mb-1">Stock Search:</div>
             <ul className="ml-2 space-y-0.5 text-sm">
               <li>
-                By symbol: <code className="bg-muted px-2 py-0.5 rounded">RELIANCE</code>,{' '}
-                <code className="bg-muted px-2 py-0.5 rounded">INFY</code>
+                By symbol: <code className="bg-muted px-2 py-0.5 rounded">AAPL</code>,{' '}
+                <code className="bg-muted px-2 py-0.5 rounded">TSLA</code>
               </li>
               <li>
                 By company name:{' '}
-                <code className="bg-muted px-2 py-0.5 rounded">Reliance Industries</code>
+                <code className="bg-muted px-2 py-0.5 rounded">Apple Inc</code>
               </li>
               <li>
-                By token number: <code className="bg-muted px-2 py-0.5 rounded">2885</code>
+                By token number: <code className="bg-muted px-2 py-0.5 rounded">12345</code>
               </li>
             </ul>
           </div>
           <div>
-            <div className="font-semibold mb-1">Futures & Options:</div>
+            <div className="font-semibold mb-1">Options & Futures:</div>
             <ul className="ml-2 space-y-0.5 text-sm">
               <li>
-                Futures: <code className="bg-muted px-2 py-0.5 rounded">nifty oct fut</code>,{' '}
-                <code className="bg-muted px-2 py-0.5 rounded">banknifty dec fut</code>
+                Select <strong>OPTIONS</strong> exchange for equity options
               </li>
               <li>
-                Call Options: <code className="bg-muted px-2 py-0.5 rounded">nifty 25000 ce</code>
+                Select <strong>FUTURES</strong> exchange for futures contracts
               </li>
               <li>
-                Put Options: <code className="bg-muted px-2 py-0.5 rounded">nifty 24000 pe</code>
+                Select <strong>CRYPTO</strong> exchange for cryptocurrency
               </li>
             </ul>
           </div>
           <div className="text-xs text-muted-foreground mt-2">
-            <strong>Tip:</strong> Select the appropriate exchange (NFO for F&O, NSE for stocks) for
-            accurate results
+            <strong>Tip:</strong> Select the appropriate exchange (EQUITY for stocks, OPTIONS for options) for accurate results
           </div>
         </AlertDescription>
       </Alert>

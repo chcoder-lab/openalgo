@@ -13,11 +13,8 @@ message:json {
   {
     "action": "subscribe",
     "symbols": [
-      {"symbol": "RELIANCE", "exchange": "NSE"},
-      {"symbol": "TCS", "exchange": "NSE"},
-      {"symbol": "INFY", "exchange": "NSE"},
-      {"symbol": "HDFCBANK", "exchange": "NSE"},
-      {"symbol": "NIFTY25JANFUT", "exchange": "NFO"}
+      {"symbol": "AAPL", "exchange": "EQUITY"},
+      {"symbol": "TSLA", "exchange": "EQUITY"}
     ],
     "mode": 2
   }
@@ -31,5 +28,5 @@ docs {
   Maximum connections: 3 (configurable via MAX_WEBSOCKET_CONNECTIONS)
   Total capacity: 3000 symbols
 
-  Supported exchanges: NSE, NFO, BSE, BFO, CDS, MCX
+  Supported exchanges: EQUITY, OPTIONS, FUTURES
 }

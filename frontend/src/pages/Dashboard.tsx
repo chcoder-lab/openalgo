@@ -20,27 +20,15 @@ interface MasterContractStatus {
   total_symbols?: number
 }
 
-// Format number in Indian format with Cr/L suffixes
+// Format number as USD
 function formatIndianNumber(value: string | number): string {
   const num = typeof value === 'string' ? parseFloat(value) : value
-  if (Number.isNaN(num)) return '0.00'
-
-  const isNegative = num < 0
-  const absNum = Math.abs(num)
-
-  let formatted: string
-  if (absNum >= 10000000) {
-    // 1 Crore or more
-    formatted = `${(absNum / 10000000).toFixed(2)}Cr`
-  } else if (absNum >= 100000) {
-    // 1 Lakh or more
-    formatted = `${(absNum / 100000).toFixed(2)}L`
-  } else {
-    // Less than 1 Lakh - just decimal format
-    formatted = absNum.toFixed(2)
-  }
-
-  return isNegative ? `-${formatted}` : formatted
+  if (Number.isNaN(num)) return '$0.00'
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: 2,
+  }).format(num)
 }
 
 // Get color class based on P&L value
